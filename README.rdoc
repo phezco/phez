@@ -1,0 +1,7 @@
+== PHEZ - THE FREE SPEECH PLATFORM
+
+Phez is a Ruby on Rails powered website online at:
+
+http://phez.co
+
+We're crowdsourcing the next generation of online free speech platforms.

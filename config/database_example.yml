@@ -1,0 +1,13 @@
+development:
+  adapter: postgresql
+  database: phez_development
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+
+test:
+  adapter: postgresql
+  database: phez_test
+  encoding: utf8
+  pool: 5
+  timeout: 5000
