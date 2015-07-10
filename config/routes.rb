@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
 
+  resources :posts, :except => [:index]
+
+  get 'p/:path' => 'subphezes#show', as: :view_subphez
+  get 'p/:path/submit' => 'posts#new', as: :new_subphez_post
+  get 'p/:path/:post_id/:guid/' => 'posts#show', as: :view_post
+
+  post 'votes/upvote' => 'votes#upvote'
+  post 'votes/downvote' => 'votes#downvote'
+
+  resources :subphezes, :except => [:destroy]
   devise_for :users
   root 'home#index'
 

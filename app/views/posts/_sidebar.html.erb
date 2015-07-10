@@ -1,0 +1,17 @@
+<div class="col-lg-3">
+  <div class="well sidebar-nav">
+    <h3>Submission Details</h3>
+    Subphez: <%= link_to @post.subphez.title, build_subphez_path(@post.subphez) %> <br/>
+    Submitted by: <%= @post.user.username %> <br/>
+    Submitted: <%= time_ago_in_words(@post.created_at) %> ago
+    <br/>
+    <% if @post.owner?(current_user) && @post.editable? %>
+      <br/>
+      <%= link_to 'Edit this Post', edit_post_path(@post), class: 'btn btn-primary' %>
+      <br/>
+      <br/>
+      <%= link_to 'Delete this Post', @post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
+    <% end %>
+
+  </div>
+</div>

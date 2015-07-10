@@ -12,4 +12,16 @@
  *
  *= require_tree .
  *= require_self
+ *= require font-awesome
  */
+
+div.voting_arrows {
+  margin-top: 1.4em;
+}
+.vote-arrow {
+  color: #808080;
+  font-size: 1.5em !important;
+}
+.voted {
+  color: #0066ff !important;
+}

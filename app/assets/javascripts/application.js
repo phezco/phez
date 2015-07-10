@@ -12,5 +12,14 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require twitter/bootstrap
 //= require turbolinks
+//= require base
 //= require_tree .
+
+$(document).ready(function() {
+
+  Phez = new PhezApp();
+  Phez.applyClickHandlers();
+
+});

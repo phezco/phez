@@ -1,0 +1,33 @@
+<%= form_for(@subphez) do |f| %>
+  <% if @subphez.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@subphez.errors.count, "error") %> prohibited this subphez from being saved:</h2>
+
+      <ul>
+      <% @subphez.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @subphez.new_record? %>
+    <div class="field">
+      <%= f.label :path %><br>
+      phez.co/p/<%= f.text_field :path %> <br/>
+      <small><i>Cannot contain any spaces. Maximum 30 characters. No special characters (alphanumeric only).</i></small>
+    </div>
+  <% else %>
+    <p>Subphez path's are not editable.</p>
+  <% end %>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :sidebar, "Sidebar Text" %><br>
+    <%= f.text_area :sidebar %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

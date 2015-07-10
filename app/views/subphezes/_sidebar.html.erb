@@ -1,0 +1,17 @@
+<div class="col-lg-3">
+  <div class="well sidebar-nav">
+    <h3><%= @subphez.title %></h3>
+
+    <%= link_to 'Submit a new link', new_subphez_post_path(:path => @subphez.path), class: 'btn btn-primary' %>
+    <br/>
+    <% if @subphez.owner?(current_user) %>
+      <br/>
+      <%= link_to 'Edit this Subphez', edit_subphez_path(@subphez), class: 'btn btn-primary' %>
+      <br/>
+    <% end %>
+    <br/>
+    <div>
+      <%= raw(@subphez.sidebar_rendered) %>
+    </div>
+  </div>
+</div>

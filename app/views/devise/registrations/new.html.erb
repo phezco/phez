@@ -1,11 +1,20 @@
 <h2>Sign up</h2>
 
+<p>We take your privacy seriously at Phez. Your information will never be sold or distributed to advertisers.</p>
+
+<p>Note: providing your email address is strictly optional (it can be used to recover your account in case of a lost password).</p>
+
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
 
   <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autofocus: true %>
+  </div>
+
+  <div class="field">
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.email_field :email %>
   </div>
 
   <div class="field">
