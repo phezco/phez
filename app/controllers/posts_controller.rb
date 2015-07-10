@@ -14,6 +14,8 @@ class PostsController < ApplicationController
         @downvoted = @vote.downvote?
       end
     end
+    @comments = @post.root_comments
+    @comment = Comment.new
   end
 
   # GET /posts/new

@@ -1,0 +1,10 @@
+<div class="comment"><%= raw(@comment.body_rendered) %></div>
+<div class="comment-actions" id="comment-<%= @comment.id %>-actions"><%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %></div>
+<% if @comment.has_children? %>
+  <% @comment.children.each do |comment| %>
+    <% @comment = comment %>
+    <div class="indented-comment">
+      <%= render :partial => 'comment' %> 
+    </div>
+  <% end %>
+<% end %>

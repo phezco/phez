@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :comments, :only => [:create]
   resources :posts, :except => [:index]
 
   get 'p/:path' => 'subphezes#show', as: :view_subphez

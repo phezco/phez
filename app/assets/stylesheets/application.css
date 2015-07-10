@@ -25,3 +25,20 @@ div.voting_arrows {
 .voted {
   color: #0066ff !important;
 }
+.comment-body {
+  width: 30em;
+  height: 7em;
+}
+.comment {
+  border-left: 1px solid #000;
+  padding-left: .5em;
+}
+.comment-actions {
+
+}
+.comment-actions a {
+  color: #ccc;
+}
+.indented-comment {
+  margin-left: 2em;
+}

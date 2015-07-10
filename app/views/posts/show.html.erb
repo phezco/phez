@@ -18,6 +18,35 @@
   <div class="well"><%= raw(@post.body_rendered) %></div>
 <% end %>
 
+<br/>
+
+<% if @comments.empty? %>
+  <%= form_for @comment, url: comments_path do |f| %>
+    <%= hidden_field_tag :post_id, @post.id %>
+    <%= f.text_area :body, class: 'comment-body' %> <br/>
+    <%= f.submit "Post Comment" %>
+  <% end %>
+<% else %>
+  <% @comments.each do |comment| %>
+    <% @comment = comment %>
+    <%= render :partial => 'comment' %> 
+  <% end %>
+
+<% end %>
+
+<div style="display: none;" id="comment-form">
+  <% @comment = Comment.new %>
+  <div class="inner-comment-form">
+    <%= form_for @comment, url: comments_path do |f| %>
+      <%= hidden_field_tag :post_id, @post.id %>
+      <%= hidden_field_tag :parent_id, '' %>
+      <%= f.text_area :body, class: 'comment-body' %> <br/>
+      <%= f.submit "Post Comment" %>
+    <% end %>
+    <br/>
+  </div>
+</div>
+
 <% content_for :sidebar do %>
   <%= render :partial => 'sidebar' %>
 <% end %>

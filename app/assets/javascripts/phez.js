@@ -4,6 +4,14 @@ var PhezApp = Class.extend({
     this.logged_in = false;
   },
 
+  reply: function(comment_id) {
+    $('#parent_id').val(comment_id);
+    $('.loaded-comment-form').hide();
+    var form_html = $('#comment-form').html();
+    form_html = form_html.replace('inner-comment-form', 'loaded-comment-form');
+    $('#comment-' + comment_id + '-actions').after(form_html);
+  },
+
   upvote: function(post_id) {
     var href = "/votes/upvote?post_id=" + post_id;
     $.ajax({
