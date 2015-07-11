@@ -1,3 +1,4 @@
+<div class="comment-by"><%= @comment.user.username %> - <%= time_ago_in_words(@comment.created_at) %> ago:</div>
 <div class="comment"><%= raw(@comment.body_rendered) %></div>
 <div class="comment-actions" id="comment-<%= @comment.id %>-actions"><%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %></div>
 <% if @comment.has_children? %>

@@ -13,6 +13,9 @@ var PhezApp = Class.extend({
   },
 
   upvote: function(post_id) {
+    if ($('.post-upvote-' + post_id).hasClass('voted')) {
+      return
+    }
     var href = "/votes/upvote?post_id=" + post_id;
     $.ajax({
       type: "POST",
@@ -26,8 +29,18 @@ var PhezApp = Class.extend({
   },
 
   onUpvoteSuccess: function(data, textStatus, jq_xhr) {
+    if ($('.post-downvote-' + data.post_id).hasClass('voted')) {
+      var increment_by = 2;
+    } else {
+      var increment_by = 1;
+    }
     $('.post-upvote-' + data.post_id).addClass('voted');
     $('.post-downvote-' + data.post_id).removeClass('voted');
+    var base_count = parseFloat( $('#vote-count-' + data.post_id).html() );
+    console.log(' base count: ' + base_count);
+    var new_count = base_count + increment_by;
+    console.log(' new count: ' + new_count);
+    $('#vote-count-' + data.post_id).html(new_count);
   },
 
   onUpvoteError: function(jq_xhr, textStatus, errorThrown) {
@@ -35,6 +48,9 @@ var PhezApp = Class.extend({
   },
 
   downvote: function(post_id) {
+    if ($('.post-downvote-' + post_id).hasClass('voted')) {
+      return
+    }
     var href = "/votes/downvote?post_id=" + post_id;
     $.ajax({
       type: "POST",
@@ -48,8 +64,18 @@ var PhezApp = Class.extend({
   },
 
   onDownvoteSuccess: function(data, textStatus, jq_xhr) {
+    if ($('.post-upvote-' + data.post_id).hasClass('voted')) {
+      var decrement_by = 2;
+    } else {
+      var decrement_by = 1
+    }
     $('.post-downvote-' + data.post_id).addClass('voted');
     $('.post-upvote-' + data.post_id).removeClass('voted');
+    var base_count = parseFloat( $('#vote-count-' + data.post_id).html() );
+    console.log(' base count: ' + base_count);
+    var new_count = base_count - decrement_by;
+    console.log(' new count: ' + new_count);
+    $('#vote-count-' + data.post_id).html(new_count);
   },
 
   onDownvoteError: function(jq_xhr, textStatus, errorThrown) {

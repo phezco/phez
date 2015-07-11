@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :posts, :except => [:index]
 
   get 'p/:path' => 'subphezes#show', as: :view_subphez
+  get 'p/:path/latest' => 'subphezes#latest', as: :subphez_latest
   get 'p/:path/submit' => 'posts#new', as: :new_subphez_post
   get 'p/:path/:post_id/:guid/' => 'posts#show', as: :view_post
 

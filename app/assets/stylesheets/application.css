@@ -14,27 +14,49 @@
  *= require_self
  *= require font-awesome
  */
+h2 a.post-link:visited {
+  color: #9933ff !important;
+}
+
+div.subphez-heading-well {
+  padding-top: 0em !important;
+  padding-bottom: 0em !important;
+}
 
 div.voting_arrows {
-  margin-top: 1.4em;
+  margin-top: .5em;
+  width: 2%;
+  float: left;
+}
+span.vote_count {
+  font-size: 1.3em;
+  color: #b2b2b2;
+  text-align: center;
 }
 .vote-arrow {
-  color: #808080;
+  color: #b2b2b2;
   font-size: 1.5em !important;
 }
 .voted {
   color: #0066ff !important;
+}
+.submitted {
+  color: #b2b2b2;
+}
+.comment-by {
+  padding-bottom: .4em;
+  color: #b2b2b2;
 }
 .comment-body {
   width: 30em;
   height: 7em;
 }
 .comment {
-  border-left: 1px solid #000;
+  border-left: 1px solid #ccc;
   padding-left: .5em;
 }
 .comment-actions {
-
+  padding-bottom: .6em;
 }
 .comment-actions a {
   color: #ccc;

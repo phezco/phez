@@ -1,8 +1,8 @@
 <div class="well subphez-heading-well">
   <ul class="list-inline">
-    <li><h2>Hot</h2></li>
+    <li><h2><%= link_to 'Hot', build_subphez_path(@subphez) %></h2></li>
     <li>&nbsp;&nbsp;</li>
-    <li><h2><%= link_to 'New', subphez_latest_path(:path => @subphez.path) %></h2></li>
+    <li><h2>New</h2></li>
   </ul>
 </div>
 

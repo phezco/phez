@@ -1,4 +1,14 @@
-<h1>Home</h1>
+<%= render :partial => 'subphezes/recently_created' %>
+
+<br/>
+
+<% @posts.each do |post| %>
+  <% @post = post %>
+  <%= render :partial => 'posts/heading' %>
+<% end %>
+
+<%= will_paginate @posts %>
+
 <% content_for :sidebar do %>
   <%= render :partial => 'shared/sidebar' %>
 <% end %>

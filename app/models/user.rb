@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
 
   validates :username, uniqueness: true
 
+  has_many :votes, dependent: :destroy
+
   def email_required?
     false
   end

@@ -1,5 +1,5 @@
 class SubphezesController < ApplicationController
-  before_action :authenticate_user!, :except => [:index, :show]
+  before_action :authenticate_user!, :except => [:index, :show, :latest]
   before_action :set_subphez, only: [:edit, :update, :destroy]
 
   # GET /subphezs
@@ -15,6 +15,15 @@ class SubphezesController < ApplicationController
     if @subphez.nil?
       redirect_to :back, alert: 'Could not find subphez.'
     end
+    @posts = @subphez.posts.by_hot_score.paginate(:page => params[:page])
+  end
+
+  def latest
+    @subphez = Subphez.by_path(params[:path])
+    if @subphez.nil?
+      redirect_to :back, alert: 'Could not find subphez.'
+    end
+    @posts = @subphez.posts.latest.paginate(:page => params[:page])
   end
 
   # GET /subphezs/new

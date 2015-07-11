@@ -6,14 +6,6 @@ class PostsController < ApplicationController
   # GET /posts/1.json
   def show
     @post = Post.find(params[:post_id])
-    @upvoted, @downvoted = false, false
-    if current_user
-      @vote = Vote.voted(current_user, @post)
-      if @vote
-        @upvoted = @vote.upvote?
-        @downvoted = @vote.downvote?
-      end
-    end
     @comments = @post.root_comments
     @comment = Comment.new
   end
@@ -56,6 +48,7 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
+    redirect_to :back unless @post.owner?(current_user)
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to build_post_path(@post), notice: 'Post was successfully updated.' }

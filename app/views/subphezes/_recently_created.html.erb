@@ -1,0 +1,6 @@
+<div>
+  Recently created Subphezes: &nbsp;&nbsp;
+  <% Subphez.latest.limit(7).each do |subphez| %>
+    <%= link_to "p/#{subphez.path}", build_subphez_path(subphez) %> &nbsp;&nbsp;&nbsp;
+  <% end %>
+</div>

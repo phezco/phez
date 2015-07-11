@@ -1,10 +1,10 @@
 <div class="col-lg-3">
   <div class="well sidebar-nav">
-    <h3><%= @subphez.title %></h3>
+    <h3><%= link_to @subphez.title, build_subphez_path(@subphez) %></h3>
 
     <%= link_to 'Submit a new link', new_subphez_post_path(:path => @subphez.path), class: 'btn btn-primary' %>
     <br/>
-    <% if @subphez.owner?(current_user) %>
+    <% if user_signed_in? && @subphez.owner?(current_user) %>
       <br/>
       <%= link_to 'Edit this Subphez', edit_subphez_path(@subphez), class: 'btn btn-primary' %>
       <br/>
