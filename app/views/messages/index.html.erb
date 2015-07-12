@@ -1,0 +1,9 @@
+<h2>Inbox</h2>
+
+<% @messages.each do |message| %>
+  <div>
+    Sent by <% if message.user.nil? %>System<% else %> <%= message.user.username %> <% end %> <%= time_ago_in_words(message.created_at) %> ago: <br/>
+    <b><%= message.title %></b> <br/>
+    <p><%= raw(message.body) %></p>
+  </div>
+<% end %>

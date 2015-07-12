@@ -2,4 +2,6 @@
 
 <% @subphezes.each do |subphez| %>
 
+  <%= link_to subphez.title, build_subphez_path(subphez) %> <br/>
+
 <% end %>

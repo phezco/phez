@@ -5,7 +5,10 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
-    @post = Post.find(params[:post_id])
+    @post = Post.where(id: params[:post_id]).first
+    if @post.nil?
+      redirect_to root_path, alert: 'Could not find post.' and return
+    end
     @comments = @post.root_comments
     @comment = Comment.new
   end
@@ -63,7 +66,9 @@ class PostsController < ApplicationController
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
-    @post.destroy if @post.owner?(current_user)
+    if @post.owner?(current_user) || @post.moderateable?(current_user)
+      @post.destroy
+    end
     respond_to do |format|
       format.html { redirect_to root_path, notice: 'Post was successfully destroyed.' }
       format.json { head :no_content }

@@ -24,14 +24,26 @@ class Ranker
   end
 
   def self.points(vote)
-    if vote.created_at > 3.hours.ago
-      return 4
-    elsif vote.created_at > 6.hours.ago
-      return 3
-    elsif vote.created_at > 18.hours.ago
-      return 2
+    if vote.upvote?
+      if vote.created_at > 3.hours.ago
+        return 4
+      elsif vote.created_at > 6.hours.ago
+        return 3
+      elsif vote.created_at > 18.hours.ago
+        return 2
+      else
+        return 1
+      end
     else
-      return 1
+      if vote.created_at > 3.hours.ago
+        return -4
+      elsif vote.created_at > 6.hours.ago
+        return -3
+      elsif vote.created_at > 18.hours.ago
+        return -2
+      else
+        return -1
+      end
     end
   end
 
@@ -43,23 +55,31 @@ class Ranker
 
   def self.hot_score_subphez(subphez)
     i = 0
-    #max_points = 1
+    top_post = Post.order('points DESC').limit(1).first
+    @@max_points_global = top_post.points
+    puts "\n\n@@max_points_global = #{@@max_points_global}\n\n"
     subphez.posts.by_points.limit(200).each do |post|
       hot_score = 0
       if i == 0
+        # Set the max points to the post in this Subphez with the most points
         @@max_points = post.points
         hot_score = 100
-        puts "Setting max_points = #{post.points}"
+        puts "Setting max_points = #{@@max_points}"
       else
         if post.points
-          # puts "post.points = #{post.points}"
-          # puts "max_points = #{@@max_points}"
-          hot_score = ((post.points * 100) / @@max_points).to_i
+          hot_score = ((post.points.to_f * 100.0) / @@max_points.to_f).to_i
         end
       end
       if post.points
-        puts "#{post.id} :: #{post.title} :: #{post.points} points :: #{hot_score} Hot Score"
-        post.update(hot_score: hot_score)
+        if @@max_points < @@max_points_global
+          # Adjust hot score to the global top points post
+          adjusted_hot_score = (hot_score.to_f * (@@max_points.to_f / @@max_points_global.to_f)).to_i
+        else
+          # Top Post - hot_score is 100
+          adjusted_hot_score = hot_score
+        end
+        puts "#{post.id} :: #{post.title} :: #{post.points} points :: Hot Score :: #{hot_score}\t\tAdjusted Hot Score :: #{adjusted_hot_score}"
+        post.update(hot_score: adjusted_hot_score)
       end
       i += 1
     end

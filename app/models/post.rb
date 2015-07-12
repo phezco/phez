@@ -11,6 +11,7 @@ class Post < ActiveRecord::Base
   before_create :set_guid
   before_save :format_website_url
   after_create :add_vote
+  before_save :sanitize_attributes
 
   self.per_page = 20
 
@@ -26,6 +27,10 @@ class Post < ActiveRecord::Base
     Vote.where(post_id: self.id).where('vote_value < 0').sum(:vote_value) * -1
   end
 
+  def comment_count
+    Comment.where(commentable_id: self.id).count
+  end
+
   def format_website_url
     if !url.blank?
       return if url.include?('http://') || url.include?('https://')
@@ -34,7 +39,7 @@ class Post < ActiveRecord::Base
   end
 
   def body_rendered
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
     markdown.render(body)
   end
 
@@ -52,8 +57,19 @@ class Post < ActiveRecord::Base
     the_user.id == user_id
   end
 
+  def moderateable?(the_user)
+    subphez.can_moderate?(the_user)
+  end
+
   def add_vote
     Vote.upvote(user, self)
+  end
+
+  def sanitize_attributes
+    sanitizer = Rails::Html::FullSanitizer.new
+    self.title = sanitizer.sanitize(self.title) unless self.title.blank?
+    self.body = sanitizer.sanitize(self.body) unless self.body.blank?
+    self.url = sanitizer.sanitize(self.url) unless self.url.blank?
   end
 
 end

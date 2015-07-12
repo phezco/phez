@@ -1,0 +1,11 @@
+<h2>Moderator Request: <%= @subphez.title %></h2>
+
+<p>
+  You have been invited to become a moderator of <%= link_to "/p/#{@subphez.path}", build_subphez_path(@subphez) %>.
+</p>
+
+<%= link_to "Become a Moderator of /p/#{@subphez.path}", update_modrequest_path(:path => @subphez.path), method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-success' %>
+
+<br/><br/>
+
+<p>If you do not want to become a moderator of this subphez, you may safely ignore this message.</p>

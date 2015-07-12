@@ -1,0 +1,2 @@
+<div class="comment-by"><%= @comment.user.username %> - <%= time_ago_in_words(@comment.created_at) %> ago:</div>
+<div class="comment"><%= raw(@comment.body_rendered) %></div>

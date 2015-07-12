@@ -82,6 +82,86 @@ var PhezApp = Class.extend({
     alert('There was a problem saving your vote. Please try again later.');
   },
 
+  upvoteComment: function(comment_id) {
+    if ($('.comment-upvote-' + comment_id).hasClass('voted')) {
+      return
+    }
+    var href = "/comment_votes/upvote?comment_id=" + comment_id;
+    $.ajax({
+      type: "POST",
+      url: href,
+      success: Phez.onCommentUpvoteSuccess,
+      statusCode: {
+        400: Phez.onCommentUpvoteError
+      },
+      dataType: 'json'
+    });
+  },
+
+  onCommentUpvoteSuccess: function(data, textStatus, jq_xhr) {
+    console.log(data);
+    if (data.success == true) {
+      if ($('.comment-downvote-' + data.comment_id).hasClass('voted')) {
+        var increment_by = 2;
+      } else {
+        var increment_by = 1;
+      }
+      $('.comment-upvote-' + data.comment_id).addClass('voted');
+      $('.comment-downvote-' + data.comment_id).removeClass('voted');
+      var base_count = parseFloat( $('#comment-vote-count-' + data.comment_id).html() );
+      console.log(' base count: ' + base_count);
+      var new_count = base_count + increment_by;
+      console.log(' new count: ' + new_count);
+      $('#comment-vote-count-' + data.comment_id).html(new_count);
+    } else {
+      alert('There was a problem saving your vote.');
+    }
+  },
+
+  onCommentUpvoteError: function(jq_xhr, textStatus, errorThrown) {
+    alert('There was a problem saving your vote. Please try again later.');
+  },
+
+  downvoteComment: function(comment_id) {
+    if ($('.comment-downvote-' + comment_id).hasClass('voted')) {
+      return
+    }
+    var href = "/comment_votes/downvote?comment_id=" + comment_id;
+    $.ajax({
+      type: "POST",
+      url: href,
+      success: Phez.onCommentDownvoteSuccess,
+      statusCode: {
+        400: Phez.onCommentDownvoteError
+      },
+      dataType: 'json'
+    });
+  },
+
+  onCommentDownvoteSuccess: function(data, textStatus, jq_xhr) {
+    console.log(data);
+    if (data.success == true) {
+      if ($('.comment-upvote-' + data.comment_id).hasClass('voted')) {
+        var decrement_by = 2;
+      } else {
+        var decrement_by = 1
+      }
+      $('.comment-downvote-' + data.comment_id).addClass('voted');
+      $('.comment-upvote-' + data.comment_id).removeClass('voted');
+      var base_count = parseFloat( $('#comment-vote-count-' + data.comment_id).html() );
+      console.log(' base count: ' + base_count);
+      var new_count = base_count - decrement_by;
+      console.log(' new count: ' + new_count);
+      $('#comment-vote-count-' + data.comment_id).html(new_count);
+    } else {
+      alert('There was a problem saving your vote.');
+    }
+  },
+
+  onCommentDownvoteError: function(jq_xhr, textStatus, errorThrown) {
+    alert('There was a problem saving your vote. Please try again later.');
+  },
+
   applyClickHandlers: function() {
   }
 

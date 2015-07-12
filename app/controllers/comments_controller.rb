@@ -18,4 +18,16 @@ class CommentsController < ApplicationController
     redirect_to build_post_path(@post)
   end
 
+  def destroy
+    @comment = Comment.find(params[:id])
+    if @comment.nil?
+      redirect_to root_path, alert: "Could not find comment to delete." and return
+    end
+    unless @comment.owner?(current_user) || @comment.moderatable?(current_user)
+      redirect_to root_path, alert: "You are not allowed to do that." and return
+    end
+    @comment.delete!
+    redirect_to build_post_path(@comment.commentable), notice: 'Success! Comment deleted.'
+  end
+
 end

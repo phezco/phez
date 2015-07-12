@@ -1,0 +1,16 @@
+<% title("#{@user.username}'s comment history") %>
+
+<div class="well subphez-heading-well">
+  <ul class="list-inline">
+    <li><h2><%= link_to 'Posts', build_profile_path(@user) %></h2></li>
+    <li>&nbsp;&nbsp;</li>
+    <li><h2>Comments</h2></li>
+  </ul>
+</div>
+
+<% @comments.each do |comment| %>
+  <% @comment = comment %>
+  <%= render :partial => 'posts/comment_stripped' %>
+<% end %>
+
+<%= will_paginate @comments %>

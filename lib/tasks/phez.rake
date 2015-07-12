@@ -1,5 +1,10 @@
 namespace :phez do
 
+  desc "Rank all posts"
+  task :rank => :environment do
+    Ranker.rank!
+  end
+
   desc "Create dummy phez data"
   task :dummy => :environment do
     user_prefix = 'user'
@@ -7,7 +12,6 @@ namespace :phez do
     password = 'phez12345'
     users = []
     1.upto(user_count) do |i|
-      #puts i
       u = User.where(username: "#{user_prefix}#{i}").first
       unless u
         u = User.create!(username: "#{user_prefix}#{i}", password: password)

@@ -13,16 +13,14 @@
         %>
       <a href="javascript:Phez.upvote(<%= @post.id %>)"><i class="vote-arrow fa fa-arrow-up post-upvote-<%= @post.id %> <%= 'voted' if @upvoted %>"></i></a> <br/>
       <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
-      <span id="base-count-<%= @post.id %>" data-count="<%= @post.vote_total %>"></span>
       <a href="javascript:Phez.downvote(<%= @post.id %>)"><i class="vote-arrow fa fa-arrow-down post-downvote-<%= @post.id %> <%= 'voted' if @downvoted %>"></a></i>
     <% else %>
       <a href="/users/sign_up"><i class="vote-arrow fa fa-arrow-up"></i></a> <br/>
       <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
-      <span id="base-count-<%= @post.id %>" data-count="<%= @post.vote_total %>"></span>
       <a href="/users/sign_up"><i class="vote-arrow fa fa-arrow-down"></a></i>
     <% end %>
   </div>
-  <div class="col-md-7">
+  <div class="col-md-8">
     <h2>
       <% if @post.is_self %>
         <%= link_to @post.title, build_post_path(@post), class: 'post-link' %>
@@ -30,6 +28,10 @@
         <%= link_to @post.title, @post.url, class: 'post-link' %>
       <% end %>
     </h2>
-    <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= @post.user.username %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_threads.size} comments", build_post_path(@post) %></p>
+    <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= link_to @post.user.username, build_profile_path(@post.user) %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_count} comments", build_post_path(@post) %>
+      <% if user_signed_in? && (@post.owner?(current_user) || @post.moderateable?(current_user)) %>
+      | <%= link_to 'delete', @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </p>
   </div>
 </div>

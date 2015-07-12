@@ -1,6 +1,44 @@
-<div class="comment-by"><%= @comment.user.username %> - <%= time_ago_in_words(@comment.created_at) %> ago:</div>
-<div class="comment"><%= raw(@comment.body_rendered) %></div>
-<div class="comment-actions" id="comment-<%= @comment.id %>-actions"><%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %></div>
+<%
+@upvoted, @downvoted = false, false
+if user_signed_in?
+  @vote = CommentVote.voted(current_user, @comment)
+  if @vote
+    @upvoted = @vote.upvote?
+    @downvoted = @vote.downvote?
+  end
+end
+%>
+<div class="comment-by">
+  <% if @comment.is_deleted %>
+    [deleted]
+  <% else %>
+    <%= link_to @comment.user.username, build_profile_path(@comment.user) %>
+    <span id="comment-vote-count-<%= @comment.id %>"><%= @comment.vote_total %></span> points <small>( <span class="comment-upvote-total">+<%= @comment.upvote_total %></span>|<span class="comment-downvote-total">-<%= @comment.downvote_total %></span> )</small>
+  <% end %>
+   :: <%= time_ago_in_words(@comment.created_at) %> ago:
+</div>
+<div class="row">
+  <div class="comment_arrows">
+    <% if !@comment.is_deleted %>
+      <a href="javascript:Phez.upvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-up comment-upvote-<%= @comment.id %> <%= 'voted' if @upvoted %>"></i></a> <br/>
+      <a href="javascript:Phez.downvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-down comment-downvote-<%= @comment.id %> <%= 'voted' if @downvoted %>"></a></i>
+    <% end %>
+  </div>
+  <div class="comment <%= 'deleted-comment' if @comment.is_deleted %>">
+    <% if @comment.is_deleted %>
+      [deleted]
+    <% else %>
+      <%= raw(@comment.body_rendered) %>
+    <% end %>
+  </div>
+</div>
+
+<div class="comment-actions" id="comment-<%= @comment.id %>-actions">
+  <%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %> &nbsp;
+  <% if user_signed_in? && !@comment.is_deleted && (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
+    <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %>
+  <% end %>
+</div>
 <% if @comment.has_children? %>
   <% @comment.children.each do |comment| %>
     <% @comment = comment %>

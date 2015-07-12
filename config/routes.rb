@@ -1,15 +1,29 @@
 Rails.application.routes.draw do
 
-  resources :comments, :only => [:create]
+  resources :comments, :only => [:create, :destroy]
   resources :posts, :except => [:index]
+  resources :messages, :only => [:index]
+  resources :profiles, :only => [:show] do
+    member do
+      get 'comments'
+    end
+  end
 
   get 'p/:path' => 'subphezes#show', as: :view_subphez
   get 'p/:path/latest' => 'subphezes#latest', as: :subphez_latest
+  get 'p/:path/manage' => 'subphezes#manage', as: :manage_subphez
+  post 'p/:path/add_moderator' => 'subphezes#add_moderator', as: :add_moderator_subphez
+  post 'p/:path/remove_moderator' => 'subphezes#remove_moderator', as: :remove_moderator_subphez
+  get 'p/:path/approve_modrequest' => 'subphezes#approve_modrequest', as: :approve_modrequest
+  post 'p/:path/update_modrequest' => 'subphezes#update_modrequest', as: :update_modrequest
   get 'p/:path/submit' => 'posts#new', as: :new_subphez_post
   get 'p/:path/:post_id/:guid/' => 'posts#show', as: :view_post
 
   post 'votes/upvote' => 'votes#upvote'
   post 'votes/downvote' => 'votes#downvote'
+
+  post 'comment_votes/upvote' => 'comment_votes#upvote'
+  post 'comment_votes/downvote' => 'comment_votes#downvote'
 
   resources :subphezes, :except => [:destroy]
   devise_for :users

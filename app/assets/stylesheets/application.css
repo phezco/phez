@@ -15,7 +15,7 @@
  *= require font-awesome
  */
 h2 a.post-link:visited {
-  color: #9933ff !important;
+  color: #4c1a80 !important;
 }
 
 div.subphez-heading-well {
@@ -52,8 +52,8 @@ span.vote_count {
   height: 7em;
 }
 .comment {
-  border-left: 1px solid #ccc;
-  padding-left: .5em;
+  padding-left: .1em;
+  display: table-cell;
 }
 .comment-actions {
   padding-bottom: .6em;
@@ -63,4 +63,24 @@ span.vote_count {
 }
 .indented-comment {
   margin-left: 2em;
+}
+.deleted-comment {
+  color: #ccc;
+  margin-left: 1.5em;
+}
+span.comment-upvote-total {
+  color: #0066ff;
+}
+span.comment-downvote-total {
+  color: #8a2ee6;
+}
+
+div.comment_arrows {
+  width: 4%;
+  float: left;
+  display: table-cell;
+}
+
+.orange {
+  color: #ff6600 !important;
 }

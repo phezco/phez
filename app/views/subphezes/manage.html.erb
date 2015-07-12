@@ -1,0 +1,28 @@
+<h2>Manage <%= @subphez.title %></h2>
+
+<h3>Add Moderator</h3>
+
+<%= form_for(@mod_request, :url => add_moderator_subphez_path(:path => @subphez.path)) do |f| %>
+  <div class="field">
+    <%= label_tag :username %><br>
+    <%= text_field_tag :username %>
+    <br/><i>Enter the username of the user who you'd like to add as a moderator.</i>
+  </div>
+  <div class="actions">
+    <%= f.submit "Add Moderator" %>
+  </div>
+<% end %>
+
+<h3>Moderators</h3>
+
+<% @subphez.moderators.each do |user| %>
+  <%= user.username %>
+  <% if current_user.is_owner?(@subphez) && user != current_user %>
+    <%= link_to 'Remove Moderator', remove_moderator_subphez_path(:id => @subphez.id, :user_id => user.id), method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+  <% end %>
+  <br/>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'sidebar' %>
+<% end %>

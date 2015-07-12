@@ -4,14 +4,24 @@
 
     <%= link_to 'Submit a new link', new_subphez_post_path(:path => @subphez.path), class: 'btn btn-primary' %>
     <br/>
-    <% if user_signed_in? && @subphez.owner?(current_user) %>
+    <% if user_signed_in? && current_user.can_moderate?(@subphez) %>
       <br/>
       <%= link_to 'Edit this Subphez', edit_subphez_path(@subphez), class: 'btn btn-primary' %>
+      <br/><br/>
+      <%= link_to 'Manage this Subphez', manage_subphez_path(:path => @subphez.path), class: 'btn btn-primary' %>
       <br/>
     <% end %>
+
     <br/>
     <div>
       <%= raw(@subphez.sidebar_rendered) %>
+    </div>
+    <br/>
+    <div>
+      <h4>Moderators</h4>
+      <% @subphez.moderators.each do |mod| %>
+        <%= link_to mod.username, build_profile_path(mod) %> <br/>
+      <% end %>
     </div>
   </div>
 </div>

@@ -4,28 +4,49 @@ class Comment < ActiveRecord::Base
   validates :body, :presence => true
   validates :user, :presence => true
 
-  # NOTE: install the acts_as_votable plugin if you
-  # want user to vote on the quality of comments.
-  #acts_as_votable
-
-  belongs_to :commentable, :polymorphic => true
-
-  # NOTE: Comments belong to a user
   belongs_to :user
+  belongs_to :commentable, :polymorphic => true
+  has_many :comment_votes, dependent: :destroy
 
-  def body_rendered
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-    markdown.render(body)
+  scope :latest, -> { order('created_at DESC') }
+
+  before_save :sanitize_attributes
+  after_create :add_comment_upvote
+
+  def add_comment_upvote
+    CommentVote.upvote(user, self)
   end
 
-  # Helper class method that allows you to build a comment
-  # by passing a commentable object, a user_id, and comment text
-  # example in readme
-  def self.build_from(obj, user_id, comment)
-    new \
-      :commentable => obj,
-      :body        => comment,
-      :user_id     => user_id
+  def vote_total
+    CommentVote.where(comment_id: self.id).sum(:vote_value)
+  end
+
+  def upvote_total
+    CommentVote.where(comment_id: self.id).where('vote_value > 0').sum(:vote_value)
+  end
+
+  def downvote_total
+    CommentVote.where(comment_id: self.id).where('vote_value < 0').sum(:vote_value) * -1
+  end
+
+  def delete!
+    update_attribute(:user_id, nil)
+    update_attribute(:body, nil)
+    update_attribute(:is_deleted, true)
+    comment_votes.delete_all
+  end
+
+  def owner?(check_user)
+    check_user.id == user_id
+  end
+
+  def moderatable?(check_user)
+    check_user.can_moderate?(commentable.subphez)
+  end
+
+  def body_rendered
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
+    markdown.render(body)
   end
 
   #helper method to check if a comment has children
@@ -45,9 +66,25 @@ class Comment < ActiveRecord::Base
     where(:commentable_type => commentable_str.to_s, :commentable_id => commentable_id).order('created_at DESC')
   }
 
+  def sanitize_attributes
+    sanitizer = Rails::Html::FullSanitizer.new
+    self.body = sanitizer.sanitize(self.body) unless self.body.blank?
+  end
+
   # Helper class method to look up a commentable object
   # given the commentable class name and id
   def self.find_commentable(commentable_str, commentable_id)
     commentable_str.constantize.find(commentable_id)
   end
+
+  # Helper class method that allows you to build a comment
+  # by passing a commentable object, a user_id, and comment text
+  # example in readme
+  def self.build_from(obj, user_id, comment)
+    new \
+      :commentable => obj,
+      :body        => comment,
+      :user_id     => user_id
+  end
+
 end

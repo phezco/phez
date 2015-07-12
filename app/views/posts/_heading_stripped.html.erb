@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="voting_arrows">
+      <br/>
+      <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
+      
+  </div>
+  <div class="col-md-7">
+    <h2>
+      <% if @post.is_self %>
+        <%= link_to @post.title, build_post_path(@post), class: 'post-link' %>
+      <% else %>
+        <%= link_to @post.title, @post.url, class: 'post-link' %>
+      <% end %>
+    </h2>
+    <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= link_to @post.user.username, build_profile_path(@post.user) %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_threads.size} comments", build_post_path(@post) %></p>
+  </div>
+</div>

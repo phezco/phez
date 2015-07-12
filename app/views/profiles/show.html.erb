@@ -1,0 +1,16 @@
+<% title("#{@user.username}'s profile") %>
+
+<div class="well subphez-heading-well">
+  <ul class="list-inline">
+    <li><h2>Posts</h2></li>
+    <li>&nbsp;&nbsp;</li>
+    <li><h2><%= link_to 'Comments', comments_profile_path(:id => @user.username) %></h2></li>
+  </ul>
+</div>
+
+<% @posts.each do |post| %>
+  <% @post = post %>
+  <%= render :partial => 'posts/heading_stripped' %>
+<% end %>
+
+<%= will_paginate @posts %>

@@ -30,7 +30,9 @@
   <div class="field">
     <%= f.label :body %><br>
     <%= f.text_area :body, style: 'width: 20em; height: 6em' %> <br/>
-    <i>Leave the body field blank unless you are submitting a self post.</i>
+    <% if @post.new_record? %>
+      <i>Leave the body field blank unless you are submitting a self post.</i>
+    <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>
