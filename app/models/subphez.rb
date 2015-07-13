@@ -8,6 +8,7 @@ class Subphez < ActiveRecord::Base
 
   scope :latest, -> { order('created_at DESC') }
 
+  before_save :sanitize_attributes
   after_create :add_owner_as_moderator
 
   MaxPerUser = 3
@@ -36,6 +37,17 @@ class Subphez < ActiveRecord::Base
 
   def self.by_path(path)
     Subphez.where("LOWER(path) = ?", path.downcase).first
+  end
+
+  def sanitize_attributes
+    self.title = sanitize(self.title) unless self.title.blank?
+    self.sidebar = sanitize(self.sidebar) unless self.title.blank?
+  end
+
+  def sanitize(text)
+    sanitizer = Rails::Html::FullSanitizer.new
+    # Sanitizer seems to be inserting "&#13;" into the text around newlines. Not sure why. For now:
+    sanitizer.sanitize(text).gsub('&#13;', '')
   end
 
 end

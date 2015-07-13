@@ -66,10 +66,15 @@ class Post < ActiveRecord::Base
   end
 
   def sanitize_attributes
+    self.title = sanitize(self.title) unless self.title.blank?
+    self.body = sanitize(self.body) unless self.title.blank?
+    self.url = sanitize(self.url) unless self.title.blank?
+  end
+
+  def sanitize(text)
     sanitizer = Rails::Html::FullSanitizer.new
-    self.title = sanitizer.sanitize(self.title) unless self.title.blank?
-    self.body = sanitizer.sanitize(self.body) unless self.body.blank?
-    self.url = sanitizer.sanitize(self.url) unless self.url.blank?
+    # Sanitizer seems to be inserting "&#13;" into the text around newlines. Not sure why. For now:
+    sanitizer.sanitize(text).gsub('&#13;', '')
   end
 
 end
