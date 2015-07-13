@@ -91,7 +91,7 @@ Rails.application.configure do
 
 end
 
-Startnoo::Application.config.middleware.use ExceptionNotification::Rack,
+Phez::Application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :email_prefix => "[Phez] ",
     :sender_address => %{"notifier" <notifier@phez.co>},
