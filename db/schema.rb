@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150712092207) do
+ActiveRecord::Schema.define(version: 20150713070053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,12 +79,13 @@ ActiveRecord::Schema.define(version: 20150712092207) do
   end
 
   create_table "subphezes", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.string   "path",       null: false
-    t.string   "title",      null: false
+    t.integer  "user_id",                       null: false
+    t.string   "path",                          null: false
+    t.string   "title",                         null: false
     t.text     "sidebar"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "is_admin_only", default: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -106,6 +107,7 @@ ActiveRecord::Schema.define(version: 20150712092207) do
     t.datetime "updated_at",                             null: false
     t.string   "username"
     t.boolean  "orange",                 default: false
+    t.boolean  "is_admin",               default: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

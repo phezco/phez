@@ -9,6 +9,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :home, :only => [:index] do
+    collection do
+      get 'privacy'
+    end
+  end
+
   get 'p/:path' => 'subphezes#show', as: :view_subphez
   get 'p/:path/latest' => 'subphezes#latest', as: :subphez_latest
   get 'p/:path/manage' => 'subphezes#manage', as: :manage_subphez

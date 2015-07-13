@@ -4,4 +4,7 @@ class HomeController < ApplicationController
     @posts = Post.by_hot_score.paginate(:page => params[:page])
   end
 
+  def privacy
+  end
+
 end

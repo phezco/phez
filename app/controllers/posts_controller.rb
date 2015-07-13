@@ -16,6 +16,9 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @subphez = Subphez.by_path(params[:path])
+    if @subphez.is_admin_only && !current_user.is_admin
+      redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
+    end
     @post = Post.new
     @post.subphez_id = @subphez.id
   end
@@ -30,6 +33,10 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
+    @subphez = Subphez.find(@post.subphez_id)
+    if @subphez.is_admin_only && !current_user.is_admin
+      redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
+    end
     @post.user_id = current_user.id
     @post.vote_total = 1
     if @post.url.blank?

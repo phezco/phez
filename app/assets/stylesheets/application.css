@@ -80,7 +80,13 @@ div.comment_arrows {
   float: left;
   display: table-cell;
 }
-
+.title-field {
+  width: 30em;
+}
+textarea.body-field {
+  width: 30em;
+  height: 15em;
+}
 .orange {
   color: #ff6600 !important;
 }

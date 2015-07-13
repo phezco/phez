@@ -17,19 +17,19 @@
     <p>You are submitting a post to: <%= link_to @subphez.title, view_subphez_path(:path => @subphez.path) %></p>
     <div class="field">
       <%= f.label :url %><br>
-      <%= f.text_field :url %> <br/>
+      <%= f.text_field :url, class: 'title-field' %> <br/>
       <i>Leave URL field blank to submit a self post (discussion thread)</i>
     </div>
     <div class="field">
       <%= f.label :title %><br>
-      <%= f.text_field :title %>
+      <%= f.text_field :title, class: 'title-field' %>
     </div>
   <% else %>
     <p>Only the body of self posts can be edited.</p>
   <% end %>
   <div class="field">
     <%= f.label :body %><br>
-    <%= f.text_area :body, style: 'width: 20em; height: 6em' %> <br/>
+    <%= f.text_area :body, class: 'body-field' %> <br/>
     <% if @post.new_record? %>
       <i>Leave the body field blank unless you are submitting a self post.</i>
     <% end %>

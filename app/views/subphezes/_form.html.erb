@@ -21,11 +21,11 @@
   <% end %>
   <div class="field">
     <%= f.label :title %><br>
-    <%= f.text_field :title %>
+    <%= f.text_field :title, class: 'title-field' %>
   </div>
   <div class="field">
     <%= f.label :sidebar, "Sidebar Text" %><br>
-    <%= f.text_area :sidebar %>
+    <%= f.text_area :sidebar, class: 'body-field' %>
   </div>
   <div class="actions">
     <%= f.submit %>
