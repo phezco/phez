@@ -135,7 +135,7 @@ class SubphezesController < ApplicationController
     def set_subphez_by_path
       @subphez = Subphez.by_path(params[:path])
       if @subphez.nil?
-        redirect_to :back, alert: 'Could not find subphez.' and return
+        redirect_to root_path, alert: 'Could not find subphez.' and return
       end
     end
 
