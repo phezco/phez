@@ -1,9 +1,0 @@
-== Phez - the free speech platform
-
-Phez is an online community (powered by this Ruby on Rails app) online at:
-
-http://phez.co
-
-Enjoy,
-
-Created by p4x
