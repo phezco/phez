@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :authentication_keys => [:username] #, :confirmable, :validatable
 
   validates :username, uniqueness: true
+  validates :password, presence: true
 
   has_many :votes, dependent: :destroy
   has_many :moderations

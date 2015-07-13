@@ -69,6 +69,8 @@ GEM
       warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.5.2)
+    figaro (1.1.1)
+      thor (~> 0.14)
     font-awesome-rails (4.3.0.0)
       railties (>= 3.2, < 5.0)
     globalid (0.3.5)
@@ -131,6 +133,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    recaptcha (0.4.0)
     redcarpet (3.3.2)
     ref (1.0.5)
     responders (2.1.0)
@@ -189,12 +192,14 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   devise
+  figaro
   font-awesome-rails
   jbuilder (~> 2.0)
   jquery-rails
   less-rails
   pg
   rails (= 4.2.3)
+  recaptcha
   redcarpet
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

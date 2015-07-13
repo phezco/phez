@@ -1,0 +1,7 @@
+
+recaptcha_public_key: 
+recaptcha_private_key: 
+
+production:
+  recaptcha_public_key: 
+  recaptcha_private_key: 

@@ -52,3 +52,5 @@ gem 'font-awesome-rails'
 gem 'acts_as_commentable_with_threading'
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.6'
+gem 'recaptcha'
+gem 'figaro'

@@ -32,7 +32,9 @@ Rails.application.routes.draw do
   post 'comment_votes/downvote' => 'comment_votes#downvote'
 
   resources :subphezes, :except => [:destroy]
-  devise_for :users
+  #devise_for :users
+  devise_for :users, :controllers => {:registrations => "registrations"}
+
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
