@@ -54,3 +54,4 @@ gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.6'
 gem 'recaptcha'
 gem 'figaro'
+gem 'exception_notification'
