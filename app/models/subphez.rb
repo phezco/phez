@@ -10,6 +10,8 @@ class Subphez < ActiveRecord::Base
 
   after_create :add_owner_as_moderator
 
+  MaxPerUser = 3
+
   def sidebar_rendered
     return '' if sidebar.blank?
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)

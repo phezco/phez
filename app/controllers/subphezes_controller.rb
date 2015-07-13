@@ -74,6 +74,9 @@ class SubphezesController < ApplicationController
   # GET /subphezs/new
   def new
     @subphez = Subphez.new
+    if current_user.max_subphezes_reached?
+      redirect_to root_path, alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon." and return
+    end
   end
 
   # GET /subphezs/1/edit
@@ -83,6 +86,9 @@ class SubphezesController < ApplicationController
   # POST /subphezs
   # POST /subphezs.json
   def create
+    if current_user.max_subphezes_reached?
+      redirect_to root_path, alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon." and return
+    end
     @subphez = Subphez.new(subphez_params)
     @subphez.user_id = current_user.id
     respond_to do |format|

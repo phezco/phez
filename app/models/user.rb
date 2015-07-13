@@ -12,8 +12,14 @@ class User < ActiveRecord::Base
   has_many :messages, dependent: :destroy
   has_many :posts
   has_many :comments
+  has_many :subphezes
 
   validate :ensure_email_unique
+
+  def max_subphezes_reached?
+    return false if self.is_admin
+    subphezes.count >= Subphez::MaxPerUser
+  end
 
   def can_moderate?(subphez)
     subphez.moderators.include?(self)
