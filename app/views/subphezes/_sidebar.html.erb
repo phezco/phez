@@ -2,7 +2,7 @@
   <div class="well sidebar-nav">
     <h3><%= link_to @subphez.title, build_subphez_path(@subphez) %></h3>
 
-    <% if !@subphez.is_admin_only %>
+    <% if !@subphez.is_admin_only || (user_signed_in? && current_user.is_admin) %>
       <%= link_to 'Submit a new link', new_subphez_post_path(:path => @subphez.path), class: 'btn btn-primary' %>
     <% end %>
     <br/>
