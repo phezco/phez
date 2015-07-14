@@ -34,6 +34,12 @@ span.vote_count {
   color: #b2b2b2;
   padding-left: 5px;
 }
+div.thumbnail {
+  float: left;
+  width: 120px;
+  margin-right: 20px;
+  display: block;
+}
 .vote-arrow {
   color: #b2b2b2;
   font-size: 1.5em !important;
@@ -43,6 +49,8 @@ span.vote_count {
 }
 .post-title {
   float: left;
+  display: block;
+  max-width: 500px;
 }
 .domain {
   color: #b2b2b2;

@@ -2,6 +2,7 @@ class Subphez < ActiveRecord::Base
   validates :path, format: { with: /\A[a-zA-Z0-9]+\Z/ }, length: {minimum: 1, maximum: 30}
   validates :title, presence: true
 
+  belongs_to :user
   has_many :posts
   has_many :moderations
   has_many :moderators, :through => :moderations
@@ -12,6 +13,7 @@ class Subphez < ActiveRecord::Base
 
   before_save :sanitize_attributes
   after_create :add_owner_as_moderator
+  after_create :subscribe_creator
 
   MaxPerUser = 3
 
@@ -41,8 +43,8 @@ class Subphez < ActiveRecord::Base
     Moderation.create!(:user_id => new_moderator.id, :subphez_id => id)
   end
 
-  def self.by_path(path)
-    Subphez.where("LOWER(path) = ?", path.downcase).first
+  def subscribe_creator
+    Subscription.subscribe!(self, user)
   end
 
   def sanitize_attributes
@@ -54,6 +56,10 @@ class Subphez < ActiveRecord::Base
     sanitizer = Rails::Html::FullSanitizer.new
     # Sanitizer seems to be inserting "&#13;" into the text around newlines. Not sure why. For now:
     sanitizer.sanitize(text).gsub('&#13;', '')
+  end
+
+  def self.by_path(path)
+    Subphez.where("LOWER(path) = ?", path.downcase).first
   end
 
 end

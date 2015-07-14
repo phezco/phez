@@ -3,6 +3,8 @@ recaptcha_public_key:
 recaptcha_private_key: 
 exception_notification_email:
 donate_code: ''
+enable_screenshots: false
+pagekeeper_link_code: ''
 
 production:
   recaptcha_public_key: 

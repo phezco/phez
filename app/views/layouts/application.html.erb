@@ -62,7 +62,11 @@
       <%= render :partial => 'shared/bitcoin' %>
 
       <footer>
-        <p>&copy; Phez.co <%= Time.now.year %> | <%= link_to 'source code', 'https://github.com/phezco/phez' %> | <%= link_to 'privacy policy', privacy_home_index_path %></p>
+        <p>&copy; Phez.co <%= Time.now.year %> | <%= link_to 'source code', 'https://github.com/phezco/phez' %> | <%= link_to 'privacy policy', privacy_home_index_path %>
+          <% if Figaro.env.enable_screenshots %>  
+            | <%= raw(Figaro.env.pagekeeper_link_code) %> 
+          <% end %>
+        </p>
       </footer>
 
     </div> <!-- /container -->

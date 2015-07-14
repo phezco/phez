@@ -4,6 +4,11 @@
       <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
   </div>
   <div class="col-md-11">
+    <% if Figaro.env.enable_screenshots && !@post.is_self %>
+      <div class="thumbnail">
+        <img src='http://api.pagepeeker.com/v2/thumbs.php?size=s&url=<%= @post.url_encoded %>'>
+      </div>
+    <% end %>
     <h3 class="post-title">
       <%= link_to raw(@post.title), @post.url_linkable, class: 'post-link' %>
     </h3>

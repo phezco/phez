@@ -24,6 +24,11 @@ class Post < ActiveRecord::Base
     self.url
   end
 
+  def url_encoded
+    return '' if url.blank?
+    CGI.escape(self.url)
+  end
+
   def domain
     return 'self' if is_self
     begin
