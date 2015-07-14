@@ -126,3 +126,13 @@ div.my-subscriptions-unsubscribe {
 .margin-bottom-20 {
   margin-bottom: 20px;
 }
+div.donate-button-wrapper {
+  margin-top: 0px;
+  width: 120px;
+  float: left;
+  min-width: 100px;
+}
+div.donate-text {
+  padding-top: 8px;
+  margin-left: 0em;
+}
