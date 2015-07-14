@@ -21,13 +21,11 @@
     <% end %>
   </div>
   <div class="col-md-11">
-    <h3>
-      <% if @post.is_self %>
-        <%= link_to @post.title, build_post_path(@post), class: 'post-link' %>
-      <% else %>
-        <%= link_to @post.title, @post.url, class: 'post-link' %>
-      <% end %>
+    <h3 class="post-title">
+      <%= link_to @post.title, @post.post_path, class: 'post-link' %>
     </h3>
+    <span class="domain">(<%= link_to @post.domain, @post.url_linkable %>)</span>
+    <div style="clear: both"></div>
     <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= link_to @post.user.username, build_profile_path(@post.user) %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_count} comments", build_post_path(@post) %>
       <% if user_signed_in? && (@post.owner?(current_user) || @post.moderateable?(current_user)) %>
       | <%= link_to 'delete', @post, method: :delete, data: { confirm: 'Are you sure?' } %>

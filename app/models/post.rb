@@ -15,6 +15,25 @@ class Post < ActiveRecord::Base
 
   self.per_page = 20
 
+  def post_path
+    "/p/#{subphez.path}/#{id}/#{guid}"
+  end
+
+  def url_linkable
+    return post_path if is_self
+    self.url
+  end
+
+  def domain
+    return 'self' if is_self
+    begin
+      uri = URI.parse(url)
+      uri.host.sub(/^www\./, '')
+    rescue URI::InvalidURIError
+      return 'unknown'
+    end
+  end
+
   def vote_total
     Vote.where(post_id: self.id).sum(:vote_value)
   end
