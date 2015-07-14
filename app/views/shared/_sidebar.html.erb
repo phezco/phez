@@ -4,6 +4,7 @@
     <p>Welcome to Phez.co - the free speech platform.</p>
     <ul class="nav nav-list">
       <% if user_signed_in? %>
+        <li><%= link_to 'My Subscriptions', subscriptions_users_path %></li>
         <li><%= link_to 'My Account', edit_user_registration_path %></li>
         <li><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %></li>
       <% else %>
@@ -13,4 +14,4 @@
     </ul>
     <%= link_to 'Create a New Subphez', new_subphez_path, class: 'btn btn-primary' %>
   </div><!--/.well -->
-</div><!--/span-->
+</div>

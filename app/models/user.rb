@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   has_many :posts
   has_many :comments
   has_many :subphezes
+  has_many :subscriptions
+  has_many :subscribed_subphezes, :through => :subscriptions
 
   validate :ensure_email_unique
 

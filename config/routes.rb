@@ -1,11 +1,18 @@
 Rails.application.routes.draw do
 
+  resources :subscriptions, :only => [:create, :destroy]
   resources :comments, :only => [:create, :destroy]
   resources :posts, :except => [:index]
   resources :messages, :only => [:index]
   resources :profiles, :only => [:show] do
     member do
       get 'comments'
+    end
+  end
+
+  resources :users, :only => [:index] do
+    collection do
+      get 'subscriptions'
     end
   end
 
@@ -35,6 +42,7 @@ Rails.application.routes.draw do
   #devise_for :users
   devise_for :users, :controllers => {:registrations => "registrations"}
 
+  get 'my' => 'home#my', as: :my
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

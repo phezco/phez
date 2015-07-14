@@ -119,3 +119,10 @@ span.comment-karma {
   font-weight: bold;
   font-size: 1.2em;
 }
+div.my-subscriptions-unsubscribe {
+  padding-top: 30px;
+  padding-left: 10px;
+}
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}

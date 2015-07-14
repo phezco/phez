@@ -5,7 +5,7 @@
   </div>
   <div class="col-md-11">
     <h3 class="post-title">
-      <%= link_to raw(@post.title), @post.post_path, class: 'post-link' %>
+      <%= link_to raw(@post.title), @post.url_linkable, class: 'post-link' %>
     </h3>
     <span class="domain">(<%= link_to @post.domain, @post.url_linkable %>)</span>
     <div style="clear: both"></div>

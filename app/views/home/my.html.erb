@@ -4,17 +4,13 @@
 
 <br/>
 
-<% if user_signed_in? %>
-  <div class="well subphez-heading-well">
-    <ul class="list-inline">
-      <li><h2>All</h2></li>
-      <li>&nbsp;&nbsp;</li>
-      <li><h2><%= link_to 'My Phez', my_path %></h2></li>
-    </ul>
-  </div>
-<% end %>
-
-<%= render :partial => 'shared/bitcoin' %>
+<div class="well subphez-heading-well">
+  <ul class="list-inline">
+    <li><h2><%= link_to 'All', root_path %></h2></li>
+    <li>&nbsp;&nbsp;</li>
+    <li><h2>My Phez</h2></li>
+  </ul>
+</div>
 
 <% @posts.each do |post| %>
   <% @post = post %>

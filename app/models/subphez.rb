@@ -5,6 +5,8 @@ class Subphez < ActiveRecord::Base
   has_many :posts
   has_many :moderations
   has_many :moderators, :through => :moderations
+  has_many :subscriptions
+  has_many :subscribers, :through => :subscriptions
 
   scope :latest, -> { order('created_at DESC') }
 
@@ -12,6 +14,10 @@ class Subphez < ActiveRecord::Base
   after_create :add_owner_as_moderator
 
   MaxPerUser = 3
+
+  def subscriber_count
+    Subscription.where(subphez_id: self.id).count
+  end
 
   def sidebar_rendered
     return '' if sidebar.blank?

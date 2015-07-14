@@ -98,4 +98,9 @@ class Post < ActiveRecord::Base
     sanitizer.sanitize(text).gsub('&#13;', '')
   end
 
+  def self.my_phez(user, page = 1)
+    subscribed_subphez_ids = user.subscribed_subphezes.map(&:id)
+    where("subphez_id IN (?)", subscribed_subphez_ids).paginate(:page => page)
+  end
+
 end
