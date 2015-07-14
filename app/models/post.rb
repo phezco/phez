@@ -70,6 +70,7 @@ class Post < ActiveRecord::Base
 
   def set_guid
     self.guid = title.downcase.gsub(' ', '-').gsub(/[^0-9a-z\- ]/i, '')
+    self.guid = self.guid.blank? ? "post" : self.guid
   end
 
   def owner?(the_user)
