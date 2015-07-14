@@ -8,6 +8,7 @@ if user_signed_in?
   end
 end
 %>
+<a name="<%= @comment.id %>"></a>
 <div class="comment-by">
   <% if @comment.is_deleted %>
     [deleted]
@@ -34,6 +35,7 @@ end
 </div>
 
 <div class="comment-actions" id="comment-<%= @comment.id %>-actions">
+  <%= link_to 'permalink', "#{build_post_path(@comment.commentable)}##{@comment.id}" %> &nbsp;
   <%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %> &nbsp;
   <% if user_signed_in? && !@comment.is_deleted && (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
     <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %>

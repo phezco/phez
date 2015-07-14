@@ -1,0 +1,9 @@
+<div class="col-lg-3">
+  <div class="well sidebar-nav">
+    <h3><%= @user.username %></h3>
+    <div class="karma"><span class="link-karma"><%= @user.link_karma %></span> &nbsp;link karma</div>
+    <div class="karma"><span class="comment-karma"><%= @user.comment_karma %></span> &nbsp;comment karma</div>
+    <br/>
+    <p>phezor since <%= time_ago_in_words(@user.created_at) %> ago</p>
+  </div>
+</div>

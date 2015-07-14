@@ -107,3 +107,15 @@ textarea.body-field {
 div.well img {
   max-width: 98%;
 }
+
+div.karma {
+  font-size: 1.1em;
+}
+span.link-karma {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+span.comment-karma {
+  font-weight: bold;
+  font-size: 1.2em;
+}

@@ -1,2 +1,4 @@
-<div class="comment-by"><%= @comment.user.username %> - <%= time_ago_in_words(@comment.created_at) %> ago:</div>
+<div class="comment-post-details"><%= link_to @comment.commentable.title, build_post_path(@comment.commentable) %> by <%= link_to @comment.commentable.user.username, build_profile_path(@comment.commentable.user) %> in <%= link_to @comment.commentable.subphez.path, build_subphez_path(@comment.commentable.subphez) %></div>
+<div class="comment-by"><%= link_to @comment.user.username, build_profile_path(@comment.user) %> <span><%= @comment.vote_total %></span> points <small>( <span class="comment-upvote-total">+<%= @comment.upvote_total %></span>|<span class="comment-downvote-total">-<%= @comment.downvote_total %></span> )</small> :: <%= time_ago_in_words(@comment.created_at) %> ago:</div>
 <div class="comment"><%= raw(@comment.body_rendered) %></div>
+<div class="comment-actions"><%= link_to 'permalink', "#{build_post_path(@comment.commentable)}##{@comment.id}" %></div>

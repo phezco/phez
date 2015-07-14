@@ -17,6 +17,16 @@ class User < ActiveRecord::Base
 
   validate :ensure_email_unique
 
+  def link_karma
+    karma = posts.map {|p| p.vote_total }.inject(:+)
+    karma.nil? ? 0 : karma
+  end
+
+  def comment_karma
+    karma = comments.map {|c| c.vote_total }.inject(:+)
+    karma.nil? ? 0 : karma
+  end
+
   def max_subphezes_reached?
     return false if self.is_admin
     subphezes.count >= Subphez::MaxPerUser
