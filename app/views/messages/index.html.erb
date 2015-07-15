@@ -1,11 +1,19 @@
+<% title('Inbox') %>
+
 <h2>Inbox</h2>
 
 <% @messages.each do |message| %>
   <div>
-    Sent by <% if message.from_user.nil? %>System<% else %> <%= link_to message.from_user.username, build_profile_path(message.from_user) %> <% end %>
-    <%= time_ago_in_words(message.created_at) %> ago: <br/>
-    <b><%= message.title.blank? ? '(no subject)' : raw(message.title) %></b> <br/>
-    <p><%= raw(message.body_rendered) %></p>
+    <% if message.messageable %>
+      <b>new comment on your post</b><br/>
+      <% @comment = message.messageable %>
+      <%= render :partial => 'posts/comment_stripped' %>
+    <% else %>
+      Sent by <% if message.from_user.nil? %>System<% else %> <%= link_to message.from_user.username, build_profile_path(message.from_user) %> <% end %>
+      <%= time_ago_in_words(message.created_at) %> ago: <br/>
+      <b><%= message.title.blank? ? '(no subject)' : raw(message.title) %></b> <br/>
+      <p><%= raw(message.body_rendered) %></p>
+    <% end %>
     <hr/>
   </div>
 <% end %>

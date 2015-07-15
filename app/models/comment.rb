@@ -12,6 +12,7 @@ class Comment < ActiveRecord::Base
 
   before_save :sanitize_attributes
   after_create :add_comment_upvote
+  after_create :add_message_to_inbox
 
   def add_comment_upvote
     CommentVote.upvote(user, self)
@@ -33,6 +34,7 @@ class Comment < ActiveRecord::Base
     update_attribute(:user_id, nil)
     update_attribute(:body, nil)
     update_attribute(:is_deleted, true)
+    delete_messages!
     comment_votes.delete_all
   end
 
@@ -47,6 +49,14 @@ class Comment < ActiveRecord::Base
   def body_rendered
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
     markdown.render(body)
+  end
+
+  def add_message_to_inbox
+    Message.add_message_comment!(commentable.user, self) unless commentable.user == user
+  end
+
+  def delete_messages!
+    Message.delete_all(:messageable_type => 'Comment', :messageable_id => self.id)
   end
 
   #helper method to check if a comment has children

@@ -4,6 +4,7 @@ class Message < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :from_user, :class_name => 'User', :foreign_key => 'from_user_id'
+  belongs_to :messageable, :polymorphic => true
 
   validates :user, :presence => true
   validates :body, :presence => true
@@ -25,6 +26,11 @@ class Message < ActiveRecord::Base
     sanitizer = Rails::Html::FullSanitizer.new
     # Sanitizer seems to be inserting "&#13;" into the text around newlines. Not sure why. For now:
     sanitizer.sanitize(text).gsub('&#13;', '')
+  end
+
+  def self.add_message_comment!(user, comment)
+    message = Message.new(user: user, messageable: comment)
+    message.save(:validate => false)
   end
 
 protected
