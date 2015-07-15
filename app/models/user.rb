@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
   end
 
   def inbox_read!
-    update(orange: false)
+    update_attribute(:orange, false)
   end
 
   def self.by_username_insensitive(username)

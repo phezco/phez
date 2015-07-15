@@ -6,4 +6,26 @@ class MessagesController < ApplicationController
     current_user.inbox_read!
   end
 
+  def new
+    #@to_user = User.find(params[:user_id])
+    #@message = Message.new(user_id: @to_user.id)
+    @message = Message.new(user_id: params[:user_id])
+  end
+
+  def create
+    @message = Message.new(message_params)
+    @message.from_user = current_user
+    if @message.save
+      redirect_to build_profile_path(@message.user), notice: 'Success! Message sent.'
+    else
+      flash[:alert] = "There was a problem saving your message."
+      render :new
+    end
+  end
+
+  private
+
+    def message_params
+      params.require(:message).permit(:user_id, :title, :body)
+    end
 end

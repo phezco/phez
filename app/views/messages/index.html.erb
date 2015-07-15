@@ -2,8 +2,10 @@
 
 <% @messages.each do |message| %>
   <div>
-    Sent by <% if message.user.nil? %>System<% else %> <%= message.user.username %> <% end %> <%= time_ago_in_words(message.created_at) %> ago: <br/>
-    <b><%= message.title %></b> <br/>
-    <p><%= raw(message.body) %></p>
+    Sent by <% if message.from_user.nil? %>System<% else %> <%= link_to message.from_user.username, build_profile_path(message.from_user) %> <% end %>
+    <%= time_ago_in_words(message.created_at) %> ago: <br/>
+    <b><%= message.title.blank? ? '(no subject)' : raw(message.title) %></b> <br/>
+    <p><%= raw(message.body_rendered) %></p>
+    <hr/>
   </div>
 <% end %>
