@@ -4,6 +4,8 @@ class Post < ActiveRecord::Base
   belongs_to :subphez
   has_many :votes, dependent: :destroy
 
+  validates :title, :presence => true
+
   scope :latest, -> { order('created_at DESC') }
   scope :by_points, -> { order('points DESC') }
   scope :by_hot_score, -> { order('hot_score DESC') }

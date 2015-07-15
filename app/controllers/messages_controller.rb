@@ -7,8 +7,6 @@ class MessagesController < ApplicationController
   end
 
   def new
-    #@to_user = User.find(params[:user_id])
-    #@message = Message.new(user_id: @to_user.id)
     @message = Message.new(user_id: params[:user_id])
   end
 
