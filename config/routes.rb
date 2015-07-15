@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   resources :subscriptions, :only => [:create, :destroy]
-  resources :comments, :only => [:create, :destroy]
+  resources :comments, :only => [:show, :create, :edit, :update, :destroy]
   resources :posts, :except => [:index]
   resources :messages, :only => [:index, :new, :create]
   resources :profiles, :only => [:show] do

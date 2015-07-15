@@ -12,6 +12,14 @@ var PhezApp = Class.extend({
     $('#comment-' + comment_id + '-actions').after(form_html);
   },
 
+  edit: function(comment_id) {
+    $('div#comment-' + comment_id).load('/comments/' + comment_id + '/edit');
+  },
+
+  cancel: function(comment_id) {
+    $('div#comment-' + comment_id).load('/comments/' + comment_id);
+  },
+
   upvote: function(post_id) {
     if ($('.post-upvote-' + post_id).hasClass('voted')) {
       return
@@ -37,9 +45,7 @@ var PhezApp = Class.extend({
     $('.post-upvote-' + data.post_id).addClass('voted');
     $('.post-downvote-' + data.post_id).removeClass('voted');
     var base_count = parseFloat( $('#vote-count-' + data.post_id).html() );
-    console.log(' base count: ' + base_count);
     var new_count = base_count + increment_by;
-    console.log(' new count: ' + new_count);
     $('#vote-count-' + data.post_id).html(new_count);
   },
 
@@ -72,9 +78,7 @@ var PhezApp = Class.extend({
     $('.post-downvote-' + data.post_id).addClass('voted');
     $('.post-upvote-' + data.post_id).removeClass('voted');
     var base_count = parseFloat( $('#vote-count-' + data.post_id).html() );
-    console.log(' base count: ' + base_count);
     var new_count = base_count - decrement_by;
-    console.log(' new count: ' + new_count);
     $('#vote-count-' + data.post_id).html(new_count);
   },
 
@@ -109,9 +113,7 @@ var PhezApp = Class.extend({
       $('.comment-upvote-' + data.comment_id).addClass('voted');
       $('.comment-downvote-' + data.comment_id).removeClass('voted');
       var base_count = parseFloat( $('#comment-vote-count-' + data.comment_id).html() );
-      console.log(' base count: ' + base_count);
       var new_count = base_count + increment_by;
-      console.log(' new count: ' + new_count);
       $('#comment-vote-count-' + data.comment_id).html(new_count);
     } else {
       alert('There was a problem saving your vote.');
@@ -149,9 +151,7 @@ var PhezApp = Class.extend({
       $('.comment-downvote-' + data.comment_id).addClass('voted');
       $('.comment-upvote-' + data.comment_id).removeClass('voted');
       var base_count = parseFloat( $('#comment-vote-count-' + data.comment_id).html() );
-      console.log(' base count: ' + base_count);
       var new_count = base_count - decrement_by;
-      console.log(' new count: ' + new_count);
       $('#comment-vote-count-' + data.comment_id).html(new_count);
     } else {
       alert('There was a problem saving your vote.');

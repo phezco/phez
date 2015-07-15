@@ -77,8 +77,7 @@ class Comment < ActiveRecord::Base
   }
 
   def sanitize_attributes
-    sanitizer = Rails::Html::FullSanitizer.new
-    self.body = sanitizer.sanitize(self.body) unless self.body.blank?
+    self.body = Sanitizer.sanitize(self.body) unless self.body.blank?
   end
 
   # Helper class method to look up a commentable object

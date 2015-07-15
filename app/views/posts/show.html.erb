@@ -19,7 +19,9 @@
 <%= form_for @comment, url: comments_path do |f| %>
   <%= hidden_field_tag :post_id, @post.id %>
   <%= f.text_area :body, class: 'comment-body' %> <br/>
-  <%= f.submit "Post Comment", class: 'btn btn-primary' %>
+  <div class="comment-edit-actions">
+    <%= f.submit "Post Comment", class: 'btn btn-primary' %>
+  </div>
 <% end %>
 
 <div style="display: none;" id="comment-form">
@@ -29,7 +31,9 @@
       <%= hidden_field_tag :post_id, @post.id %>
       <%= hidden_field_tag :parent_id, '' %>
       <%= f.text_area :body, class: 'comment-body' %> <br/>
-      <%= f.submit "Post Comment", class: 'btn btn-primary' %>
+      <div class="comment-edit-actions">
+        <%= f.submit "Post Comment", class: 'btn btn-primary' %>
+      </div>
     <% end %>
     <br/>
   </div>

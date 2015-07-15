@@ -77,6 +77,14 @@ a.post-link {
   width: 30em;
   height: 7em;
 }
+.edit-comment-body {
+  min-width: 150px;
+  width: 50em;
+  height: 10em;
+}
+.comment-edit-actions {
+  padding: 10px 0;
+}
 .comment {
   padding-left: .1em;
   display: table-cell;

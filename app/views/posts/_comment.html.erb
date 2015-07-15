@@ -25,7 +25,7 @@ end
       <a href="javascript:Phez.downvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-down comment-downvote-<%= @comment.id %> <%= 'voted' if @downvoted %>"></a></i>
     <% end %>
   </div>
-  <div class="comment <%= 'deleted-comment' if @comment.is_deleted %>">
+  <div class="comment <%= 'deleted-comment' if @comment.is_deleted %>" id="comment-<%= @comment.id %>">
     <% if @comment.is_deleted %>
       [deleted]
     <% else %>
@@ -36,9 +36,14 @@ end
 
 <div class="comment-actions" id="comment-<%= @comment.id %>-actions">
   <%= link_to 'permalink', "#{build_post_path(@comment.commentable)}##{@comment.id}" %> &nbsp;
-  <%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %> &nbsp;
+  <% if user_signed_in? && !@comment.is_deleted && @comment.owner?(current_user) %>
+    <%= link_to 'edit', "javascript:Phez.edit(#{@comment.id})" %> &nbsp;
+  <% end %>
   <% if user_signed_in? && !@comment.is_deleted && (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
-    <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %> &nbsp;
+  <% end %>
+  <% if user_signed_in? %>
+    <%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %> &nbsp;
   <% end %>
 </div>
 <% if @comment.has_children? %>
