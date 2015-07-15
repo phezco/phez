@@ -15,6 +15,9 @@
       <%= f.label :title %><br>
       <%= f.text_field :title, class: 'title-field' %>
     </div>
+    <div style="padding-bottom: 7px;">
+      <%= link_to 'Suggest Title', 'javascript:Phez.suggestTitle()', class: 'btn btn-primary btn-sm' %>
+    </div>
   <% else %>
     <p>Only the body of self posts can be edited.</p>
   <% end %>

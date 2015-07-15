@@ -103,4 +103,22 @@ class Post < ActiveRecord::Base
     where("subphez_id IN (?)", subscribed_subphez_ids).paginate(:page => page)
   end
 
+  def self.suggest_title(url)
+    suggested_title = ''
+    begin
+      rc = RestClient.get(url)
+      if rc.headers && rc.headers[:content_type] && !rc.headers[:content_type].blank?
+        content_type = rc.headers[:content_type].split(';')[0].strip
+        if content_type == 'text/html'
+          page = Nokogiri::HTML(rc)
+          if page.css('title')
+            suggested_title = page.css('title').text
+          end
+        end
+      end
+    rescue Errno::ECONNREFUSED, SocketError, URI::InvalidURIError
+    end
+    suggested_title
+  end
+
 end

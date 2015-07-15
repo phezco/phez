@@ -4,6 +4,29 @@ var PhezApp = Class.extend({
     this.logged_in = false;
   },
 
+  suggestTitle: function() {
+    var url = $('#post_url').val();
+    if (url == '') {
+      alert('Please enter a URL to suggest a title.');
+      return
+    }
+    var href = '/posts/suggest_title?url=' + encodeURIComponent(url);
+    $.ajax({
+      type: "GET",
+      url: href,
+      success: Phez.handleSuggestedTitle,
+      dataType: 'json'
+    });
+  },
+
+  handleSuggestedTitle: function(data, textStatus, jq_xhr) {
+    if (data.suggest == true) {
+      $('#post_title').val(data.title);
+    } else {
+      $('#post_title').after('<br/>There was a problem getting a suggested title from the URL provided.');
+    }
+  },
+
   reply: function(comment_id) {
     $('#parent_id').val(comment_id);
     $('.loaded-comment-form').hide();

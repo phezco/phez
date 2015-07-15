@@ -2,6 +2,18 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, :except => [:index, :show]
   before_action :set_post, only: [:edit, :update, :destroy]
 
+  def suggest_title
+    suggested_title = Post.suggest_title(params[:url])
+    respond_to do |format|
+      if suggested_title.blank?
+        json = { 'suggest' => false}
+      else
+        json = { 'suggest' => true, 'title' => suggested_title }
+      end
+      format.json { render json: json, status: :ok }
+    end
+  end
+
   # GET /posts/1
   # GET /posts/1.json
   def show
