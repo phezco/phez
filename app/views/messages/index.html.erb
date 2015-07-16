@@ -5,7 +5,12 @@
 <% @messages.each do |message| %>
   <div>
     <% if message.messageable %>
-      <b>new comment on your post</b><br/>
+      <% if message.reason == 'comment_reply' %>
+        <b>new reply to your comment</b>
+      <% else %>
+        <b>new comment on your post</b>
+      <% end %>
+      <br/>
       <% @comment = message.messageable %>
       <%= render :partial => 'posts/comment_stripped' %>
     <% else %>

@@ -35,6 +35,7 @@ class CommentsController < ApplicationController
       flash[:notice] = "Your comment was successfully posted."
       if @parent
         @comment.move_to_child_of(@parent)
+        @comment.add_reply_message
       end
     else
       flash[:alert] = "There was a problem saving your comment."

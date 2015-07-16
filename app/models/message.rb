@@ -17,23 +17,19 @@ class Message < ActiveRecord::Base
   end
 
   def sanitize_attributes
-    self.title = sanitize(self.title) unless self.title.blank?
-    self.body = sanitize(self.body) unless self.body.blank?
+    self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
+    self.body = Sanitizer.sanitize(self.body) unless self.body.blank?
   end
 
-  def sanitize(text)
-    return '' if text.blank?
-    sanitizer = Rails::Html::FullSanitizer.new
-    # Sanitizer seems to be inserting "&#13;" into the text around newlines. Not sure why. For now:
-    sanitizer.sanitize(text).gsub('&#13;', '')
-  end
-
-  def self.add_message_comment!(user, comment)
-    message = Message.new(user: user, messageable: comment)
+  def self.add_message_comment!(user, comment, reason)
+    message = Message.new(user: user, messageable: comment, reason: reason)
     message.save(:validate => false)
+    message.set_orange
   end
 
-protected
+  def self.messageable_inboxed?(user, messageable)
+    Message.where(user_id: user.id, messageable_type: messageable.class.to_s, messageable_id: messageable.id).any?
+  end
 
   def set_orange
     user.update_attribute(:orange, true)

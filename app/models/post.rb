@@ -116,7 +116,7 @@ class Post < ActiveRecord::Base
           end
         end
       end
-    rescue Errno::ECONNREFUSED, SocketError, URI::InvalidURIError
+    rescue RestClient::TooManyRequests, Errno::ECONNREFUSED, SocketError, URI::InvalidURIError
     end
     suggested_title
   end

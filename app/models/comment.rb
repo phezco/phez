@@ -12,7 +12,7 @@ class Comment < ActiveRecord::Base
 
   before_save :sanitize_attributes
   after_create :add_comment_upvote
-  after_create :add_message_to_inbox
+  after_create :add_message_to_inbox_of_post_creator
 
   def add_comment_upvote
     CommentVote.upvote(user, self)
@@ -51,8 +51,17 @@ class Comment < ActiveRecord::Base
     markdown.render(body)
   end
 
-  def add_message_to_inbox
-    Message.add_message_comment!(commentable.user, self) unless commentable.user == user
+  def add_message_to_inbox_of_post_creator
+    Message.add_message_comment!(commentable.user, self, 'new_post_comment') unless commentable.user == user
+  end
+
+  def add_reply_message
+    parent_comment = parent
+    if parent_comment && !(parent_comment.user == user)
+      unless Message.messageable_inboxed?(parent_comment.user, self)
+        Message.add_message_comment!(parent_comment.user, self, 'comment_reply')
+      end
+    end
   end
 
   def delete_messages!
