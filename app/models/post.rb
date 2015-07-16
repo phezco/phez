@@ -112,11 +112,11 @@ class Post < ActiveRecord::Base
         if content_type == 'text/html'
           page = Nokogiri::HTML(rc)
           if page.css('title')
-            suggested_title = page.css('title').text
+            suggested_title = page.css('title').text.strip
           end
         end
       end
-    rescue RestClient::TooManyRequests, Errno::ECONNREFUSED, SocketError, URI::InvalidURIError
+    rescue Exception
     end
     suggested_title
   end
