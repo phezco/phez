@@ -17,6 +17,10 @@ class Subphez < ActiveRecord::Base
 
   MaxPerUser = 3
 
+  def url
+    "http://#{Figaro.env.app_domain}/p/#{path}"
+  end
+
   def subscriber_count
     Subscription.where(subphez_id: self.id).count
   end

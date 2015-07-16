@@ -14,6 +14,10 @@ class Comment < ActiveRecord::Base
   after_create :add_comment_upvote
   after_create :add_message_to_inbox_of_post_creator
 
+  def url
+    "#{commentable.full_post_url}##{id}"
+  end
+
   def add_comment_upvote
     CommentVote.upvote(user, self)
   end

@@ -4,7 +4,6 @@ require 'rails/all'
 require 'uri/http'
 require 'cgi'
 require 'net/http'
-require 'pismo'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

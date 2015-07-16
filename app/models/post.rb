@@ -17,12 +17,21 @@ class Post < ActiveRecord::Base
 
   self.per_page = 20
 
+  def full_post_url
+    "http://#{Figaro.env.app_domain}#{post_path}"
+  end
+
   def post_path
     "/p/#{subphez.path}/#{id}/#{guid}"
   end
 
   def url_linkable
     return post_path if is_self
+    self.url
+  end
+
+  def full_url
+    return full_post_url if is_self
     self.url
   end
 

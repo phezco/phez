@@ -1,5 +1,29 @@
 Rails.application.routes.draw do
 
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :posts, only: [:show] do
+        collection do
+          get 'all'
+        end
+      end
+      resources :subphezes, only: [] do
+        collection do
+          get 'top'
+          get ':path/all' => 'subphezes#all'
+          get ':path/latest' => 'subphezes#latest'
+        end
+      end
+      resources :profiles, only: [:show] do
+        collection do
+          get ':username/details' => 'profiles#show'
+          get ':username/posts' => 'profiles#posts'
+          get ':username/comments' => 'profiles#comments'
+        end
+      end
+    end
+  end
+
   resources :subscriptions, :only => [:create, :destroy]
   resources :comments, :only => [:show, :create, :edit, :update, :destroy]
   resources :posts, :except => [:index] do
