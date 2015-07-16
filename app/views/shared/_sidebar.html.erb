@@ -5,11 +5,13 @@
     <ul class="nav nav-list">
       <% if user_signed_in? %>
         <li><%= link_to 'My Subscriptions', subscriptions_users_path %></li>
+        <li><%= link_to 'Top Subphezes', subphezes_path %></li>
         <li><%= link_to 'My Account', edit_user_registration_path %></li>
         <li><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %></li>
       <% else %>
         <li><%= link_to 'Login', new_user_session_path %></li>
         <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+        <li><%= link_to 'Top Subphezes', subphezes_path %></li>
       <% end %>
     </ul>
     <%= link_to 'Create a New Subphez', new_subphez_path, class: 'btn btn-primary' %>
