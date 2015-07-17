@@ -26,14 +26,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def disallow_non_premium(subphez)
+    return true if !subphez.is_premium_only
+    unless current_user.is_premium
+      redirect_to root_path, alert: "You must be a premium user to access that content. Please consider buying some Phez Premium."
+      return false
+    end
+  end
+
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
-    #devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password, :bitcoin_address) }
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :bitcoin_address) }
   end
-  
 
 end

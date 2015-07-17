@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717101544) do
+ActiveRecord::Schema.define(version: 20150717123930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,18 +67,19 @@ ActiveRecord::Schema.define(version: 20150717101544) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "user_id",                    null: false
-    t.integer  "subphez_id",                 null: false
-    t.string   "guid",                       null: false
+    t.integer  "user_id",                         null: false
+    t.integer  "subphez_id",                      null: false
+    t.string   "guid",                            null: false
     t.string   "url"
-    t.string   "title",                      null: false
-    t.integer  "vote_total", default: 0,     null: false
-    t.boolean  "is_self",    default: false, null: false
+    t.string   "title",                           null: false
+    t.integer  "vote_total",      default: 0,     null: false
+    t.boolean  "is_self",         default: false, null: false
     t.text     "body"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "points",     default: 0
-    t.integer  "hot_score",  default: 0
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "points",          default: 0
+    t.integer  "hot_score",       default: 0
+    t.boolean  "is_premium_only", default: false
   end
 
   create_table "rewards", force: :cascade do |t|

@@ -15,6 +15,12 @@ class Post < ActiveRecord::Base
     end_of_month = t.end_of_month
     where('created_at >= :beginning_of_month AND created_at <= :end_of_month', beginning_of_month: beginning_of_month, end_of_month: end_of_month)
   end
+  scope :show_premium, ->(to_show_premium) do
+    if to_show_premium
+    else
+      where(is_premium_only: false)
+    end
+  end
 
   before_create :set_guid
   before_save :format_website_url
@@ -113,9 +119,9 @@ class Post < ActiveRecord::Base
     self.url = Sanitizer.sanitize(self.url) unless self.url.blank?
   end
 
-  def self.my_phez(user, page = 1)
+  def self.my_phez(user, page = 1, to_show_premium = false)
     subscribed_subphez_ids = user.subscribed_subphezes.map(&:id)
-    where("subphez_id IN (?)", subscribed_subphez_ids).paginate(:page => page)
+    show_premium(to_show_premium).where("subphez_id IN (?)", subscribed_subphez_ids).paginate(:page => page)
   end
 
   def self.suggest_title(url)

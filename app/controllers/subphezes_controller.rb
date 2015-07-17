@@ -12,10 +12,12 @@ class SubphezesController < ApplicationController
   # GET /subphezs/1
   # GET /subphezs/1.json
   def show
+    disallow_non_premium(@subphez)
     @posts = @subphez.posts.by_hot_score.paginate(:page => params[:page])
   end
 
   def latest
+    disallow_non_premium(@subphez)
     @posts = @subphez.posts.latest.paginate(:page => params[:page])
   end
 
