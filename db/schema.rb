@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717072832) do
+ActiveRecord::Schema.define(version: 20150717101544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,14 +81,29 @@ ActiveRecord::Schema.define(version: 20150717072832) do
     t.integer  "hot_score",  default: 0
   end
 
+  create_table "rewards", force: :cascade do |t|
+    t.integer  "user_id"
+    t.float    "amount_usd"
+    t.float    "amount_mbtc"
+    t.integer  "confirmations_count", default: 0,     null: false
+    t.integer  "rewarded_user_id"
+    t.integer  "rewardable_id"
+    t.string   "rewardable_type"
+    t.integer  "months"
+    t.boolean  "payment_confirmed",   default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "subphezes", force: :cascade do |t|
-    t.integer  "user_id",                       null: false
-    t.string   "path",                          null: false
-    t.string   "title",                         null: false
+    t.integer  "user_id",                         null: false
+    t.string   "path",                            null: false
+    t.string   "title",                           null: false
     t.text     "sidebar"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.boolean  "is_admin_only", default: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "is_admin_only",   default: false
+    t.boolean  "is_premium_only", default: false
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -119,6 +134,10 @@ ActiveRecord::Schema.define(version: 20150717072832) do
     t.boolean  "is_admin",               default: false
     t.string   "remember_token"
     t.string   "bitcoin_address"
+    t.boolean  "is_premium"
+    t.integer  "premium_months",         default: 0
+    t.datetime "premium_since"
+    t.datetime "premium_until"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

@@ -1,0 +1,21 @@
+<% title('Buy Premium') %>
+
+<h2>Buy Phez Premium</h2>
+
+<p>The Phez Premium you purchase is giftable to other users on this site. When you reward someone with Phez Premium, they receive 50% of your gift in Bitcoin. Please select how much Phez Premium you would like to purchase from the list below.</p>
+
+<%= form_for(@reward) do |f| %>
+  <% @object = @reward %>
+  <%= render :partial => 'shared/errors' %>
+
+  <%= f.hidden_field :rewardable_type %>
+  <%= f.hidden_field :rewardable_id %>
+
+  <%= render :partial => 'plans' %>
+
+  <div class="actions" style="padding-top: 10px">
+    <%= f.submit 'Buy Phez Premium with Bitcoin', class: 'btn btn-success btn-lg' %>
+  </div>
+<% end %>
+
+<br/>

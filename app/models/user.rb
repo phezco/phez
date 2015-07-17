@@ -19,6 +19,25 @@ class User < ActiveRecord::Base
 
   validate :ensure_email_unique
 
+  def reward!(reward)
+    if is_premium
+      # Already Premium - do not debit a premium month. Add all new reward months to this user's premium month count:
+      add_premium_months!(reward.months)
+    else
+      update(is_premium: true, premium_since: DateTime.now, premium_until: 1.month.from_now)
+      add_premium_months!(reward.months - 1)
+    end
+  end
+
+  def add_premium_months!(new_month_count)
+    self.premium_months += new_month_count
+    save
+  end
+
+  def revoke_premium!
+    update(is_premium: false, premium_since: nil, premium_until: nil)
+  end
+
   def password_present?
     !self.password.blank? && !self.password_confirmation.blank?
   end

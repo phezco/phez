@@ -24,6 +24,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :rewards, :only => [:new, :create] do
+    collection do
+      get 'premium'
+    end
+    member do
+      get 'thanks'
+    end
+  end
   resources :credits, :only => [] do
     collection do
       get 'leaderboard'

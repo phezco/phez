@@ -1,0 +1,27 @@
+
+<div class="premium-plan">
+  <input type="radio" value="one_month" name="plan" id="one_month"> &nbsp; <label for="one_month"><%= number_to_currency(Reward.cost) %> USD for One Month of Phez Premium</label>
+</div>
+
+<div class="premium-plan">
+  <input type="radio" value="three_months" name="plan" id="three_months"> &nbsp; <label for="three_months"><%= number_to_currency(Reward.cost(3)) %> USD for Three Months of Phez Premium</label>
+</div>
+
+<div class="premium-plan">
+  <input type="radio" value="six_months" name="plan" id="six_months"> &nbsp; <label for="six_months"><%= number_to_currency(Reward.cost(6)) %> USD for Six Months of Phez Premium</label> (10% discount)
+</div>
+
+<div class="premium-plan">
+  <input type="radio" value="one_year" name="plan" id="one_year"> &nbsp; <label for="one_year"><%= number_to_currency(Reward.cost(12)) %> USD for One Year of Phez Premium</label> (25% discount)
+</div>
+
+<div class="premium-plan">
+  <input type="radio" value="custom" name="plan" id="custom"> &nbsp; <label for="custom">Or enter a custom amount: </label>
+  <div class="input-group">
+    <div class="input-group-addon">$</div>
+    <input type="text" class="form-control premium-amount" value="" name="custom_amount" placeholder="Amount">
+    &nbsp;&nbsp;
+    <em><small>(multiples of <%= number_to_currency(Reward.cost) %> for maximum value)</small></em>
+  </div>
+   
+</div>

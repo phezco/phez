@@ -9,6 +9,9 @@
       <br/>
     <% end %>
     <br/>
+    <% if @user.is_premium %>
+      <p><i class="fa fa-thumbs-o-up big-fa"></i> premium phezor since <%= time_ago_in_words(@user.premium_since) %> ago</p> <br/>
+    <% end %>
     <p>phezor since <%= time_ago_in_words(@user.created_at) %> ago</p>
   </div>
 </div>

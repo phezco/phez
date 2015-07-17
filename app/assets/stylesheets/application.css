@@ -174,3 +174,13 @@ table.top-table td {
 .edit-account-field {
   width: 30em;
 }
+div.premium-plan {
+  padding: 10px 10px;
+}
+.premium-amount {
+  width: 200px !important;
+}
+.big-fa {
+  font-size: 3em !important;
+  color: green;
+}
