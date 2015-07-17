@@ -18,10 +18,10 @@ class PostsController < ApplicationController
   # GET /posts/1.json
   def show
     @post = Post.where(id: params[:post_id]).first
-    disallow_non_premium(@post.subphez)
     if @post.nil?
       redirect_to root_path, alert: 'Could not find post.' and return
     end
+    disallow_non_premium(@post.subphez)
     @comments = @post.root_comments
     @comment = Comment.new
   end
