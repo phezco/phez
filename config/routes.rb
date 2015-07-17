@@ -24,6 +24,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :credits, :only => [] do
+    collection do
+      get 'leaderboard'
+      get 'posters_csv'
+    end
+  end
   resources :subscriptions, :only => [:create, :destroy]
   resources :comments, :only => [:show, :create, :edit, :update, :destroy]
   resources :posts, :except => [:index] do
@@ -38,9 +44,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, :only => [:index] do
+  resources :users, :only => [] do
     collection do
       get 'subscriptions'
+      get 'change_password'
+      patch 'update_password'
     end
   end
 
@@ -68,7 +76,6 @@ Rails.application.routes.draw do
   post 'comment_votes/downvote' => 'comment_votes#downvote'
 
   resources :subphezes, :except => [:destroy]
-  #devise_for :users
   devise_for :users, :controllers => {:registrations => "registrations"}
 
   get 'my' => 'home#my', as: :my

@@ -9,6 +9,12 @@ class Post < ActiveRecord::Base
   scope :latest, -> { order('created_at DESC') }
   scope :by_points, -> { order('points DESC') }
   scope :by_hot_score, -> { order('hot_score DESC') }
+  scope :this_month, -> do
+    t = DateTime.now
+    beginning_of_month = t.beginning_of_month
+    end_of_month = t.end_of_month
+    where('created_at >= :beginning_of_month AND created_at <= :end_of_month', beginning_of_month: beginning_of_month, end_of_month: end_of_month)
+  end
 
   before_create :set_guid
   before_save :format_website_url

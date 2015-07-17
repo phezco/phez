@@ -9,6 +9,12 @@ class Comment < ActiveRecord::Base
   has_many :comment_votes, dependent: :destroy
 
   scope :latest, -> { order('created_at DESC') }
+  scope :this_month, -> do
+    t = DateTime.now
+    beginning_of_month = t.beginning_of_month
+    end_of_month = t.end_of_month
+    where('created_at >= :beginning_of_month AND created_at <= :end_of_month', beginning_of_month: beginning_of_month, end_of_month: end_of_month)
+  end
 
   before_save :sanitize_attributes
   after_create :add_comment_upvote

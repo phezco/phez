@@ -1,17 +1,19 @@
 <div class="col-lg-3">
   <div class="well sidebar-nav">
     <h3>Welcome</h3>
-    <p>Welcome to Phez.co - the free speech platform.</p>
+    <p>Welcome to Phez.co - the free speech platform. Earn Bitcoin when you participate in the Phez community. <%= link_to 'Learn more', leaderboard_credits_path %>.</p>
     <ul class="nav nav-list">
       <% if user_signed_in? %>
         <li><%= link_to 'My Subscriptions', subscriptions_users_path %></li>
         <li><%= link_to 'Top Subphezes', subphezes_path %></li>
+        <li><%= link_to 'Leaderboard', leaderboard_credits_path %></li>
         <li><%= link_to 'My Account', edit_user_registration_path %></li>
         <li><%= link_to 'Sign Out', destroy_user_session_path, :method => :delete %></li>
       <% else %>
         <li><%= link_to 'Login', new_user_session_path %></li>
         <li><%= link_to 'Sign Up', new_user_registration_path %></li>
         <li><%= link_to 'Top Subphezes', subphezes_path %></li>
+        <li><%= link_to 'Leaderboard', leaderboard_credits_path %></li>
       <% end %>
     </ul>
     <%= link_to 'Create a New Subphez', new_subphez_path, class: 'btn btn-primary' %>

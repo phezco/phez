@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :authentication_keys => [:username] #, :confirmable, :validatable
 
   validates :username, uniqueness: true
-  validates :password, presence: true
+  validates :password, if: :password_present?, :presence => true, length: { minimum: 6, maximum: 100 }, :allow_blank => false, confirmation: true
 
   has_many :votes, dependent: :destroy
   has_many :moderations
@@ -18,6 +18,20 @@ class User < ActiveRecord::Base
   has_many :subscribed_subphezes, :through => :subscriptions
 
   validate :ensure_email_unique
+
+  def password_present?
+    !self.password.blank? && !self.password_confirmation.blank?
+  end
+
+  def monthly_comment_karma
+    karma = comments.this_month.map {|p| p.vote_total }.inject(:+)
+    karma.nil? ? 0 : karma
+  end
+
+  def monthly_link_karma
+    karma = posts.this_month.map {|p| p.vote_total }.inject(:+)
+    karma.nil? ? 0 : karma
+  end
 
   def link_karma
     karma = posts.map {|p| p.vote_total }.inject(:+)
@@ -60,6 +74,29 @@ class User < ActiveRecord::Base
 
   def self.by_username_insensitive(username)
     User.where('LOWER(username) = ?', username.downcase).first
+  end
+
+  def self.top_by_monthly_link_karma(limit = 100)
+    users = User.all.map {|u| u }
+    users.sort! { |a, b| b.monthly_link_karma <=> a.monthly_link_karma }[0 .. (limit-1)]
+  end
+
+  def self.top_by_monthly_moderation(limit = 100)
+    mods = []
+    subphezes = Subphez.top_by_subscriber_count(100)
+    subphezes.each do |subphez|
+      next if mods.size >= limit
+      subphez.moderators.each do |mod|
+        mods << mod
+      end
+    end
+    #mods.uniq
+    mods
+  end
+
+  def self.top_by_monthly_comment_karma(limit = 100)
+    users = User.all.map {|u| u }
+    users.sort! { |a, b| b.monthly_comment_karma <=> a.monthly_comment_karma }[0 .. (limit-1)]
   end
 
   protected

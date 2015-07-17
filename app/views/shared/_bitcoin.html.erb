@@ -3,7 +3,7 @@
     <%= raw(Figaro.env.donate_code) %>
   </div>
   <div class="col-md-7 donate-text">
-    Donate Bitcoin: 1NhonFuVMiCaM9RJj1DJBoYTiN6Qaf51KQ
+    Donate Bitcoin: <%= Figaro.env.bitcoin_address %>
   </div>
 </div>
 <br/>

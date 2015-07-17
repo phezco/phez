@@ -66,4 +66,9 @@ class Subphez < ActiveRecord::Base
     Subphez.where("LOWER(path) = ?", path.downcase).first
   end
 
+  def self.top_by_subscriber_count(limit = 100)
+    subphezes = Subphez.all
+    subphezes = subphezes.map { |s| s }.sort! { |a, b| b.subscriber_count <=> a.subscriber_count }
+    subphezes[0 .. (limit-1)]
+  end
 end

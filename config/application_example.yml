@@ -7,6 +7,8 @@ enable_screenshots: 'false'
 pagekeeper_link_code: ''
 # Include port in app_domain if developing on localhost, e.g. "localhost:3000"
 app_domain: ''
+bitcoin_address: '1NhonFuVMiCaM9RJj1DJBoYTiN6Qaf51KQ'
+fixed_monthly_costs: 20.0
 
 production:
   recaptcha_public_key: 

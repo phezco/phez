@@ -2,9 +2,7 @@ class Api::V1::SubphezesController < Api::V1::BaseController
   before_action :set_subphez_by_path, :except => [:top]
 
   def top
-    @subphezes = Subphez.all
-    @subphezes = @subphezes.map { |s| s }.sort! { |a, b| b.subscriber_count <=> a.subscriber_count }
-    @subphezes = @subphezes[0 .. 99]
+    @subphezes = Subphez.top_by_subscriber_count(100)
     render json: @subphezes, each_serializer: SubphezSerializer
   end
 

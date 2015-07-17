@@ -156,3 +156,21 @@ div.donate-text {
   padding-top: 8px;
   margin-left: 0em;
 }
+
+table.leaderboard-table th {
+  text-align: center;
+}
+table.leaderboard-table td {
+  padding: 10px;
+  text-align: left;
+}
+table.top-table th {
+  text-align: center;
+}
+table.top-table td {
+  padding: 4px;
+}
+
+.edit-account-field {
+  width: 30em;
+}

@@ -6,9 +6,7 @@ class SubphezesController < ApplicationController
   # GET /subphezs
   # GET /subphezs.json
   def index
-    @subphezes = Subphez.all
-    @subphezes = @subphezes.map { |s| s }.sort! { |a, b| b.subscriber_count <=> a.subscriber_count }
-    @subphezes = @subphezes[0 .. 99]
+    @subphezes = Subphez.top_by_subscriber_count(100)
   end
 
   # GET /subphezs/1
