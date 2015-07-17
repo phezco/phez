@@ -90,8 +90,7 @@ class User < ActiveRecord::Base
         mods << mod
       end
     end
-    #mods.uniq
-    mods
+    mods.uniq
   end
 
   def self.top_by_monthly_comment_karma(limit = 100)
