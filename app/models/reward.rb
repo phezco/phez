@@ -10,6 +10,12 @@ class Reward < ActiveRecord::Base
 
   def activate!
     user.reward!(self)
+    rewardable.reward! if rewardable
+  end
+
+  def deliver_message(txn)
+    Message.create!(user_id: rewarded_user_id, title: "You have been rewarded Phez Premium by #{user.username}",
+      body: "Congratulations!\n\nYou have been rewarded Phez Premium and #{txn.amount_mbtc} mBTC has been credited to your account.\n\nAt the end of the month, your balance of earned bitcoin will be swept into the bitcoin address you have setup under My Account.")
   end
 
   def self.months_given_cost(cost)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717123930) do
+ActiveRecord::Schema.define(version: 20150718084030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20150717123930) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_deleted",       default: false
+    t.boolean  "is_rewarded",      default: false
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
@@ -80,6 +81,7 @@ ActiveRecord::Schema.define(version: 20150717123930) do
     t.integer  "points",          default: 0
     t.integer  "hot_score",       default: 0
     t.boolean  "is_premium_only", default: false
+    t.boolean  "is_rewarded",     default: false
   end
 
   create_table "rewards", force: :cascade do |t|
@@ -94,6 +96,7 @@ ActiveRecord::Schema.define(version: 20150717123930) do
     t.boolean  "payment_confirmed",   default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "funding_source"
   end
 
   create_table "subphezes", force: :cascade do |t|
@@ -111,6 +114,14 @@ ActiveRecord::Schema.define(version: 20150717123930) do
     t.integer  "user_id",    null: false
     t.integer  "subphez_id", null: false
     t.datetime "created_at", null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.float    "amount_mbtc"
+    t.string   "txn_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -139,6 +150,7 @@ ActiveRecord::Schema.define(version: 20150717123930) do
     t.integer  "premium_months",         default: 0
     t.datetime "premium_since"
     t.datetime "premium_until"
+    t.integer  "rewardable_months",      default: 0
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

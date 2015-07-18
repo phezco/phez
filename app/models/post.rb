@@ -29,6 +29,10 @@ class Post < ActiveRecord::Base
 
   self.per_page = 20
 
+  def reward!
+    update_attribute(:is_rewarded, true)
+  end
+
   def full_post_url
     "http://#{Figaro.env.app_domain}#{post_path}"
   end

@@ -16,21 +16,47 @@ class User < ActiveRecord::Base
   has_many :subphezes
   has_many :subscriptions
   has_many :subscribed_subphezes, :through => :subscriptions
+  has_many :transactions
 
   validate :ensure_email_unique
 
+  def has_rewardable_months?
+    rewardable_months > 0
+  end
+
   def reward!(reward)
-    if is_premium
-      # Already Premium - do not debit a premium month. Add all new reward months to this user's premium month count:
-      add_premium_months!(reward.months)
+    rewardable = (reward.funding_source == 'coinkite')
+    if reward.rewarded_user
+      reward.user.subtract_premium_months!(reward.months)
+      if reward.rewarded_user.is_premium
+        reward.rewarded_user.add_premium_months!(reward.months, false)
+      else
+        reward.rewarded_user.update(is_premium: true, premium_since: DateTime.now, premium_until: 1.month.from_now)
+        reward.rewarded_user.add_premium_months!(reward.months - 1, false)
+      end
     else
-      update(is_premium: true, premium_since: DateTime.now, premium_until: 1.month.from_now)
-      add_premium_months!(reward.months - 1)
+      if is_premium
+        # Already Premium - do not debit a premium month. Add all new reward months to this user's premium month count:
+        add_premium_months!(reward.months, rewardable)
+      else
+        update(is_premium: true, premium_since: DateTime.now, premium_until: 1.month.from_now)
+        add_premium_months!(reward.months - 1, rewardable)
+      end
+    end
+    if reward.funding_source == 'internal' && reward.rewarded_user
+      Transaction.reward!(reward)
     end
   end
 
-  def add_premium_months!(new_month_count)
+  def add_premium_months!(new_month_count, rewardable)
     self.premium_months += new_month_count
+    self.rewardable_months += new_month_count if rewardable
+    save
+  end
+
+  def subtract_premium_months!(num_months_to_debit)
+    self.premium_months -= num_months_to_debit
+    self.rewardable_months -= num_months_to_debit
     save
   end
 

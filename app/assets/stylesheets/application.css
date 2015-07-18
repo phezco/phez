@@ -184,3 +184,33 @@ div.premium-plan {
   font-size: 3em !important;
   color: green;
 }
+.transactions-table {
+  width: 800px;
+}
+.transactions-table td, .transactions-table th {
+  padding: 10px;
+}
+table.transactions-table, table.transactions-table th, table.transactions-table td {
+   border: 1px solid #ccc;
+}
+a.reward-comment-premium {
+  color: #fff !important;
+}
+div.rewarded-comment {
+  background-color: #66ccff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+div.rewarded-comment .comment-actions a {
+  color: #000 !important;
+}
+div.rewarded-comment .comment_arrows {
+  padding-left: 10px;
+}
+div.rewarded-post {
+  background-color: #B2E6FF;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

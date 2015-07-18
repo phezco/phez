@@ -24,6 +24,7 @@ class PostsController < ApplicationController
     disallow_non_premium(@post.subphez)
     @comments = @post.root_comments
     @comment = Comment.new
+    @show_context = true
   end
 
   # GET /posts/new

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row <%= 'rewarded-post' if @post.is_rewarded %>">
   <div class="voting_arrows col-xs-1">
     <% if user_signed_in? %>
         <%
@@ -31,8 +31,16 @@
     <span class="domain">(<%= link_to @post.domain, @post.url_linkable %>)</span>
     <div style="clear: both"></div>
     <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= link_to @post.user.username, build_profile_path(@post.user) %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_count} comments", build_post_path(@post) %>
-      <% if user_signed_in? && (@post.owner?(current_user) || @post.moderateable?(current_user)) %>
-      | <%= link_to 'delete', @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% if user_signed_in? %>
+        <% if (@post.owner?(current_user) || @post.moderateable?(current_user)) %>
+          | <%= link_to 'delete', @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+        <% unless @post.owner?(current_user) || !@show_context %>
+          &nbsp;&nbsp; <%= link_to 'reward with premium', premium_rewards_path(:rewardable_id => @post.id, :rewardable_type => 'Post'), class: 'btn btn-success btn-xs' %>
+        <% end %>
+      <% end %>
+      <% if @post.is_rewarded %>
+        &nbsp;<i>rewarded with premium</i>
       <% end %>
     </p>
   </div>

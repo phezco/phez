@@ -20,6 +20,10 @@ class Comment < ActiveRecord::Base
   after_create :add_comment_upvote
   after_create :add_message_to_inbox_of_post_creator
 
+  def reward!
+    update_attribute(:is_rewarded, true)
+  end
+
   def url
     "#{commentable.full_post_url}##{id}"
   end

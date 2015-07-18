@@ -2,21 +2,69 @@
 
 <h2>My Account</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= devise_error_messages! %>
+<div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, class: 'edit-account-field' %>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">My Info</a></li>
+    <li role="presentation"><a href="#transactions" aria-controls="transactions" role="tab" data-toggle="tab">My Transactions</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="main">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <%= devise_error_messages! %>
+
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, class: 'edit-account-field' %>
+        </div>
+
+        <div class="field">
+          <%= f.label :bitcoin_address, 'Your Bitcoin Address' %><br />
+          <%= f.text_field :bitcoin_address, class: 'edit-account-field' %>
+        </div>
+        <p>Note: Please triple-check your Bitcoin address (if supplying one). Bitcoin transactions are not reversible.</p>
+
+        <div class="actions">
+          <%= f.submit "Update", class: 'btn btn-primary' %> or <%= link_to 'Change Your Password', change_password_users_path %>
+        </div>
+      <% end %>
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="transactions">
+      <% if current_user.transactions.any? %>
+        <br/>
+        <table class="transactions-table">
+          <tr>
+            <th>Transaction Type</th>
+            <th>Amount mBTC</th>
+            <th>Deposit Address</th>
+            <th>Credit/Withdrawal</th>
+            <th>When</th>
+          </tr>
+          <% current_user.transactions.order('created_at DESC').each do |txn| %>
+            <tr>
+              <td>
+                <%= case txn.txn_type
+                    when 'reward'
+                      'phez premium reward'
+                    end
+                %>
+              </td>
+              <td><%= txn.amount_mbtc.round(0) %></td>
+              <td>N/A - internal</td>
+              <td><%= txn.credit? ? 'Credit' : 'Withdrawal' %></td>
+              <td><%= txn.created_at %></td>
+            </tr>
+          <% end %>
+        </table>
+        <br/>
+      <% else %>
+        <p>You do not currently have any transactions. Earn bitcoin by <%= link_to 'becoming a top contributor', leaderboard_credits_path %> or by being rewarded with premium for your contributions.</p>
+      <% end %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :bitcoin_address, 'Your Bitcoin Address' %><br />
-    <%= f.text_field :bitcoin_address, class: 'edit-account-field' %>
-  </div>
-  <p>Note: Please triple-check your Bitcoin address (if supplying one). Bitcoin transactions are not reversible.</p>
-
-  <div class="actions">
-    <%= f.submit "Update", class: 'btn btn-primary' %> or <%= link_to 'Change Your Password', change_password_users_path %>
-  </div>
-<% end %>
+</div>

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :rewards, :only => [:new, :create] do
     collection do
       get 'premium'
+      post 'create_rewardable'
     end
     member do
       get 'thanks'
