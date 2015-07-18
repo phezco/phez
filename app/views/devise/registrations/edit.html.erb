@@ -8,6 +8,7 @@
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">My Info</a></li>
     <li role="presentation"><a href="#transactions" aria-controls="transactions" role="tab" data-toggle="tab">My Transactions</a></li>
+    <li role="presentation"><a href="#developers" aria-controls="developers" role="tab" data-toggle="tab">Developers</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -64,6 +65,13 @@
       <% else %>
         <p>You do not currently have any transactions. Earn bitcoin by <%= link_to 'becoming a top contributor', leaderboard_credits_path %> or by being rewarded with premium for your contributions.</p>
       <% end %>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="developers">
+      <br/>
+      <p>Are you an application developer?</p>
+      <p><%= link_to 'Manage Your Applications', '/oauth/applications' %></p>
+      <p>We're currently working on documenting the Phez API more thoroughly. For now visit <%= link_to 'our GitHub page', 'https://github.com/phezco' %> and look through the examples shared there, such as the <%= link_to 'public API example using HTML and JavaScript', 'https://github.com/phezco/phez-public-api-example-html-javascript' %>.
+      <br/>
     </div>
   </div>
 

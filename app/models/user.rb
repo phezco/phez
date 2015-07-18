@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :subscriptions
   has_many :subscribed_subphezes, :through => :subscriptions
   has_many :transactions
+  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
   validate :ensure_email_unique
 

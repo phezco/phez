@@ -22,4 +22,19 @@ private
     { errors: [*messages] }
   end
 
+  def current_resource_owner
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+
+  def authenticate_user!
+    if doorkeeper_token
+      #Thread.current[:current_user] = User.find(doorkeeper_token.resource_owner_id)
+      current_user = User.find(doorkeeper_token.resource_owner_id)
+    end
+
+    return if current_user
+
+    render json: { errors: ['User is not authenticated!'] }, status: :unauthorized
+  end
+
 end

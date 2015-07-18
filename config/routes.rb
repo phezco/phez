@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
 
+  use_doorkeeper do
+    controllers :applications => 'oauth/applications'
+  end
+
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
+      resources :users, only: [] do
+        collection do
+          get 'details'
+        end
+      end
       resources :posts, only: [:show] do
         collection do
           get 'all'
@@ -14,8 +23,9 @@ Rails.application.routes.draw do
           get ':path/latest' => 'subphezes#latest'
         end
       end
-      resources :profiles, only: [:show] do
+      resources :profiles, only: [] do
         collection do
+          get 'my'
           get ':username/details' => 'profiles#show'
           get ':username/posts' => 'profiles#posts'
           get ':username/comments' => 'profiles#comments'
