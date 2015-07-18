@@ -27,13 +27,16 @@ class User < ActiveRecord::Base
   def reward!(reward)
     rewardable = (reward.funding_source == 'coinkite')
     if reward.rewarded_user
-      reward.user.subtract_premium_months!(reward.months)
+      if reward.funding_source == 'internal'
+        reward.user.subtract_premium_months!(reward.months)
+      end
       if reward.rewarded_user.is_premium
         reward.rewarded_user.add_premium_months!(reward.months, false)
       else
         reward.rewarded_user.update(is_premium: true, premium_since: DateTime.now, premium_until: 1.month.from_now)
         reward.rewarded_user.add_premium_months!(reward.months - 1, false)
       end
+      Transaction.reward!(reward)
     else
       if is_premium
         # Already Premium - do not debit a premium month. Add all new reward months to this user's premium month count:
@@ -42,9 +45,6 @@ class User < ActiveRecord::Base
         update(is_premium: true, premium_since: DateTime.now, premium_until: 1.month.from_now)
         add_premium_months!(reward.months - 1, rewardable)
       end
-    end
-    if reward.funding_source == 'internal' && reward.rewarded_user
-      Transaction.reward!(reward)
     end
   end
 
