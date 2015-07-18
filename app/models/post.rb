@@ -90,8 +90,9 @@ class Post < ActiveRecord::Base
   end
 
   def body_rendered
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
-    markdown.render(body)
+    Renderer.render(body)
+    # markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
+    # markdown.render(body)
   end
 
   def editable?
@@ -119,7 +120,6 @@ class Post < ActiveRecord::Base
 
   def sanitize_attributes
     self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
-    self.body = Sanitizer.sanitize(self.body) unless self.body.blank?
     self.url = Sanitizer.sanitize(self.url) unless self.url.blank?
   end
 

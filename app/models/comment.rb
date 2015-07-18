@@ -16,7 +16,6 @@ class Comment < ActiveRecord::Base
     where('created_at >= :beginning_of_month AND created_at <= :end_of_month', beginning_of_month: beginning_of_month, end_of_month: end_of_month)
   end
 
-  before_save :sanitize_attributes
   after_create :add_comment_upvote
   after_create :add_message_to_inbox_of_post_creator
 
@@ -61,8 +60,7 @@ class Comment < ActiveRecord::Base
   end
 
   def body_rendered
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
-    markdown.render(body)
+    Renderer.render(body)
   end
 
   def add_message_to_inbox_of_post_creator
@@ -98,10 +96,6 @@ class Comment < ActiveRecord::Base
   scope :find_comments_for_commentable, lambda { |commentable_str, commentable_id|
     where(:commentable_type => commentable_str.to_s, :commentable_id => commentable_id).order('created_at DESC')
   }
-
-  def sanitize_attributes
-    self.body = Sanitizer.sanitize(self.body) unless self.body.blank?
-  end
 
   # Helper class method to look up a commentable object
   # given the commentable class name and id
