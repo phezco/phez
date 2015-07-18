@@ -39,6 +39,8 @@ class RewardsController < ApplicationController
 
     if params[:plan]
       @reward = set_reward_plan(params[:plan])
+      @reward.rewarded_user_id = @reward.rewardable.user.id
+      @reward.funding_source = 'coinkite'
       if @reward.save
         coinkite_pay_url = setup_coinkite(@reward)
         redirect_to coinkite_pay_url
@@ -92,23 +94,18 @@ class RewardsController < ApplicationController
       when 'one_month'
         @reward.amount_usd = Reward.cost(1)
         @reward.months = 1
-        @reward.rewardable_months = 1 if rewardable
       when 'three_months'
         @reward.amount_usd = Reward.cost(3)
         @reward.months = 3
-        @reward.rewardable_months = 3 if rewardable 
       when 'six_months'
         @reward.amount_usd = Reward.cost(6)
         @reward.months = 6
-        @reward.rewardable_months = 6 if rewardable
       when 'one_year'
         @reward.amount_usd = Reward.cost(12)
         @reward.months = 12
-        @reward.rewardable_months = 12 if rewardable
       when 'custom'
         @reward.amount_usd = params[:custom_amount]
         @reward.months = Reward.months_given_cost(params[:custom_amount])
-        @reward.rewardable_months = @reward.months if rewardable
       end
       @reward
     end
