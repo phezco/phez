@@ -18,6 +18,9 @@
       <%= time_ago_in_words(message.created_at) %> ago: <br/>
       <b><%= message.title.blank? ? '(no subject)' : raw(message.title) %></b> <br/>
       <p><%= raw(message.body_rendered) %></p>
+      <% if message.from_user %>S
+        <div class="comment-actions"><%= link_to 'reply', new_message_path(:user_id => message.from_user.id) %></div>
+      <% end %>
     <% end %>
     <hr/>
   </div>

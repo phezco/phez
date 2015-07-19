@@ -12,13 +12,11 @@ class Message < ActiveRecord::Base
   before_save :sanitize_attributes
 
   def body_rendered
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
-    markdown.render(body)
+    Renderer.render(body)
   end
 
   def sanitize_attributes
     self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
-    self.body = Sanitizer.sanitize(self.body) unless self.body.blank?
   end
 
   def self.add_message_comment!(user, comment, reason)
