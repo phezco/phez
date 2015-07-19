@@ -1,6 +1,6 @@
 class Api::V1::ProfilesController < Api::V1::BaseController
 
-  before_filter :set_by_username, :except => [:my]
+  before_filter :set_by_username
 
   def posts
     @posts = @user.posts.latest.paginate(:page => params[:page])

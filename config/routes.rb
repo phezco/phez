@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       resources :posts, only: [:show] do
         collection do
           get 'all'
+          get 'my'
+          post 'create'
         end
       end
       resources :subphezes, only: [] do
@@ -21,11 +23,12 @@ Rails.application.routes.draw do
           get 'top'
           get ':path/all' => 'subphezes#all'
           get ':path/latest' => 'subphezes#latest'
+          post ':path/subscribe' => 'subphezes#subscribe'
+          post ':path/unsubscribe' => 'subphezes#unsubscribe'
         end
       end
       resources :profiles, only: [] do
         collection do
-          get 'my'
           get ':username/details' => 'profiles#show'
           get ':username/posts' => 'profiles#posts'
           get ':username/comments' => 'profiles#comments'
@@ -75,6 +78,7 @@ Rails.application.routes.draw do
     collection do
       get 'privacy'
       get 'thanks'
+      get 'apidocs'
     end
   end
 

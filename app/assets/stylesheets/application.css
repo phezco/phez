@@ -214,3 +214,15 @@ div.rewarded-post {
   padding: 10px;
   margin-bottom: 10px;
 }
+table.api-table {
+
+}
+table.api-table td, table.api-table th {
+  padding: 10px;
+}
+table.api-table, table.api-table th, table.api-table td {
+   border: 1px solid #ccc;
+}
+table.api-table {
+  margin-bottom: 10px;
+}

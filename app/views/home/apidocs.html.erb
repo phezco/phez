@@ -1,0 +1,195 @@
+<% title('API Docs') %>
+
+<h2>API Documentation</h2>
+
+<p>The Phez API includes access to commonly accessed pages and resources on Phez. There are several resources accessible via the Phez API that do not require authentication. These are even available cross-origin, so you can do things like embed a user's post feed on another web page. <small>(<%= link_to'More on CORS', 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS' %>.)</small></p>
+
+<p>Note: the Phez source code is <%= link_to 'available on GitHub', 'https://github.com/phezco/phez' %> if you'd like to dig deeper into our API implementation.</p>
+
+<h3>Public API Methods</h3>
+
+<br/>
+
+<h4>All Posts (Phez Homepage)</h4>
+
+<pre><code>GET /api/v1/posts/all</code></pre>
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1. Example: <br/>
+      GET /api/v1/posts/all?page=2
+    </td>
+  </tr>
+</table>
+
+<p>Example request using curl:</p>
+
+<pre><code>curl "http://phez.co/api/v1/posts/all"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>[{"id":192,"title":"Hosting a Party? Boil Water to get Clear Ice Cubes.","url":"http://phez.co/p/lifehacks/192/hosting-a-party-boil-water-to-get-clear-ice-cubes","submitted_by":"LoneSeeker777","subphez":"lifehacks","comments_url":"http://phez.co/p/lifehacks/192/hosting-a-party-boil-water-to-get-clear-ice-cubes","comment_count":8,"vote_total":6,"upvote_total":6,"downvote_total":0,"created_at":"2015-07-18T23:29:57.944Z","updated_at":"2015-07-19T12:25:02.555Z"}, ...]</code></pre>
+
+<p>Ruby implementation: we recommend using a gem like RestClient to access the Phez API. First make sure you install the ruby gems:</p>
+
+<pre><code>gem install rest-client
+gem install json
+</code></pre>
+
+<p>Example code that parses the top posts:</p>
+
+<pre><code>require 'rest-client'
+require 'json'
+
+body = RestClient.get('http://phez.co/api/v1/posts/all')
+
+json = JSON.parse(body)
+
+json.each do |post|
+  puts post['title']
+end
+</code></pre>
+
+<p>For pagination, pass in the page param. For example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/posts/all?page=2"</code></pre>
+
+<p>Pagination works similarly for other API endpoints at Phez that return an array of values. We currently do not report total page counts. Number of items per page should be assumed to be 20. If you receive less than 20 results, assume that you've reached the last page of results.</p>
+
+<h4>Top Subphezes</h4>
+
+<pre><code>GET /api/v1/subphezes/top</code></pre>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/subphezes/top"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>[{"path":"announcements","title":"Announcements","url":"http://phez.co/p/announcements","creator":"p4x","subscriber_count":6,"sidebar":"Phez Official Announcements.\n","created_at":"2015-07-13T09:13:23.116Z"}, ...]</code></pre>
+
+<p>Will return up to 100 of the most-subscribed subphezes. Pagination not supported.</p>
+
+<h4>Subphez Hot Posts</h4>
+
+<p>You must first know the path of a subphez to obtain its hot posts. For example, the <%= link_to '/p/pics', '/p/pics' %> subphez has path: pics</p>
+
+<pre><code>GET /api/v1/subphezes/:path/all</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1.</td>
+  </tr>
+</table>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/subphezes/pics/all"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>[{"id":26,"title":"Largest dogs in the world","url":"http://imgur.com/gallery/kWtuT","submitted_by":"mcflurry","subphez":"pics","comments_url":"http://phez.co/p/pics/26/largest-dogs-in-the-world","comment_count":0,"vote_total":1,"upvote_total":1,"downvote_total":0,"created_at":"2015-07-13T18:07:30.283Z","updated_at":"2015-07-19T11:55:02.446Z"}, ...]</code></pre>
+
+
+<h4>Subphez Latest Posts</h4>
+
+<p>Works much like the subphez hot posts endpoint, but returns the subphez's latest posts instead.</p>
+
+<pre><code>GET /api/v1/subphezes/:path/latest</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1.</td>
+  </tr>
+</table>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/subphezes/pics/latest"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>[{"id":188,"title":"Jesus in Philadelphia","url":"http://blogs.reuters.com/photographers-blog/2014/12/22/jesus-in-philadelphia/","submitted_by":"TheDude","subphez":"pics","comments_url":"http://phez.co/p/pics/188/jesus-in-philadelphia","comment_count":0,"vote_total":1,"upvote_total":1,"downvote_total":0,"created_at":"2015-07-18T18:12:58.127Z","updated_at":"2015-07-19T12:15:02.669Z"}, ...]</code></pre>
+
+<h4>List User Posts</h4>
+
+<p>You must know the username of the user whose posts you'd like to obtain. Posts are returned in order: most recently created first.</p>
+
+<pre><code>GET /api/v1/profiles/:username/posts</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1.</td>
+  </tr>
+</table>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/profiles/p4x/posts"</code></pre>
+
+<p>This will output an array of posts, much like the subphez top posts returns (same json attributes, etc).</p>
+
+<h4>List User Comments</h4>
+
+<p>Comments are returned in order: most recently created first.</p>
+
+<pre><code>GET /api/v1/profiles/:username/comments</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1.</td>
+  </tr>
+</table>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/profiles/p4x/comments"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"comments":[{"post_id":190,"url":"http://phez.co/p/LetsBuildPhez/190/create-a-comprehensive-database-of-subphezs#63","body":"Comment body.\nCan contain html like bold tags, image tags, etc.","vote_total":1,"upvote_total":1,"downvote_total":0}, ...]</code></pre>
+
+<p>Note: this method returns a root element ("comments") whose value is an array of user comments.</p>
+
+<h4>Show Post</h4>
+
+<p>Returns post details, including comment threads. You must know the post id to obtain post details</p>
+
+<pre><code>GET /api/v1/posts/:id</code></pre>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/posts/1"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"id":1,"self":false,title":"Bernie Sanders Owning His Opponent","url":"https://www.youtube.com/watch?v=8-ssFshYZlU","comments_url":"http://phez.co/p/Bernie4Prez/1/bernie-sanders-owning-his-opponent","comments":[{"body":"This is a comment.","username":"p4x","vote_total":2,"upvote_total":2,"downvote_total":0}, ...]}</code></pre>
+
+<p>The <i>self</i> attribute indicates whether it is a self post or not -- whether or not there should be a body attribute expected. Comment children are returned on the <i>comments</i> attribute of the comment if present.</p>
+
+
+<br><br>
