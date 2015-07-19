@@ -1,7 +1,15 @@
 class SubphezesController < ApplicationController
-  before_action :authenticate_user!, :except => [:index, :show, :latest]
+  before_action :authenticate_user!, :except => [:index, :show, :latest, :autocomplete]
   before_action :set_subphez, only: [:edit, :update, :destroy]
   before_action :set_subphez_by_path, only: [:show, :latest, :manage, :add_moderator, :remove_moderator, :approve_modrequest, :update_modrequest]
+
+  def autocomplete
+    @subphezes = Subphez.where('path ILIKE ?', "#{params[:term]}%").order('path ASC')
+    @paths = @subphezes.collect { |s| s.path }
+    respond_to do |format|
+      format.json { render json: @paths.to_json }
+    end
+  end
 
   # GET /subphezs
   # GET /subphezs.json

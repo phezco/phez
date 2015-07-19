@@ -4,6 +4,10 @@ var PhezApp = Class.extend({
     this.logged_in = false;
   },
 
+  pickSubphez: function(path) {
+    $('#subphez_path').val(path);
+  },
+
   suggestTitle: function() {
     var url = $('#post_url').val();
     if (url == '') {
@@ -186,6 +190,11 @@ var PhezApp = Class.extend({
   },
 
   applyClickHandlers: function() {
+
+    $("#subphez_path").autocomplete({
+      source: '/subphezes/autocomplete.json',
+    });
+
   }
 
 });

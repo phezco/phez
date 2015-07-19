@@ -3,3 +3,11 @@
 <h2>Submit to Phez</h2>
 
 <%= render 'form' %>
+
+<h3>Phez Submit Bookmarket</h3>
+
+<p>Submitting a lot of links to Phez? Simply drag the following link to your bookmarks toolbar:</p>
+
+<a href="javascript:location.href='http://<%= Figaro.env.app_domain %>/submit?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)" class='btn btn-success'>Submit to Phez</a>
+<br/><br/>
+<p>Then when you're on a page you'd like to submit to Phez, click the "Submit to Phez" bookmark link in your toolbar.</p>

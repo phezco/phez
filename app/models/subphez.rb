@@ -27,8 +27,7 @@ class Subphez < ActiveRecord::Base
 
   def sidebar_rendered
     return '' if sidebar.blank?
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-    markdown.render(sidebar)
+    Renderer.render(sidebar)
   end
 
   def owner?(the_user)
@@ -52,14 +51,8 @@ class Subphez < ActiveRecord::Base
   end
 
   def sanitize_attributes
-    self.title = sanitize(self.title) unless self.title.blank?
-    self.sidebar = sanitize(self.sidebar) unless self.title.blank?
-  end
-
-  def sanitize(text)
-    sanitizer = Rails::Html::FullSanitizer.new
-    # Sanitizer seems to be inserting "&#13;" into the text around newlines. Not sure why. For now:
-    sanitizer.sanitize(text).gsub('&#13;', '')
+    self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
+    self.sidebar = Sanitizer.sanitize(self.sidebar) unless self.title.blank?
   end
 
   def self.by_path(path)

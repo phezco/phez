@@ -5,6 +5,7 @@ class Post < ActiveRecord::Base
   has_many :votes, dependent: :destroy
 
   validates :title, :presence => true
+  validate :url_and_body_cant_both_be_blank
 
   scope :latest, -> { order('created_at DESC') }
   scope :by_points, -> { order('points DESC') }
@@ -121,6 +122,13 @@ class Post < ActiveRecord::Base
   def sanitize_attributes
     self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
     self.url = Sanitizer.sanitize(self.url) unless self.url.blank?
+  end
+
+  def url_and_body_cant_both_be_blank
+    if url.blank? && body.blank?
+      errors.add(:url, "can't be blank if body is blank")
+      errors.add(:body, "can't be blank if url is blank")
+    end
   end
 
   def self.my_phez(user, page = 1, to_show_premium = false)

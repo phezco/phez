@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   end
   resources :subscriptions, :only => [:create, :destroy]
   resources :comments, :only => [:show, :create, :edit, :update, :destroy]
-  resources :posts, :except => [:index] do
+  resources :posts, :except => [:index, :new] do
     collection do
       get 'suggest_title'
     end
@@ -78,13 +78,19 @@ Rails.application.routes.draw do
   get 'p/:path/submit' => 'posts#new', as: :new_subphez_post
   get 'p/:path/:post_id/:guid/' => 'posts#show', as: :view_post
 
+  get 'submit' => 'posts#new', as: :new_post
+
   post 'votes/upvote' => 'votes#upvote'
   post 'votes/downvote' => 'votes#downvote'
 
   post 'comment_votes/upvote' => 'comment_votes#upvote'
   post 'comment_votes/downvote' => 'comment_votes#downvote'
 
-  resources :subphezes, :except => [:destroy]
+  resources :subphezes, :except => [:destroy] do
+    collection do
+      get 'autocomplete'
+    end
+  end
   devise_for :users, :controllers => {:registrations => "registrations"}
 
   get 'my' => 'home#my', as: :my

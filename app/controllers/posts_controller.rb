@@ -29,12 +29,14 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @subphez = Subphez.by_path(params[:path])
-    if @subphez.is_admin_only && !current_user.is_admin
+    @subphez = nil
+    @subphez = Subphez.by_path(params[:path]) if params[:path]
+    if @subphez && @subphez.is_admin_only && !current_user.is_admin
       redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
     end
     @post = Post.new
-    @post.subphez_id = @subphez.id
+    @post.url = params[:url] if params[:url]
+    @post.title = params[:title] if params[:title]
   end
 
   # GET /posts/1/edit
@@ -47,14 +49,19 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
-    @subphez = Subphez.find(@post.subphez_id)
+    @subphez = Subphez.by_path(params[:subphez_path]) if params[:subphez_path]
+    if @subphez.nil?
+      flash[:alert] = "Could not find Subphez with path: #{params[:subphez_path]}"
+      render :action => :new and return
+    end
+    @post.subphez = @subphez
     if @subphez.is_admin_only && !current_user.is_admin
       redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
     end
     @post.user_id = current_user.id
     @post.vote_total = 1
     @post.is_premium_only = @subphez.is_premium_only
-    if @post.url.blank?
+    if @post.url.strip.blank?
       @post.is_self = true
     else
       @post.body = nil
