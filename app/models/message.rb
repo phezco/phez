@@ -11,6 +11,8 @@ class Message < ActiveRecord::Base
   after_create :set_orange
   before_save :sanitize_attributes
 
+  self.per_page = 20
+
   def body_rendered
     Renderer.render(body)
   end

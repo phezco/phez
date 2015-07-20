@@ -18,6 +18,7 @@ class Comment < ActiveRecord::Base
 
   after_create :add_comment_upvote
   after_create :add_message_to_inbox_of_post_creator
+  before_destroy :delete_messages!
 
   def reward!
     update_attribute(:is_rewarded, true)
