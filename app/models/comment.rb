@@ -19,6 +19,7 @@ class Comment < ActiveRecord::Base
   after_create :add_comment_upvote
   after_create :add_message_to_inbox_of_post_creator
   before_destroy :delete_messages!
+  after_destroy :message_cleanup
 
   def reward!
     update_attribute(:is_rewarded, true)
@@ -79,6 +80,12 @@ class Comment < ActiveRecord::Base
 
   def delete_messages!
     Message.delete_all(:messageable_type => 'Comment', :messageable_id => self.id)
+  end
+
+  def message_cleanup
+    # Not ideal but other ways of deleting comment messages weren't working properly:
+    m = Message.all.select {|m| m.messageable_id && m.messageable_type && m.messageable.nil? }
+    m.map(&:destroy)
   end
 
   #helper method to check if a comment has children
