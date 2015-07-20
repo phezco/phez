@@ -65,6 +65,7 @@
         <p>&copy; Phez.co <%= Time.now.year %> |
           <%= link_to 'source code', 'https://github.com/phezco/phez' %> |
           <%= link_to 'privacy policy', privacy_home_index_path %> |
+          <%= link_to 'api', apidocs_home_index_path %> |
           <%= link_to 'markdown help', 'http://daringfireball.net/projects/markdown/syntax', target: '_blank' %>
           <% if Figaro.env.enable_screenshots %>  
             | <%= raw(Figaro.env.pagekeeper_link_code) %> 

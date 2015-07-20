@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :users, only: [] do
         collection do
           get 'details'
+          get 'inbox'
         end
       end
       resources :posts, only: [:show] do

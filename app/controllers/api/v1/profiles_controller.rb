@@ -11,6 +11,9 @@ class Api::V1::ProfilesController < Api::V1::BaseController
     @comments = @user.comments.latest.paginate(:page => params[:page])
   end
 
+  def show
+  end
+
 private
 
   def set_by_username

@@ -2,9 +2,14 @@
 
 <h2>API Documentation</h2>
 
-<p>The Phez API includes access to commonly accessed pages and resources on Phez. There are several resources accessible via the Phez API that do not require authentication. These are even available cross-origin, so you can do things like embed a user's post feed on another web page. <small>(<%= link_to'More on CORS', 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS' %>.)</small></p>
+<p>The Phez API includes access to commonly accessed pages and resources on Phez. There are several resources accessible via the Phez API that do not require authentication. These are even available cross-origin, so you can do things like embed a user's post feed on another web page. <small>(<%= link_to 'More on CORS', 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS' %>)</small></p>
 
 <p>Note: the Phez source code is <%= link_to 'available on GitHub', 'https://github.com/phezco/phez' %> if you'd like to dig deeper into our API implementation.</p>
+
+<p>Also be sure to check the <%= link_to 'Phez.co GitHub page', 'https://github.com/phezco' %> to see any example applications. Currently we have posted:</p>
+<ul>
+  <li><%= link_to 'Phez Public API Example Using HTML, JavaScript and jQuery', 'https://github.com/phezco/phez-public-api-example-html-javascript' %></li>
+</ul>
 
 <h3>Public API Methods</h3>
 
@@ -125,6 +130,20 @@ end
 
 <pre><code>[{"id":188,"title":"Jesus in Philadelphia","url":"http://blogs.reuters.com/photographers-blog/2014/12/22/jesus-in-philadelphia/","submitted_by":"TheDude","subphez":"pics","comments_url":"http://phez.co/p/pics/188/jesus-in-philadelphia","comment_count":0,"vote_total":1,"upvote_total":1,"downvote_total":0,"created_at":"2015-07-18T18:12:58.127Z","updated_at":"2015-07-19T12:15:02.669Z"}, ...]</code></pre>
 
+<h4>Show User Details</h4>
+
+<p>You must know the username of the user whose details you'd like to obtain.</p>
+
+<pre><code>GET /api/v1/profiles/:username/details</code></pre>
+
+<p>Example:</p>
+
+<pre><code>curl "http://phez.co/api/v1/profiles/p4x/details"</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"post_karma":22,"comment_karma":3,"created_at":"2015-07-11T07:19:06.641Z","post_count":22,"comment_count":4}</code></pre>
+
 <h4>List User Posts</h4>
 
 <p>You must know the username of the user whose posts you'd like to obtain. Posts are returned in order: most recently created first.</p>
@@ -177,7 +196,7 @@ end
 
 <h4>Show Post</h4>
 
-<p>Returns post details, including comment threads. You must know the post id to obtain post details</p>
+<p>Returns post details, including comment threads. You must know the post id to obtain post details.</p>
 
 <pre><code>GET /api/v1/posts/:id</code></pre>
 
@@ -191,5 +210,189 @@ end
 
 <p>The <i>self</i> attribute indicates whether it is a self post or not -- whether or not there should be a body attribute expected. Comment children are returned on the <i>comments</i> attribute of the comment if present.</p>
 
+<br/>
+<h3>Authenticated API Methods</h3>
+<br/>
+
+<p>Phez uses OAuth 2.0 for authenticating user accounts. To get started, first <%= link_to 'Create an Account', '/users/sign_up' %> then head over to <%= link_to 'Manage Applications', '/oauth/applications' %> and add a new application.</p>
+
+
+<h4>User Details</h4>
+
+<p>Returns details about the authenticated user. It's a good method to test whether or not you've successfully authenticated.</p>
+
+<pre><code>GET /api/v1/users/details</code></pre>
+
+<p>Ruby example:</p>
+
+<pre><code>require 'oauth2'
+
+client_id     = 'REPLACE-WITH-YOUR-CLIENT-ID'
+client_secret = 'REPLACE-WITH-YOUR-CLIENT-SECRET'
+
+client = OAuth2::Client.new(client_id, client_secret, :site => "http://phez.co")
+# Set your username and password:
+access_token = client.password.get_token('username', 'password')
+
+response = access_token.get('/api/v1/users/details')
+
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"username":"username","post_karma":20,"comment_karma":3,"has_messages":true}</code></pre>
+
+
+<h4>Subscribe to a Subphez</h4>
+
+<p>Subscribes the authenticated user to the specified subphez. Specify the :path of the subphez in the URL path. (/p/pics for example has a path of 'pics')</p>
+
+<pre><code>POST /api/v1/subphezes/:path/subscribe</code></pre>
+
+<p>Ruby example (continued from above):</p>
+
+<pre><code>access_token = client.password.get_token('username', 'password')
+
+response = access_token.post('/api/v1/subphezes/bitcoin/subscribe')
+
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"success":true}</code></pre>
+
+<p>... if the user is not already subscribed to the subphez specified. If already subscribed, the result will be:</p>
+
+<pre><code>{"success":false,"errors":"already subscribed"}</code></pre>
+
+
+<h4>Unsubscribe from a Subphez</h4>
+
+<p>Unsubscribes the authenticated user from the specified subphez.</p>
+
+<pre><code>POST /api/v1/subphezes/:path/unsubscribe</code></pre>
+
+<p>Ruby example:</p>
+
+<pre><code>access_token = client.password.get_token('username', 'password')
+
+response = access_token.post('/api/v1/subphezes/announcements/unsubscribe')
+
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"success":true}</code></pre>
+
+<p>... if the user is already subscribed to the subphez specified. Otherwise, the result will be:</p>
+
+<pre><code>{"success":false,"errors":"not subscribed"}</code></pre>
+
+
+<h4>List My Subphez Posts (Subscribed Feed)</h4>
+
+<p>This endpoint is equivalent to the <%= link_to '/my', '/my' %> page of the Phez UI. It returns a list of posts (by hot score) from subphezes that the authenticated user is subscribed to.</p>
+
+<pre><code>GET /api/v1/posts/my</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1.</td>
+  </tr>
+</table>
+
+<p>Ruby example:</p>
+
+<pre><code>response = access_token.get('/api/v1/posts/my')
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>[{"id":42,"title":"Gandhi","url":"https://en.wikipedia.org/wiki/Mahatma_Gandhi","submitted_by":"user31","subphez":"history","comments_url":"http://localhost:3000/p/subphez1/42/gandhi","comment_count":7,"vote_total":54,"upvote_total":56,"downvote_total":2,"created_at":"2015-07-11T12:41:04.653Z","updated_at":"2015-07-18T09:12:01.420Z"}, ...]</code></pre>
+
+<p>Pagination example (in ruby):</p>
+
+<pre><code>response = access_token.get('/api/v1/posts/my', {body: {:page => 2}})</code></pre>
+
+
+<h4>Create Post</h4>
+
+<p>Create a post on Phez, added to a specific subphez.</p>
+
+<pre><code>POST /api/v1/posts/create</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>subphez_path</td>
+    <td>Path of the subphez to submit the post to.</td>
+  </tr>
+  <tr>
+    <td>title</td>
+    <td>Post title.</td>
+  </tr>
+  <tr>
+    <td>url</td>
+    <td>(optional) URL of the external page to link to. Do not specify if creating a self post.</td>
+  </tr>
+  <tr>
+    <td>body</td>
+    <td>(optional) Body of a self post. Do not specify if passing a URL param (external site link).</td>
+  </tr>
+
+</table>
+
+<p>Note: if a <i>url</i> param is present, the body field is ignored.</p>
+
+<p>Ruby example:</p>
+
+<pre><code>response = access_token.post('/api/v1/posts/create', {body: {:subphez_path => 'pics', :title => "MJ popcorn", :url => "https://i.imgur.com/xblF4h.jpg"}})
+
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"id":96,"title":"MJ popcorn","url":"https://i.imgur.com/xblF4h.jpg","submitted_by":"username","subphez":"pics","comments_url":"http://phez.co/p/pics/96/mj-popcorn","comment_count":0,"vote_total":1,"upvote_total":1,"downvote_total":0,"created_at":"2015-07-20T07:21:18.032Z","updated_at":"2015-07-20T07:21:18.032Z"}</code></pre>
+
+
+<h4>List Messages (Inbox)</h4>
+
+<p>Obtain the list of latest messages from the user's inbox. Also marks the user's inbox as having been read, so do not request the endpoint unless the user is actually reading their inbox. To determine whether or not the user has any unread messages, see the User Details endpoint.</p>
+
+<pre><code>GET /api/v1/users/inbox</code></pre>
+
+<table class="api-table">
+  <tr>
+    <th>parameter</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>page</td>
+    <td>Page of results to return. Defaults to 1.</td>
+  </tr>
+</table>
+
+<p>Ruby example:</p>
+
+<pre><code>response = access_token.get('/api/v1/users/inbox')
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"messages":[{"reason":null,"from_user":"user31","via_system":false,"title":"hey there","body":"The message body. Contains HTML.","created_at":"2015-07-19T09:46:43.265Z"}, ...]</code></pre>
+
+<p>Note: this method returns a root element (<i>messages</i>).</p>
+
+<p>The <i>reason</i> attribute can be one of: nil, 'comment_reply' or 'new_post_comment'. When nil, the message is either from another user or from the system (new moderator request, etc). When set to <i>comment_reply</i>, it indicates the message was generated as a result of a new reply to one of the authenticated user's comments.  When set to <i>new_post_comment</i>, it indicates the message was generated because there was a new comment on one of the user's previously-submitted posts.</p>
+
+<p>If you need help or have any questions about the Phez API, please ask in <%= link_to '/p/LetsBuildPhez', '/p/LetsBuildPhez' %>.</p>
 
 <br><br>
