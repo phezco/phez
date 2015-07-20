@@ -1,4 +1,8 @@
 class Post < ActiveRecord::Base
+  include PgSearch
+  multisearchable :against => [:title, :url, :body],
+                  :if => :not_premium
+
   acts_as_commentable
   belongs_to :user
   belongs_to :subphez
@@ -29,6 +33,10 @@ class Post < ActiveRecord::Base
   before_save :sanitize_attributes
 
   self.per_page = 20
+
+  def not_premium
+    !is_premium_only
+  end
 
   def reward!
     update_attribute(:is_rewarded, true)
@@ -92,8 +100,6 @@ class Post < ActiveRecord::Base
 
   def body_rendered
     Renderer.render(body)
-    # markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
-    # markdown.render(body)
   end
 
   def editable?

@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  include PgSearch
+  multisearchable :against => :username
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :authentication_keys => [:username]
 

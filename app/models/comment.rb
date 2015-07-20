@@ -1,4 +1,8 @@
 class Comment < ActiveRecord::Base
+  include PgSearch
+  multisearchable :against => :body,
+                  :if => :not_premium
+
   acts_as_nested_set :scope => [:commentable_id, :commentable_type]
 
   validates :body, :presence => true
@@ -20,6 +24,10 @@ class Comment < ActiveRecord::Base
   after_create :add_message_to_inbox_of_post_creator
   before_destroy :delete_messages!
   after_destroy :message_cleanup
+
+  def not_premium
+    !commentable.is_premium_only
+  end
 
   def reward!
     update_attribute(:is_rewarded, true)

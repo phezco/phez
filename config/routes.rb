@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :search, :only => [:index]
+
   resources :rewards, :only => [:new, :create] do
     collection do
       get 'premium'
