@@ -35,4 +35,17 @@ class Vote < ActiveRecord::Base
     destroy_vote(user, post)
   end
 
+  def self.vote_hash(user, posts)
+    return nil if user.nil?
+    return {} if posts.empty?
+    post_ids = posts.map(&:id)
+    votes = Vote.where(user_id: user.id).where('post_id IN (?)', post_ids)
+    return {} if votes.empty?
+    vote_hash = {}
+    votes.each do |vote|
+      vote_hash[vote.post_id] = vote
+    end
+    vote_hash
+  end
+
 end

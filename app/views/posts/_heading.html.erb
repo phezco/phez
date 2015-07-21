@@ -3,7 +3,14 @@
     <% if user_signed_in? %>
         <%
         @upvoted, @downvoted = false, false
-        if current_user
+
+        if user_signed_in? && @vote_hash
+          @vote = @vote_hash[@post.id]
+          if @vote
+            @upvoted = @vote.upvote?
+            @downvoted = @vote.downvote?
+          end
+        elsif user_signed_in?
           @vote = Vote.voted(current_user, @post)
           if @vote
             @upvoted = @vote.upvote?

@@ -22,11 +22,13 @@ class SubphezesController < ApplicationController
   def show
     disallow_non_premium(@subphez)
     @posts = @subphez.posts.by_hot_score.paginate(:page => params[:page])
+    @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
   def latest
     disallow_non_premium(@subphez)
     @posts = @subphez.posts.latest.paginate(:page => params[:page])
+    @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
   def manage

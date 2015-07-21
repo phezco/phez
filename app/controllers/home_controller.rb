@@ -4,11 +4,13 @@ class HomeController < ApplicationController
   def index
     to_show_premium = user_signed_in? ? current_user.is_premium : false
     @posts = Post.by_hot_score.show_premium(to_show_premium).paginate(:page => params[:page])
+    @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
   def my
     to_show_premium = user_signed_in? ? current_user.is_premium : false
     @posts = Post.my_phez(current_user, params[:page], to_show_premium)
+    @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
   def privacy
