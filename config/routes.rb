@@ -84,6 +84,7 @@ Rails.application.routes.draw do
 
   post 'votes/upvote' => 'votes#upvote'
   post 'votes/downvote' => 'votes#downvote'
+  post 'votes/delete_vote' => 'votes#delete_vote'
 
   post 'comment_votes/upvote' => 'comment_votes#upvote'
   post 'comment_votes/downvote' => 'comment_votes#downvote'

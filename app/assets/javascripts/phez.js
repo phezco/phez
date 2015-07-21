@@ -47,8 +47,40 @@ var PhezApp = Class.extend({
     $('div#comment-' + comment_id).load('/comments/' + comment_id);
   },
 
+  deleteVote: function(post_id) {
+    var href = "/votes/delete_vote?post_id=" + post_id;
+    $.ajax({
+      type: "POST",
+      url: href,
+      success: Phez.onDeleteVoteSuccess,
+      statusCode: {
+        400: Phez.onDeleteVoteError
+      },
+      dataType: 'json'
+    });
+
+  },
+
+  onDeleteVoteSuccess: function(data, textStatus, jq_xhr) {
+    if ($('.post-downvote-' + data.post_id).hasClass('voted')) {
+      var diff = 1;
+    } else if ($('.post-upvote-' + data.post_id).hasClass('voted')) {
+      var diff = -1;
+    }
+    $('.post-downvote-' + data.post_id).removeClass('voted');
+    $('.post-upvote-' + data.post_id).removeClass('voted');
+    var base_count = parseFloat( $('#vote-count-' + data.post_id).html() );
+    var new_count = base_count + diff;
+    $('#vote-count-' + data.post_id).html(new_count);
+  },
+
+  onDeleteVoteError: function(jq_xhr, textStatus, errorThrown) {
+    alert('There was a problem deleting your vote. Please try again later.');
+  },
+
   upvote: function(post_id) {
     if ($('.post-upvote-' + post_id).hasClass('voted')) {
+      Phez.deleteVote(post_id);
       return
     }
     var href = "/votes/upvote?post_id=" + post_id;
@@ -82,6 +114,7 @@ var PhezApp = Class.extend({
 
   downvote: function(post_id) {
     if ($('.post-downvote-' + post_id).hasClass('voted')) {
+      Phez.deleteVote(post_id);
       return
     }
     var href = "/votes/downvote?post_id=" + post_id;

@@ -31,4 +31,8 @@ class Vote < ActiveRecord::Base
     Vote.create(user_id: user.id, post_id: post.id, vote_value: -1)
   end
 
+  def self.delete_vote(user, post)
+    destroy_vote(user, post)
+  end
+
 end
