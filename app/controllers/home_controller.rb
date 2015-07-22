@@ -13,6 +13,12 @@ class HomeController < ApplicationController
     @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
+  def latest
+    to_show_premium = user_signed_in? ? current_user.is_premium : false
+    @posts = Post.latest.show_premium(to_show_premium).paginate(:page => params[:page])
+    @vote_hash = Vote.vote_hash(current_user, @posts)
+  end
+
   def privacy
   end
 

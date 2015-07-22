@@ -97,6 +97,7 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations"}
 
   get 'my' => 'home#my', as: :my
+  get 'latest' => 'home#latest', as: :latest
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
