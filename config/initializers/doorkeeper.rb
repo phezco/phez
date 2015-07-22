@@ -9,6 +9,7 @@ Doorkeeper.configure do
     #fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
+    session[:previous_url] = request.fullpath
     current_user || redirect_to(new_user_session_url)
   end
 
