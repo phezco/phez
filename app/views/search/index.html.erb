@@ -1,0 +1,18 @@
+<% title("Search: #{@query}") %>
+
+<h3>Search results for: <%= @query %></h3>
+
+<% @results.each do |result| %>
+  <% @object = result.searchable %>
+  <%  case @object.class.to_s
+      when 'User' %>
+        <h3>User: <%= link_to @object.username, build_profile_path(@object) %></h3>
+        <div style="padding-bottom: 10px">phezor since <%= time_ago_in_words(@object.created_at) %> ago</div>
+   <% when 'Post'
+      @post = @object %>
+      <%= render :partial => 'posts/heading' %>
+  <% when 'Comment'
+      @comment = @object %>
+      <%= render :partial => 'posts/comment_stripped' %>
+      <% end %>
+<% end %>

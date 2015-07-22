@@ -1,0 +1,12 @@
+<% title('Latest Posts') %>
+
+<% @posts.each do |post| %>
+  <% @post = post %>
+  <%= render :partial => 'posts/heading' %>
+<% end %>
+
+<%= will_paginate @posts %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'shared/sidebar' %>
+<% end %>

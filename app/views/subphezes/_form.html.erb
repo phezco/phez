@@ -1,15 +1,6 @@
 <%= form_for(@subphez) do |f| %>
-  <% if @subphez.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@subphez.errors.count, "error") %> prohibited this subphez from being saved:</h2>
-
-      <ul>
-      <% @subphez.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <% @object = @subphez %>
+  <%= render :partial => 'shared/errors' %>
   <% if @subphez.new_record? %>
     <div class="field">
       <%= f.label :path %><br>

@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
 private
 
   def set_by_username
-    @user = User.where(username: params[:id]).first
+    @user = User.by_username_insensitive(params[:id])
     if @user.nil?
       redirect_to root_path, alert: 'Could not find user.' and return
     end

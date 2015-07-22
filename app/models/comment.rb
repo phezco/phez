@@ -1,4 +1,8 @@
 class Comment < ActiveRecord::Base
+  include PgSearch
+  multisearchable :against => :body,
+                  :if => :not_premium
+
   acts_as_nested_set :scope => [:commentable_id, :commentable_type]
 
   validates :body, :presence => true
@@ -9,9 +13,29 @@ class Comment < ActiveRecord::Base
   has_many :comment_votes, dependent: :destroy
 
   scope :latest, -> { order('created_at DESC') }
+  scope :this_month, -> do
+    t = DateTime.now
+    beginning_of_month = t.beginning_of_month
+    end_of_month = t.end_of_month
+    where('created_at >= :beginning_of_month AND created_at <= :end_of_month', beginning_of_month: beginning_of_month, end_of_month: end_of_month)
+  end
 
-  before_save :sanitize_attributes
   after_create :add_comment_upvote
+  after_create :add_message_to_inbox_of_post_creator
+  before_destroy :delete_messages!
+  after_destroy :message_cleanup
+
+  def not_premium
+    !commentable.is_premium_only
+  end
+
+  def reward!
+    update_attribute(:is_rewarded, true)
+  end
+
+  def url
+    "#{commentable.full_post_url}##{id}"
+  end
 
   def add_comment_upvote
     CommentVote.upvote(user, self)
@@ -33,6 +57,7 @@ class Comment < ActiveRecord::Base
     update_attribute(:user_id, nil)
     update_attribute(:body, nil)
     update_attribute(:is_deleted, true)
+    delete_messages!
     comment_votes.delete_all
   end
 
@@ -45,8 +70,30 @@ class Comment < ActiveRecord::Base
   end
 
   def body_rendered
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:hard_wrap => true), autolink: true, tables: true)
-    markdown.render(body)
+    Renderer.render(body)
+  end
+
+  def add_message_to_inbox_of_post_creator
+    Message.add_message_comment!(commentable.user, self, 'new_post_comment') unless commentable.user == user
+  end
+
+  def add_reply_message
+    parent_comment = parent
+    if parent_comment && !(parent_comment.user == user)
+      unless Message.messageable_inboxed?(parent_comment.user, self)
+        Message.add_message_comment!(parent_comment.user, self, 'comment_reply')
+      end
+    end
+  end
+
+  def delete_messages!
+    Message.delete_all(:messageable_type => 'Comment', :messageable_id => self.id)
+  end
+
+  def message_cleanup
+    # Not ideal but other ways of deleting comment messages weren't working properly:
+    m = Message.all.select {|m| m.messageable_id && m.messageable_type && m.messageable.nil? }
+    m.map(&:destroy)
   end
 
   #helper method to check if a comment has children
@@ -65,11 +112,6 @@ class Comment < ActiveRecord::Base
   scope :find_comments_for_commentable, lambda { |commentable_str, commentable_id|
     where(:commentable_type => commentable_str.to_s, :commentable_id => commentable_id).order('created_at DESC')
   }
-
-  def sanitize_attributes
-    sanitizer = Rails::Html::FullSanitizer.new
-    self.body = sanitizer.sanitize(self.body) unless self.body.blank?
-  end
 
   # Helper class method to look up a commentable object
   # given the commentable class name and id

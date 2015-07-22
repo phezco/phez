@@ -1,0 +1,7 @@
+<%= form_for @comment do |f| %>
+  <%= f.text_area :body, class: 'edit-comment-body' %> <br/>
+  <div class="comment-edit-actions">
+    <%= f.submit "Save Comment", class: 'btn btn-primary btn-sm' %> &nbsp;&nbsp;
+    <%= link_to 'Cancel', "javascript:Phez.cancel(#{@comment.id})", class: 'btn btn-primary btn-sm' %>
+  </div>
+<% end %>

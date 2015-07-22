@@ -1,0 +1,5 @@
+<% if @comment.is_deleted %>
+  [deleted]
+<% else %>
+  <%= raw(@comment.body_rendered) %>
+<% end %>

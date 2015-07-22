@@ -21,7 +21,7 @@ We love pull requests. Here's a quick guide:
 
 1. Fork the repo.
 
-2. Add some tests. Currently we don't have any (yet). But the more the better, especially unit tests. Ideally we'll get Factory Girl setup in lieu of fixtures.
+2. Add some tests if your changes are code-related (not design). Currently we don't have any (yet). But the more the better, especially unit tests. Ideally we'll get Factory Girl setup in lieu of fixtures.
 
 3. Push your fork and submit a pull request.
 

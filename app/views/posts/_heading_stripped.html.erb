@@ -1,17 +1,18 @@
 <div class="row">
-  <div class="voting_arrows">
+  <div class="voting_arrows col-xs-1" style="padding-top: 10px;">
       <br/>
       <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
-      
   </div>
-  <div class="col-md-7">
-    <h2>
-      <% if @post.is_self %>
-        <%= link_to @post.title, build_post_path(@post), class: 'post-link' %>
-      <% else %>
-        <%= link_to @post.title, @post.url, class: 'post-link' %>
-      <% end %>
-    </h2>
+  <div class="col-md-11 col-sm-11 col-xs-10">
+    <% if Figaro.env.enable_screenshots && !@post.is_self %>
+      <div class="thumbnail">
+        <a href="<%= @post.url_linkable %>"><img src='http://api.pagepeeker.com/v2/thumbs.php?size=s&url=<%= @post.url_encoded %>' width="90"></a>
+      </div>
+    <% end %>
+    <br class="post-title-spacer" />
+    <%= link_to raw(@post.title), @post.url_linkable, class: 'post-link' %>
+    <span class="domain">(<%= link_to @post.domain, @post.url_linkable %>)</span>
+    <div style="clear: both"></div>
     <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= link_to @post.user.username, build_profile_path(@post.user) %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_threads.size} comments", build_post_path(@post) %></p>
   </div>
 </div>

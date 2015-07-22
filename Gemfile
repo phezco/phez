@@ -42,6 +42,9 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'rspec-rails'
+  gem 'capybara'
 end
 
 gem 'devise'
@@ -55,3 +58,8 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'recaptcha'
 gem 'figaro'
 gem 'exception_notification'
+gem 'rest-client'
+gem 'active_model_serializers', '>=0.10.x'
+gem 'jwt'
+gem 'jquery-ui-rails'
+gem 'pg_search'

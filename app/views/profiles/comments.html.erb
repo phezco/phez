@@ -14,3 +14,7 @@
 <% end %>
 
 <%= will_paginate @comments %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'sidebar' %>
+<% end %>

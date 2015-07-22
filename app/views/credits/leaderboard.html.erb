@@ -1,0 +1,171 @@
+<%= title('Leaderboard') %>
+
+<h2>Earn Bitcoin by Contributing to Phez</h2>
+
+<p>Phez rewards contributors, moderators and commenters with a portion of the Bitcoin that is donated each month. This page explains how the breakdown is calculated and shows the top contributors, moderators and commenters for the month.</p>
+
+<h4>Current Phez BTC Balance: <%= @btc_balance %> BTC</h4>
+
+<h4>Current Phez mBTC Balance: <%= @mbtc_balance %> mBTC</h4>
+
+<p>Note: there may be additional bitcoin available that was donated via payment buttons, etc. This will be added to the general fund and reported at the end of the month.</p>
+
+<p><a href="https://blockchain.info/address/<%= Figaro.env.bitcoin_address %>">View the Donations on Blockchain</a></p>
+
+<h2>Calculating the General Pool of Available mBTC</h2>
+
+<p>Monthly Fixed Costs in USD: <%= number_to_currency(Figaro.env.fixed_monthly_costs) %></p>
+
+<p>(server hosting)</p>
+
+<p>Monthly Fixed Costs in mBTC: <%= @fixed_costs_mbtc %></p>
+
+<p>We like to keep three months of fixed costs reserved, so to calculate the General Pool of mBTC available the formula is:<br/><br/>$mbtc_balance - (3 * $fixed_monthly_costs)</p>
+
+<p>So to calculate the General Pool of mBTC available: <%= @mbtc_balance %> - (3 * <%= @fixed_costs_mbtc %>) = <%= @pool_available %> mBTC</p>
+
+<br/>
+
+<h4>General Pool Available for <%= Time.now.strftime("%B") %>, <%= Time.now.year %>: <%= @pool_available %> mBTC</h4>
+
+<h2>Breakdown</h2>
+
+<p>Here is a breakdown of how the general pool funds will be split.</p>
+
+<table class="leaderboard-table">
+  <tr>
+    <th>overall percentage</th>
+    <th>who</th>
+    <th>mBTC allocated</th>
+  </tr>
+  <tr>
+    <td>50%</td>
+    <td>content contributors/moderators</td>
+    <td><%= (0.5 * @pool_available).round(0) %>
+  </tr>
+  <tr>
+    <td>45%</td>
+    <td>developers, designers, devops, etc</td>
+    <td><%= (0.45 * @pool_available).round(0) %>
+  </tr>
+  <tr>
+    <td>5%</td>
+    <td>benevolent dictator for life fee</td>
+    <td><%= (0.05 * @pool_available).round(0) %>
+  </tr>
+</table>
+
+<h3>Content Contributors / Moderators Breakdown</h3>
+
+<p>The pool for content contributors / moderators will be split equally three ways between: content contributors (posters), moderators (of subphezes) and commenters. You can earn more by being at the top in multiple categories.</p>
+
+<table class="leaderboard-table">
+  <tr>
+    <th>overall percentage</th>
+    <th>who</th>
+    <th>mBTC allocated</th>
+  </tr>
+  <tr>
+    <td>16.6%</td>
+    <td>content contributors</td>
+    <td><%= (0.166 * @pool_available).round(0) %>
+  </tr>
+  <tr>
+    <td>16.6%</td>
+    <td>subphez moderators</td>
+    <td><%= (0.166 * @pool_available).round(0) %>
+  </tr>
+  <tr>
+    <td>16.6%</td>
+    <td>top commenters</td>
+    <td><%= (0.166 * @pool_available).round(0) %>
+  </tr>
+</table>
+
+<p>Currently the pool for developers, designers, devops, etc. will be split by determination of the <%= link_to 'benevolent dictator for life', "/profiles/p4x" %>. If you'd like to be eligible for this pool, check out the <%= link_to 'Phez GitHub page', 'https://github.com/phezco/phez' %>, especially the <%= link_to 'issues section', 'https://github.com/phezco/phez/issues' %> to see if there's some way that you might be able to contribute.</p>
+
+<h2>Collecting Your Earned Bitcoin</h2>
+
+<p>You have to have a user account, of course. <%= link_to 'Sign Up here', new_user_registration_path %> if you haven't already. Then make sure your Bitcoin address is set under your <%= link_to 'My Account', edit_user_registration_path %> page.</p>
+
+<p>Payments will be sent on the last day of each month.</p>
+
+<h2>Leaderboard</h2>
+
+<p>Note: the mBTC amount listed is the projected user earnings this month. Site admins are filtered out from this list (they are not eligible for this kind of reward).</p>
+
+<div class="row">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <h3>Top Posters</h3>
+    <table class="top-table">
+      <tr>
+        <th>rank</th>
+        <th>user</th>
+        <th>mBTC</th>
+      </tr>
+      <% i = 1 %>
+      <% @top_posters.each do |user| %>
+        <tr>
+          <td>#<%= i %></td>
+          <td><%= link_to user.username, build_profile_path(user) %> <br/>
+            <small><b><i><%= user.monthly_link_karma %></i></b> monthly link karma</small></td>
+          <td><%= @ec.calculate_mbtc_earnings(0.166, i).round(2) %></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </table>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <h3>Top Moderators</h3>
+    <table class="top-table">
+      <tr>
+        <th>rank</th>
+        <th>user</th>
+        <th>mBTC</th>
+      </tr>
+      <% i = 1 %>
+      <% @top_moderators.each do |user| %>
+        <tr>
+          <td>#<%= i %></td>
+          <td><%= link_to user.username, build_profile_path(user) %> <br/>
+            <small><b><i>
+              moderates
+              <%
+              subphez_links = []
+              user.moderated_subphezes.each do |s|
+                subphez_link = link_to "/p/#{s.path}", build_subphez_path(s)
+                subphez_links << subphez_link
+              end
+              %>
+            <%= raw(subphez_links.join(' &nbsp; ')) %>
+            </small></td>
+          <td><%= @ec.calculate_mbtc_earnings(0.166, i).round(2) %></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </table>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <h3>Top Commenters</h3>
+    <table class="top-table">
+      <tr>
+        <th>rank</th>
+        <th>user</th>
+        <th>mBTC</th>
+      </tr>
+      <% i = 1 %>
+      <% @top_commenters.each do |user| %>
+        <tr>
+          <td>#<%= i %></td>
+          <td><%= link_to user.username, build_profile_path(user) %> <br/>
+            <small><b><i><%= user.monthly_comment_karma %></i></b> monthly comment karma</small></td>
+          <td><%= @ec.calculate_mbtc_earnings(0.166, i).round(2) %></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<br/><br/>
+

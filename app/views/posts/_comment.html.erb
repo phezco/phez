@@ -8,36 +8,56 @@ if user_signed_in?
   end
 end
 %>
-<div class="comment-by">
-  <% if @comment.is_deleted %>
-    [deleted]
-  <% else %>
-    <%= link_to @comment.user.username, build_profile_path(@comment.user) %>
-    <span id="comment-vote-count-<%= @comment.id %>"><%= @comment.vote_total %></span> points <small>( <span class="comment-upvote-total">+<%= @comment.upvote_total %></span>|<span class="comment-downvote-total">-<%= @comment.downvote_total %></span> )</small>
-  <% end %>
-   :: <%= time_ago_in_words(@comment.created_at) %> ago:
-</div>
-<div class="row">
-  <div class="comment_arrows">
-    <% if !@comment.is_deleted %>
-      <a href="javascript:Phez.upvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-up comment-upvote-<%= @comment.id %> <%= 'voted' if @upvoted %>"></i></a> <br/>
-      <a href="javascript:Phez.downvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-down comment-downvote-<%= @comment.id %> <%= 'voted' if @downvoted %>"></a></i>
-    <% end %>
-  </div>
-  <div class="comment <%= 'deleted-comment' if @comment.is_deleted %>">
+<a name="<%= @comment.id %>"></a>
+<div class="<%= 'rewarded-comment' if @comment.is_rewarded %>">
+  <div class="comment-by">
     <% if @comment.is_deleted %>
       [deleted]
     <% else %>
-      <%= raw(@comment.body_rendered) %>
+      <%= link_to @comment.user.username, build_profile_path(@comment.user) %>
+      <span id="comment-vote-count-<%= @comment.id %>"><%= @comment.vote_total %></span> points <small>( <span class="comment-upvote-total">+<%= @comment.upvote_total %></span>|<span class="comment-downvote-total">-<%= @comment.downvote_total %></span> )</small>
     <% end %>
+     :: <%= time_ago_in_words(@comment.created_at) %> ago:
   </div>
-</div>
+  <div class="row">
+    <div class="comment_arrows">
+      <% if !@comment.is_deleted %>
+        <a href="javascript:Phez.upvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-up comment-upvote-<%= @comment.id %> <%= 'voted' if @upvoted %>"></i></a> <br/>
+        <a href="javascript:Phez.downvoteComment(<%= @comment.id %>)"><i class="vote-arrow fa fa-arrow-down comment-downvote-<%= @comment.id %> <%= 'voted' if @downvoted %>"></a></i>
+      <% end %>
+    </div>
+    <div class="comment <%= 'deleted-comment' if @comment.is_deleted %>" id="comment-<%= @comment.id %>">
+      <% if @comment.is_deleted %>
+        [deleted]
+      <% else %>
+        <%= raw(@comment.body_rendered) %>
+      <% end %>
+    </div>
+  </div>
 
-<div class="comment-actions" id="comment-<%= @comment.id %>-actions">
-  <%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %> &nbsp;
-  <% if user_signed_in? && !@comment.is_deleted && (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
-    <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %>
-  <% end %>
+  <div class="comment-actions" id="comment-<%= @comment.id %>-actions">
+    <%= link_to 'permalink', "#{build_post_path(@comment.commentable)}##{@comment.id}" %> &nbsp;
+    <% if user_signed_in? %>
+
+      <% if !@comment.is_deleted && @comment.owner?(current_user) %>
+        <%= link_to 'edit', "javascript:Phez.edit(#{@comment.id})" %> &nbsp;
+      <% end %>
+      <% if !@comment.is_deleted && (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
+        <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %> &nbsp;
+      <% end %>
+
+      <%= link_to 'reply', "javascript:Phez.reply(#{@comment.id})" %> &nbsp;
+
+      <% if !@comment.owner?(current_user) %>
+          &nbsp; <%= link_to 'reward with premium', premium_rewards_path(:rewardable_id => @comment.id, :rewardable_type => 'Comment'), class: 'btn btn-success btn-xs reward-comment-premium' %>
+      <% end %>
+    <% end %>
+
+    <% if @comment.is_rewarded %>
+      &nbsp;<i><small>this comment has been rewarded with premium</small></i>
+    <% end %>
+
+  </div>
 </div>
 <% if @comment.has_children? %>
   <% @comment.children.each do |comment| %>

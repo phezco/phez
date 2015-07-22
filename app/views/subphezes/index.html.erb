@@ -1,7 +1,21 @@
-<h1>Latest Subphezes</h1>
+<% title('Top Subphezes') %>
+
+<h2>Top Subphezes</h2>
 
 <% @subphezes.each do |subphez| %>
-
-  <%= link_to subphez.title, build_subphez_path(subphez) %> <br/>
-
+  <div class="row margin-bottom-20">
+    <% if user_signed_in? %>
+      <div class="col-md-2 my-subscriptions-unsubscribe">
+        <% if current_user.subscribed_subphezes.include?(subphez) %>
+          <%= link_to 'unsubscribe', subscription_path(0, :subphez_id => subphez.id), method: :delete, class: 'btn btn-danger btn-sm' %>
+        <% else %>
+          <%= link_to 'subscribe', subscriptions_path(subphez_id: subphez.id), method: :post, class: 'btn btn-success' %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="col-md-10">
+      <h3><%= link_to subphez.title, build_subphez_path(subphez) %></h3>
+      <%= link_to "/p/#{subphez.path}", build_subphez_path(subphez) %> | <%= subphez.subscriber_count %> subscribers
+    </div>
+  </div>
 <% end %>

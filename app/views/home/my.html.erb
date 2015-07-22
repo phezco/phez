@@ -1,0 +1,24 @@
+<% title('Home') %>
+
+<%= render :partial => 'subphezes/recently_created' %>
+
+<br/>
+
+<div class="well subphez-heading-well">
+  <ul class="list-inline">
+    <li><h2><%= link_to 'All', root_path %></h2></li>
+    <li>&nbsp;&nbsp;</li>
+    <li><h2>My Phez</h2></li>
+  </ul>
+</div>
+
+<% @posts.each do |post| %>
+  <% @post = post %>
+  <%= render :partial => 'posts/heading' %>
+<% end %>
+
+<%= will_paginate @posts %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'shared/sidebar' %>
+<% end %>

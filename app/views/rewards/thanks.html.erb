@@ -1,0 +1,23 @@
+<% title('Thank you for your purchase') %>
+
+<% if @reward.rewarded_user %>
+  
+  <h2>Rewarded <%= @reward.rewarded_user.username %> with Phez Premium</h2>
+
+  <p>They now have access to exclusive subphezes like <%= link_to '/p/premium', '/p/premium' %> and were credited with 50% of your gift in Bitcoin.</p>
+
+<% else %>
+
+  <h2>Thank You for Purchasing Phez Premium</h2>
+
+  <p>You now have access to exclusive subphezes like <%= link_to '/p/premium', '/p/premium' %>.</p>
+
+
+  <p>You are able to gift Phez Premium to other users. They will receive 50% of your gift in Bitcoin.</p>
+
+  <p>It's a great way to give back or say thanks, perhaps to someone who answered a question for you or provided links to quality content.</p>
+
+  <br/>
+<% end %>
+
+<p>Thank you again. Your continued support will allow us to continue growing as an online community, dedicated to the principles of free-speech.</p>

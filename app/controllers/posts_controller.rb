@@ -2,6 +2,18 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, :except => [:index, :show]
   before_action :set_post, only: [:edit, :update, :destroy]
 
+  def suggest_title
+    suggested_title = Post.suggest_title(params[:url])
+    respond_to do |format|
+      if suggested_title.blank?
+        json = { 'suggest' => false}
+      else
+        json = { 'suggest' => true, 'title' => suggested_title }
+      end
+      format.json { render json: json, status: :ok }
+    end
+  end
+
   # GET /posts/1
   # GET /posts/1.json
   def show
@@ -9,18 +21,22 @@ class PostsController < ApplicationController
     if @post.nil?
       redirect_to root_path, alert: 'Could not find post.' and return
     end
+    disallow_non_premium(@post.subphez)
     @comments = @post.root_comments
     @comment = Comment.new
+    @show_context = true
   end
 
   # GET /posts/new
   def new
-    @subphez = Subphez.by_path(params[:path])
-    if @subphez.is_admin_only && !current_user.is_admin
+    @subphez = nil
+    @subphez = Subphez.by_path(params[:path]) if params[:path]
+    if @subphez && @subphez.is_admin_only && !current_user.is_admin
       redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
     end
     @post = Post.new
-    @post.subphez_id = @subphez.id
+    @post.url = params[:url] if params[:url]
+    @post.title = params[:title] if params[:title]
   end
 
   # GET /posts/1/edit
@@ -33,13 +49,19 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
-    @subphez = Subphez.find(@post.subphez_id)
+    @subphez = Subphez.by_path(params[:subphez_path]) if params[:subphez_path]
+    if @subphez.nil?
+      flash[:alert] = "Could not find Subphez with path: #{params[:subphez_path]}"
+      render :action => :new and return
+    end
+    @post.subphez = @subphez
     if @subphez.is_admin_only && !current_user.is_admin
       redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
     end
     @post.user_id = current_user.id
     @post.vote_total = 1
-    if @post.url.blank?
+    @post.is_premium_only = @subphez.is_premium_only
+    if @post.url.strip.blank?
       @post.is_self = true
     else
       @post.body = nil

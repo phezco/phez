@@ -1,22 +1,34 @@
 class SubphezesController < ApplicationController
-  before_action :authenticate_user!, :except => [:index, :show, :latest]
+  before_action :authenticate_user!, :except => [:index, :show, :latest, :autocomplete]
   before_action :set_subphez, only: [:edit, :update, :destroy]
   before_action :set_subphez_by_path, only: [:show, :latest, :manage, :add_moderator, :remove_moderator, :approve_modrequest, :update_modrequest]
+
+  def autocomplete
+    @subphezes = Subphez.where('path ILIKE ?', "#{params[:term]}%").order('path ASC')
+    @paths = @subphezes.collect { |s| s.path }
+    respond_to do |format|
+      format.json { render json: @paths.to_json }
+    end
+  end
 
   # GET /subphezs
   # GET /subphezs.json
   def index
-    @subphezes = Subphez.all.order('created_at DESC')
+    @subphezes = Subphez.top_by_subscriber_count(100)
   end
 
   # GET /subphezs/1
   # GET /subphezs/1.json
   def show
+    disallow_non_premium(@subphez)
     @posts = @subphez.posts.by_hot_score.paginate(:page => params[:page])
+    @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
   def latest
+    disallow_non_premium(@subphez)
     @posts = @subphez.posts.latest.paginate(:page => params[:page])
+    @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
   def manage

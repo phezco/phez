@@ -1,0 +1,47 @@
+<% title('Reward with Premium') %>
+
+<h2>Reward <%= @reward.rewardable.user.username %> with Premium</h2>
+
+<p>You are rewarding <%= @reward.rewardable.user.username %> with Phez Premium. They will receive 50% of your reward in Bitcoin at today's exchange rate, in addition to gaining premium access to Phez for the number of months selected.</p>
+
+<%= form_for(@reward, url: create_rewardable_rewards_path) do |f| %>
+  <% @object = @reward %>
+  <%= render :partial => 'shared/errors' %>
+
+  <%= f.hidden_field :rewardable_type %>
+  <%= f.hidden_field :rewardable_id %>
+
+  <% if current_user.has_rewardable_months? %>
+    <br/>
+    <p>You may give <%= @reward.rewardable.user.username %> some of your existing premium months from your account. You have <%= current_user.rewardable_months %> months left on your account.</p>
+
+    <div class="premium-plan">
+      <input type="radio" value="account" name="funding_source" id="account"> &nbsp;
+      <label for="account">
+        Give 
+
+        <select name="months" id="months">
+          <option value="">(Select)</option>
+          <% 1.upto(current_user.premium_months - 1) do |i| %>
+            <option value="<%= i %>"><%= pluralize(i, 'month') %></option>
+          <% end %>
+        </select>
+
+         of Phez Premium (from my account) to <%= @reward.rewardable.user.username %>
+      </label>
+    </div>
+
+    <h3>OR</h3>
+
+    <p>Purchase more Phez Premium with Bitcoin to give to <%= @reward.rewardable.user.username %>.</p>
+
+  <% end %>
+
+  <%= render :partial => 'plans' %>
+
+  <div class="actions" style="padding-top: 10px">
+    <%= f.submit "Reward #{@reward.rewardable.user.username} with Phez Premium", class: 'btn btn-success btn-lg' %>
+  </div>
+<% end %>
+
+<br/>

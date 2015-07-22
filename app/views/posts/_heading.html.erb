@@ -1,9 +1,16 @@
-<div class="row">
-  <div class="voting_arrows">
+<div class="row <%= 'rewarded-post' if @post.is_rewarded %>">
+  <div class="voting_arrows col-xs-1">
     <% if user_signed_in? %>
         <%
         @upvoted, @downvoted = false, false
-        if current_user
+
+        if user_signed_in? && @vote_hash
+          @vote = @vote_hash[@post.id]
+          if @vote
+            @upvoted = @vote.upvote?
+            @downvoted = @vote.downvote?
+          end
+        elsif user_signed_in?
           @vote = Vote.voted(current_user, @post)
           if @vote
             @upvoted = @vote.upvote?
@@ -13,24 +20,34 @@
         %>
       <a href="javascript:Phez.upvote(<%= @post.id %>)"><i class="vote-arrow fa fa-arrow-up post-upvote-<%= @post.id %> <%= 'voted' if @upvoted %>"></i></a> <br/>
       <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
-      <a href="javascript:Phez.downvote(<%= @post.id %>)"><i class="vote-arrow fa fa-arrow-down post-downvote-<%= @post.id %> <%= 'voted' if @downvoted %>"></a></i>
+      <a href="javascript:Phez.downvote(<%= @post.id %>)"><i class="vote-arrow fa fa-arrow-down post-downvote-<%= @post.id %> <%= 'voted' if @downvoted %>"></i></a>
     <% else %>
       <a href="/users/sign_up"><i class="vote-arrow fa fa-arrow-up"></i></a> <br/>
       <span class="vote_count" id="vote-count-<%= @post.id %>"><%= @post.vote_total %></span><br/>
-      <a href="/users/sign_up"><i class="vote-arrow fa fa-arrow-down"></a></i>
+      <a href="/users/sign_up"><i class="vote-arrow fa fa-arrow-down"></i></a>
     <% end %>
   </div>
-  <div class="col-md-11">
-    <h3>
-      <% if @post.is_self %>
-        <%= link_to @post.title, build_post_path(@post), class: 'post-link' %>
-      <% else %>
-        <%= link_to @post.title, @post.url, class: 'post-link' %>
-      <% end %>
-    </h3>
+  <div class="col-md-11 col-sm-11 col-xs-10">
+    <% if Figaro.env.enable_screenshots && !@post.is_self %>
+      <div class="thumbnail">
+        <a href="<%= @post.url_linkable %>"><img src='http://api.pagepeeker.com/v2/thumbs.php?size=s&url=<%= @post.url_encoded %>' width="90"></a>
+      </div>
+    <% end %>
+    <br class="post-title-spacer" />
+    <%= link_to raw(@post.title), @post.url_linkable, class: 'post-link' %>
+    <span class="domain">(<%= link_to @post.domain, @post.url_linkable %>)</span>
+    <div style="clear: both"></div>
     <p class="submitted">submitted <%= time_ago_in_words(@post.created_at) %> ago by <%= link_to @post.user.username, build_profile_path(@post.user) %> to <%= link_to "/p/#{@post.subphez.path}", build_subphez_path(@post.subphez) %> | <%= link_to "#{@post.comment_count} comments", build_post_path(@post) %>
-      <% if user_signed_in? && (@post.owner?(current_user) || @post.moderateable?(current_user)) %>
-      | <%= link_to 'delete', @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% if user_signed_in? %>
+        <% if (@post.owner?(current_user) || @post.moderateable?(current_user)) %>
+          | <%= link_to 'delete', @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+        <% unless @post.owner?(current_user) || !@show_context %>
+          &nbsp;&nbsp; <%= link_to 'reward with premium', premium_rewards_path(:rewardable_id => @post.id, :rewardable_type => 'Post'), class: 'btn btn-success btn-xs' %>
+        <% end %>
+      <% end %>
+      <% if @post.is_rewarded %>
+        &nbsp;<i>rewarded with premium</i>
       <% end %>
     </p>
   </div>

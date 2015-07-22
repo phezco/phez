@@ -25,21 +25,21 @@ class Ranker
 
   def self.points(vote)
     if vote.upvote?
-      if vote.created_at > 3.hours.ago
+      if vote.created_at > 2.hours.ago
+        return 8
+      elsif vote.created_at > 4.hours.ago
         return 4
-      elsif vote.created_at > 6.hours.ago
-        return 3
-      elsif vote.created_at > 18.hours.ago
+      elsif vote.created_at > 8.hours.ago
         return 2
       else
         return 1
       end
     else
-      if vote.created_at > 3.hours.ago
+      if vote.created_at > 2.hours.ago
+        return -8
+      elsif vote.created_at > 4.hours.ago
         return -4
-      elsif vote.created_at > 6.hours.ago
-        return -3
-      elsif vote.created_at > 18.hours.ago
+      elsif vote.created_at > 8.hours.ago
         return -2
       else
         return -1
@@ -65,6 +65,7 @@ class Ranker
         @@max_points = post.points
         hot_score = 100
         puts "Setting max_points = #{@@max_points}"
+        @@max_points = 1 if @@max_points <= 0
       else
         if post.points
           hot_score = ((post.points.to_f * 100.0) / @@max_points.to_f).to_i
@@ -78,6 +79,28 @@ class Ranker
           # Top Post - hot_score is 100
           adjusted_hot_score = hot_score
         end
+
+        # Weight it based on when the post was created (or how many votes it has)
+        weight = 1
+        if post.votes.size == 1
+          weight = 0.35
+        else
+          if post.created_at > 3.hours.ago
+            weight = 1.33
+          elsif post.created_at > 6.hours.ago
+            weight = 1.25
+          elsif post.created_at > 12.hours.ago
+            weight = 1.12
+          elsif post.created_at > 24.hours.ago
+            weight = 1.06
+          elsif post.created_at > 48.hours.ago
+            weight = 0.95
+          else
+            weight = 0.9
+          end
+        end
+        adjusted_hot_score = (adjusted_hot_score.to_f * weight).to_i
+
         puts "#{post.id} :: #{post.title} :: #{post.points} points :: Hot Score :: #{hot_score}\t\tAdjusted Hot Score :: #{adjusted_hot_score}"
         post.update(hot_score: adjusted_hot_score)
       end

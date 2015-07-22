@@ -1,17 +1,72 @@
 Rails.application.routes.draw do
 
-  resources :comments, :only => [:create, :destroy]
-  resources :posts, :except => [:index]
-  resources :messages, :only => [:index]
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :posts, only: [:show] do
+        collection do
+          get 'all'
+        end
+      end
+      resources :subphezes, only: [] do
+        collection do
+          get 'top'
+          get ':path/all' => 'subphezes#all'
+          get ':path/latest' => 'subphezes#latest'
+        end
+      end
+      resources :profiles, only: [:show] do
+        collection do
+          get ':username/details' => 'profiles#show'
+          get ':username/posts' => 'profiles#posts'
+          get ':username/comments' => 'profiles#comments'
+        end
+      end
+    end
+  end
+
+  resources :search, :only => [:index]
+
+  resources :rewards, :only => [:new, :create] do
+    collection do
+      get 'premium'
+      post 'create_rewardable'
+    end
+    member do
+      get 'thanks'
+    end
+  end
+  resources :credits, :only => [] do
+    collection do
+      get 'leaderboard'
+      get 'posters_csv'
+    end
+  end
+  resources :subscriptions, :only => [:create, :destroy]
+  resources :comments, :only => [:show, :create, :edit, :update, :destroy]
+  resources :posts, :except => [:index, :new] do
+    collection do
+      get 'suggest_title'
+    end
+  end
+  resources :messages, :only => [:index, :new, :create]
   resources :profiles, :only => [:show] do
     member do
       get 'comments'
     end
   end
 
+  resources :users, :only => [] do
+    collection do
+      get 'subscriptions'
+      get 'change_password'
+      patch 'update_password'
+    end
+  end
+
   resources :home, :only => [:index] do
     collection do
       get 'privacy'
+      get 'thanks'
     end
   end
 
@@ -25,16 +80,24 @@ Rails.application.routes.draw do
   get 'p/:path/submit' => 'posts#new', as: :new_subphez_post
   get 'p/:path/:post_id/:guid/' => 'posts#show', as: :view_post
 
+  get 'submit' => 'posts#new', as: :new_post
+
   post 'votes/upvote' => 'votes#upvote'
   post 'votes/downvote' => 'votes#downvote'
+  post 'votes/delete_vote' => 'votes#delete_vote'
 
   post 'comment_votes/upvote' => 'comment_votes#upvote'
   post 'comment_votes/downvote' => 'comment_votes#downvote'
 
-  resources :subphezes, :except => [:destroy]
-  #devise_for :users
+  resources :subphezes, :except => [:destroy] do
+    collection do
+      get 'autocomplete'
+    end
+  end
   devise_for :users, :controllers => {:registrations => "registrations"}
 
+  get 'my' => 'home#my', as: :my
+  get 'latest' => 'home#latest', as: :latest
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

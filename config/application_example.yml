@@ -2,8 +2,21 @@
 recaptcha_public_key: 
 recaptcha_private_key: 
 exception_notification_email:
+donate_code: ''
+enable_screenshots: 'false'
+pagekeeper_link_code: ''
+# Include port in app_domain if developing on localhost, e.g. "localhost:3000"
+app_domain: ''
+bitcoin_address: '1NhonFuVMiCaM9RJj1DJBoYTiN6Qaf51KQ'
+fixed_monthly_costs: '20.0'
+premium_cost_per_month: '6'
+coinkite_button_url: ''
+# If you update these values, do *not* check them into a public GitHub repo!
+coinkite_api_key: ''
+coinkite_api_secret: ''
 
 production:
   recaptcha_public_key: 
   recaptcha_private_key: 
   exception_notification_email:
+  app_domain: ''

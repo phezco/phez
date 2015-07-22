@@ -1,0 +1,16 @@
+<%= form_for(@message) do |f| %>
+  <% @object = @message %>
+  <%= render :partial => 'shared/errors' %>
+  <%= f.hidden_field :user_id %>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title, class: 'title-field' %>
+  </div>
+  <div class="field">
+    <%= f.label :body, "Message" %><br>
+    <%= f.text_area :body, class: 'body-field' %>
+  </div>
+  <div class="actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

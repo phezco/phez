@@ -1,20 +1,11 @@
 <%= form_for(@post) do |f| %>
-  <% if @post.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+  <% @object = @post %>
+  <%= render :partial => 'shared/errors' %>
 
-      <ul>
-      <% @post.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%= f.hidden_field :subphez_id %>
+  <%#= f.hidden_field :subphez_id %>
 
   <% if @post.new_record? %>
-    <p>You are submitting a post to: <%= link_to @subphez.title, view_subphez_path(:path => @subphez.path) %></p>
+
     <div class="field">
       <%= f.label :url %><br>
       <%= f.text_field :url, class: 'title-field' %> <br/>
@@ -24,14 +15,35 @@
       <%= f.label :title %><br>
       <%= f.text_field :title, class: 'title-field' %>
     </div>
+    <div style="padding-bottom: 7px;">
+      <%= link_to 'Suggest Title', 'javascript:Phez.suggestTitle()', class: 'btn btn-primary btn-sm' %>
+    </div>
   <% else %>
     <p>Only the body of self posts can be edited.</p>
   <% end %>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="field">
+        <%= f.label :body %><br>
+        <%= f.text_area :body, class: 'new-post-body-field' %> <br/>
+        <% if @post.new_record? %>
+          <i>Leave the body field blank unless you are submitting a self post.</i>
+        <% end %>
+      </div>
+    </div>
+  </div>
   <div class="field">
-    <%= f.label :body %><br>
-    <%= f.text_area :body, class: 'body-field' %> <br/>
-    <% if @post.new_record? %>
-      <i>Leave the body field blank unless you are submitting a self post.</i>
+    <label>Submit to Subphez</label><br>
+    <%= text_field_tag 'subphez_path', @subphez ? @subphez.path : '', :required => true %> <br/>
+    <% if current_user.subscribed_subphezes.any? %>
+      <br/>
+      <p>Select from your subscribed subphezes:</p>
+      <div style="width: 40em">
+        <% current_user.subscribed_subphezes.order('path ASC').each do |subphez| %>
+          <%= link_to subphez.path, "javascript:Phez.pickSubphez('#{subphez.path}')" %> &nbsp;&nbsp;
+        <% end %>
+      </div>
     <% end %>
   </div>
   <div class="actions">

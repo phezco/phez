@@ -1,0 +1,17 @@
+<div class="col-lg-3">
+  <div class="well sidebar-nav">
+    <h3><%= @user.username %></h3>
+    <div class="karma"><span class="link-karma"><%= @user.link_karma %></span> &nbsp;link karma</div>
+    <div class="karma"><span class="comment-karma"><%= @user.comment_karma %></span> &nbsp;comment karma</div>
+    <br/>
+    <% if user_signed_in? %>
+      <%= link_to "Message #{@user.username}", new_message_path(:user_id => @user.id), class: 'btn btn-primary' %>
+      <br/>
+    <% end %>
+    <br/>
+    <% if @user.is_premium %>
+      <p><i class="fa fa-thumbs-o-up big-fa"></i> premium phezor since <%= time_ago_in_words(@user.premium_since) %> ago</p> <br/>
+    <% end %>
+    <p>phezor since <%= time_ago_in_words(@user.created_at) %> ago</p>
+  </div>
+</div>

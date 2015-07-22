@@ -9,7 +9,7 @@ protected
 
   def deliver_message
     Message.create!(user_id: user.id, title: "Moderator Request for Subphez #{subphez.title}",
-      body: "You have been invited to become a moderator of /p/#{subphez.path} -- To accept, click here: <a href='/p/#{subphez.path}/approve_modrequest'>Approve Moderator Request</a>")
+      body: "You have been invited to become a moderator of /p/#{subphez.path} -- To accept, click here: [Approve Moderator Request](/p/#{subphez.path}/approve_modrequest)")
   end
 
 end

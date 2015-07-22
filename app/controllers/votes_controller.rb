@@ -26,6 +26,18 @@ class VotesController < ApplicationController
     end
   end
 
+  def delete_vote
+    respond_to do |format|
+      if Vote.delete_vote(current_user, @post)
+        json = { 'success' => true, 'post_id' => @post.id }
+        format.json { render json: json, status: :created }
+      else
+        json = { 'success' => false, 'post_id' => @post.id, 'error' => 'There was a problem deleting your vote.' }
+        format.json { render json: json, status: :bad_request }
+      end
+    end
+  end
+
   private
 
     def set_post
