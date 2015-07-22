@@ -52,7 +52,7 @@ class Subphez < ActiveRecord::Base
 
   def sanitize_attributes
     self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
-    self.sidebar = Sanitizer.sanitize(self.sidebar) unless self.title.blank?
+    self.sidebar = Sanitizer.sanitize(self.sidebar) unless self.sidebar.blank?
   end
 
   def self.by_path(path)
