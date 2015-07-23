@@ -1,0 +1,69 @@
+<% title('Transactions :: Admin') %>
+
+<h2>New Transaction</h2>
+
+<%= form_for(@transaction, url: create_transaction_admin_index_path) do |f| %>
+  <% @object = @transaction %>
+  <%= render :partial => 'shared/errors' %>
+
+  <div class="field">
+    <label>Username</label><br>
+    <input type="text" name="username" required="required">
+  </div>
+  <div class="field">
+    <%= f.label :amount_mbtc, "Amount in mBTC" %><br>
+    <%= f.text_field :amount_mbtc %>
+  </div>
+  <div class="field">
+    <%= f.label :txn_type, "Transaction Type" %><br/>
+    <%= f.select(:txn_type, options_for_select(Transaction.txn_types_for_select), { :include_blank => '(select txn type)'}) %>
+  </div>
+  <div class="actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+
+<% end %>
+
+
+<h2>Transactions</h2>
+
+<table class="transactions-table" style="width: 98%">
+  <tr>
+    <th>User</th>
+    <th>Transaction Type</th>
+    <th>Amount (mBTC)</th>
+    <th>Deposit Address</th>
+    <th>Credit/Withdrawal</th>
+    <th>When</th>
+  </tr>
+  <% @transactions.each do |txn| %>
+    <tr>
+      <td><%= link_to txn.user.username, build_profile_path(txn.user) %></td>
+      <td>
+        <%= case txn.txn_type
+            when 'reward'
+              'phez premium reward'
+            when 'content'
+              'content contributor'
+            when 'development'
+              'development'
+            when 'misc'
+              'miscellaneous / other'
+            else
+              'unknown'
+            end
+        %>
+      </td>
+      <td><%= txn.amount_mbtc.round(0) %> mBTC</td>
+      <td>
+        <% if txn.credit? %>
+          N/A - internal
+        <% else %>
+          <%= txn.bitcoin_address %>
+        <% end %>
+      </td>
+      <td><%= txn.credit? ? 'Credit' : 'Withdrawal' %></td>
+      <td><%= txn.created_at %></td>
+    </tr>
+  <% end %>
+</table>

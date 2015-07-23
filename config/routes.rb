@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     collection do
       get 'payments_csv'
       get 'microtip_csv'
+      get 'transactions'
+      post 'create_transaction'
     end
   end
 

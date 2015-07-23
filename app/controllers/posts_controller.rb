@@ -47,7 +47,6 @@ class PostsController < ApplicationController
   end
 
   # POST /posts
-  # POST /posts.json
   def create
     @post = Post.new(post_params)
     @subphez = Subphez.by_path(params[:subphez_path]) if params[:subphez_path]
@@ -77,7 +76,6 @@ class PostsController < ApplicationController
   end
 
   # PATCH/PUT /posts/1
-  # PATCH/PUT /posts/1.json
   def update
     redirect_to :back unless @post.owner?(current_user)
     if @post.update(post_params)
@@ -89,7 +87,6 @@ class PostsController < ApplicationController
   end
 
   # DELETE /posts/1
-  # DELETE /posts/1.json
   def destroy
     if @post.owner?(current_user) || @post.moderateable?(current_user)
       @post.destroy
