@@ -18,7 +18,7 @@ class AdminController < ApplicationController
 
   def microtip_csv
     @users = User.all.select { |u| !u.bitcoin_address.blank? }
-    @microtip = 1.0 / 1000.0
+    @microtip = 1
     render :layout => false
   end
 
