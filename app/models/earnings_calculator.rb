@@ -14,7 +14,8 @@ class EarningsCalculator
     mbtc.round.to_i
   end
 
-  # This needs to be updated as the site grows to keep the distribution fairly logarithmic
+  # This needs to be updated as the site grows to keep the distribution fairly
+  # logarithmic
   def sub_percentage_by_rank(rank)
     case rank
     when 1
@@ -33,5 +34,4 @@ class EarningsCalculator
       return 0.25 / @num_users_eligible.to_f
     end
   end
-
 end
