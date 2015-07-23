@@ -109,7 +109,7 @@
           <td>#<%= i %></td>
           <td><%= link_to user.username, build_profile_path(user) %> <br/>
             <small><b><i><%= user.monthly_link_karma %></i></b> monthly link karma</small></td>
-          <td><%= @ec.calculate_mbtc_earnings(0.166, i).round(2) %></td>
+          <td><%= @ec.calculate_mbtc_earnings(0.166, i) %></td>
         </tr>
         <% i += 1 %>
       <% end %>
@@ -139,7 +139,7 @@
               %>
             <%= raw(subphez_links.join(' &nbsp; ')) %>
             </small></td>
-          <td><%= @ec.calculate_mbtc_earnings(0.166, i).round(2) %></td>
+          <td><%= @ec.calculate_mbtc_earnings(0.166, i) %></td>
         </tr>
         <% i += 1 %>
       <% end %>
@@ -159,7 +159,7 @@
           <td>#<%= i %></td>
           <td><%= link_to user.username, build_profile_path(user) %> <br/>
             <small><b><i><%= user.monthly_comment_karma %></i></b> monthly comment karma</small></td>
-          <td><%= @ec.calculate_mbtc_earnings(0.166, i).round(2) %></td>
+          <td><%= @ec.calculate_mbtc_earnings(0.166, i) %></td>
         </tr>
         <% i += 1 %>
       <% end %>

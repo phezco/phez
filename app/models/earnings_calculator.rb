@@ -8,10 +8,10 @@ class EarningsCalculator
   end
 
   def calculate_mbtc_earnings(sub_pool_percentage, rank)
-    return 0.0 if rank >= @num_users_eligible
+    return 0 if rank >= @num_users_eligible
     sub_percentage = sub_percentage_by_rank(rank)
     mbtc = sub_percentage * sub_pool_percentage * @pool_available.to_f
-    mbtc
+    mbtc.round.to_i
   end
 
   # This needs to be updated as the site grows to keep the distribution fairly logarithmic
