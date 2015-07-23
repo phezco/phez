@@ -1,9 +1,11 @@
 class Api::V1::PostsController < Api::V1::BaseController
-  before_action :doorkeeper_authorize!, :only => [:create, :my]
-  before_action :authenticate_user!, :only => [:create, :my]
+  before_action :doorkeeper_authorize!, :only => [:create, :my, :upvote, :downvote]
+  before_action :authenticate_user!, :only => [:create, :my, :upvote, :downvote]
+  before_action :set_post, only: [:show, :upvote, :downvote]
 
   def all
-    @posts = Post.by_hot_score.paginate(:page => params[:page])
+    to_show_premium = current_resource_owner ? current_resource_owner.is_premium : false
+    @posts = Post.by_hot_score.show_premium(to_show_premium).paginate(:page => params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
@@ -13,7 +15,7 @@ class Api::V1::PostsController < Api::V1::BaseController
   end
 
   def show
-    @post = Post.find(params[:id])
+    api_disallow_non_premium(@post.subphez)
   end
 
   def create
@@ -48,4 +50,29 @@ class Api::V1::PostsController < Api::V1::BaseController
     end
   end
 
+  def upvote
+    if Vote.upvote(current_resource_owner, @post)
+      json = { 'success' => true, 'post_id' => @post.id }
+      render json: json
+    else
+      json = { 'success' => false, 'post_id' => @post.id, 'error' => 'There was a problem saving your vote.' }
+      render json: json, status: :bad_request
+    end
+  end
+
+  def downvote
+    if Vote.downvote(current_resource_owner, @post)
+      json = { 'success' => true, 'post_id' => @post.id }
+      render json: json
+    else
+      json = { 'success' => false, 'post_id' => @post.id, 'error' => 'There was a problem saving your vote.' }
+      render json: json, status: :bad_request
+    end
+  end
+
+  private
+
+    def set_post
+      @post = Post.find(params[:id])
+    end
 end

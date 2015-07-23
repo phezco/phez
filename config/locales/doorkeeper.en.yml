@@ -45,6 +45,8 @@ en:
               secured_uri: 'must be an HTTPS/SSL URI.'
 
   doorkeeper:
+    scopes:
+      public: 'Access your Phez data; Post submissions and comments at your request'
     applications:
       confirmations:
         destroy: 'Are you sure?'

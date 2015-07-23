@@ -362,6 +362,55 @@ puts response.body</code></pre>
 
 <pre><code>{"id":96,"title":"MJ popcorn","url":"https://i.imgur.com/xblF4h.jpg","submitted_by":"username","subphez":"pics","comments_url":"http://phez.co/p/pics/96/mj-popcorn","comment_count":0,"vote_total":1,"upvote_total":1,"downvote_total":0,"created_at":"2015-07-20T07:21:18.032Z","updated_at":"2015-07-20T07:21:18.032Z"}</code></pre>
 
+<h4>Upvote a Post</h4>
+
+<p>Upvotes the specified post. Specify the post id in the url string.</p>
+
+<pre><code>POST /api/v1/posts/:id/upvote</code></pre>
+
+<p>Ruby example:</p>
+
+<pre><code>response = access_token.post('/api/v1/posts/100/upvote')
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"success":true,"post_id":100}</code></pre>
+
+
+<h4>Downvote a Post</h4>
+
+<p>Downvotes the specified post. Specify the post id in the url string.</p>
+
+<pre><code>POST /api/v1/posts/:id/downvote</code></pre>
+
+<p>Ruby example:</p>
+
+<pre><code>response = access_token.post('/api/v1/posts/100/downvote')
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"success":true,"post_id":100}</code></pre>
+
+
+<h4>Create a Comment</h4>
+
+<p>Adds a comment to a post (with an optional parent_id to specify a parent comment).</p>
+
+<pre><code>POST /api/v1/comments</code></pre>
+
+<p>Ruby example:</p>
+
+<pre><code>response = response = access_token.post('/api/v1/comments', {body: {:post_id => 105, :parent_id => 60, :body => 'This **is** my comment.'}})
+puts response.body</code></pre>
+
+<p>Will output:</p>
+
+<pre><code>{"success":true,"comment":{"body":"\u003cp\u003eThis \u003cstrong\u003eis\u003c/strong\u003e my comment.\u003c/p\u003e\n","username":"username","vote_total":1,"upvote_total":1,"downvote_total":0}}</code></pre>
+
+<p>The newly-created comment is included as 'comment' in the root element. The body is the rendered (HTML) version of the comment.</p>
+
 
 <h4>List Messages (Inbox)</h4>
 

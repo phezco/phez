@@ -10,7 +10,15 @@ class Api::V1::BaseController < ApplicationController
   end
 
 private
-  
+
+  def api_disallow_non_premium(subphez)
+    return true if !subphez.is_premium_only
+    unless current_resource_owner && current_resource_owner.is_premium
+      render json: errors_json('You must be a premium user to access that content. Please consider buying some Phez Premium.'), status: :unauthorized
+      return false
+    end
+  end
+
   def set_cors_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET'
@@ -28,7 +36,6 @@ private
 
   def authenticate_user!
     if doorkeeper_token
-      #Thread.current[:current_user] = User.find(doorkeeper_token.resource_owner_id)
       current_user = User.find(doorkeeper_token.resource_owner_id)
     end
 

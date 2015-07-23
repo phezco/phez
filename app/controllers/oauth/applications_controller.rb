@@ -14,7 +14,7 @@ class Oauth::ApplicationsController < Doorkeeper::ApplicationsController
   end
 
   def update
-    @application = Doorkeeper::Application.find(params[:id])
+    @application = current_user.oauth_applications.find(params[:id])
     if @application.update(application_params)
       flash[:notice] = 'Application updated.'
       redirect_to oauth_application_url(@application)

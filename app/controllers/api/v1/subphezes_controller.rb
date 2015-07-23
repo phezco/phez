@@ -9,16 +9,19 @@ class Api::V1::SubphezesController < Api::V1::BaseController
   end
 
   def all
+    api_disallow_non_premium(@subphez)
     @posts = @subphez.posts.by_hot_score.paginate(:page => params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
   def latest
+    api_disallow_non_premium(@subphez)
     @posts = @subphez.posts.latest.paginate(:page => params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
   def subscribe
+    api_disallow_non_premium(@subphez)
     subscription = Subscription.subscribe!(@subphez, current_resource_owner)
     if subscription
       json = {'success' => true}

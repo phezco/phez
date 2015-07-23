@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
+      resources :comments, only: [:create, :destroy]
       resources :users, only: [] do
         collection do
           get 'details'
@@ -17,6 +18,10 @@ Rails.application.routes.draw do
           get 'all'
           get 'my'
           post 'create'
+        end
+        member do
+          post 'upvote'
+          post 'downvote'
         end
       end
       resources :subphezes, only: [] do

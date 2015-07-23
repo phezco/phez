@@ -63,6 +63,7 @@
         </table>
         <br/>
       <% else %>
+        <br/>
         <p>You do not currently have any transactions. Earn bitcoin by <%= link_to 'becoming a top contributor', leaderboard_credits_path %> or by being rewarded with premium for your contributions.</p>
       <% end %>
     </div>
@@ -70,7 +71,7 @@
       <br/>
       <p>Are you an application developer?</p>
       <p><%= link_to 'Manage Your Applications', '/oauth/applications' %></p>
-      <p>We're currently working on documenting the Phez API more thoroughly. For now visit <%= link_to 'our GitHub page', 'https://github.com/phezco' %> and look through the examples shared there, such as the <%= link_to 'public API example using HTML and JavaScript', 'https://github.com/phezco/phez-public-api-example-html-javascript' %>.
+      <p>Visit the <%= link_to 'Phez API page', '/home/api' %> to learn more.</p>
       <br/>
     </div>
   </div>
