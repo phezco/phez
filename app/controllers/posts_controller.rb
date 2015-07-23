@@ -1,12 +1,12 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, :except => [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_post, only: [:edit, :update, :destroy]
 
   def suggest_title
     suggested_title = Post.suggest_title(params[:url])
     respond_to do |format|
       if suggested_title.blank?
-        json = { 'suggest' => false}
+        json = { 'suggest' => false }
       else
         json = { 'suggest' => true, 'title' => suggested_title }
       end
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
   def show
     @post = Post.where(id: params[:post_id]).first
     if @post.nil?
-      redirect_to root_path, alert: 'Could not find post.' and return
+      redirect_to root_path, alert: 'Could not find post.' && return
     end
     disallow_non_premium(@post.subphez)
     @comments = @post.root_comments
@@ -32,7 +32,8 @@ class PostsController < ApplicationController
     @subphez = nil
     @subphez = Subphez.by_path(params[:path]) if params[:path]
     if @subphez && @subphez.is_admin_only && !current_user.is_admin
-      redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
+      redirect_to root_path,
+                  alert: 'Only Admins are allowed to post here.' && return
     end
     @post = Post.new
     @post.url = params[:url] if params[:url]
@@ -51,12 +52,14 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @subphez = Subphez.by_path(params[:subphez_path]) if params[:subphez_path]
     if @subphez.nil?
-      flash[:alert] = "Could not find Subphez with path: #{params[:subphez_path]}"
-      render :action => :new and return
+      render action: :new,
+      alert: "Could not find Subphez with path: #{params[:subphez_path]}" &&
+        return
     end
     @post.subphez = @subphez
     if @subphez.is_admin_only && !current_user.is_admin
-      redirect_to root_path, alert: 'Only Admins are allowed to post here.' and return
+      redirect_to root_path,
+                  alert: 'Only Admins are allowed to post here.' && return
     end
     @post.user_id = current_user.id
     @post.vote_total = 1
@@ -68,7 +71,9 @@ class PostsController < ApplicationController
     end
     respond_to do |format|
       if @post.save
-        format.html { redirect_to build_post_path(@post), notice: 'Post was successfully created.' }
+        format.html
+        redirect_to build_post_path(@post),
+                    notice: 'Post was successfully created.'
         format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new }
@@ -83,7 +88,10 @@ class PostsController < ApplicationController
     redirect_to :back unless @post.owner?(current_user)
     respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to build_post_path(@post), notice: 'Post was successfully updated.' }
+        format.html
+        redirect_to build_post_path(@post),
+                    notice: 'Post was successfully updated.'
+
         format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit }
@@ -99,19 +107,24 @@ class PostsController < ApplicationController
       @post.destroy
     end
     respond_to do |format|
-      format.html { redirect_to root_path, notice: 'Post was successfully destroyed.' }
+      format.html
+      redirect_to root_path,
+                  notice: 'Post was successfully destroyed.'
+
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def post_params
-      params.require(:post).permit(:subphez_id, :url, :title, :is_self, :body)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet,
+  # only allow the white list through.
+  def post_params
+    params.require(:post).permit(:subphez_id, :url, :title, :is_self, :body)
+  end
 end

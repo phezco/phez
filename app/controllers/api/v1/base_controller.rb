@@ -9,8 +9,8 @@ class Api::V1::BaseController < ApplicationController
     render json: errors_json(e.message), status: :not_found
   end
 
-private
-  
+  private
+
   def set_cors_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET'
@@ -21,5 +21,4 @@ private
   def errors_json(messages)
     { errors: [*messages] }
   end
-
 end

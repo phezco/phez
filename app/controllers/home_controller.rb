@@ -1,9 +1,11 @@
 class HomeController < ApplicationController
-  before_action :authenticate_user!, :only => [:my]
+  before_action :authenticate_user!, only: [:my]
 
   def index
     to_show_premium = user_signed_in? ? current_user.is_premium : false
-    @posts = Post.by_hot_score.show_premium(to_show_premium).paginate(:page => params[:page])
+    @posts = Post.by_hot_score
+             .show_premium(to_show_premium)
+             .paginate(page: params[:page])
     @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
@@ -15,7 +17,9 @@ class HomeController < ApplicationController
 
   def latest
     to_show_premium = user_signed_in? ? current_user.is_premium : false
-    @posts = Post.latest.show_premium(to_show_premium).paginate(:page => params[:page])
+    @posts = Post.latest
+             .show_premium(to_show_premium)
+             .paginate(page: params[:page])
     @vote_hash = Vote.vote_hash(current_user, @posts)
   end
 
@@ -24,5 +28,4 @@ class HomeController < ApplicationController
 
   def thanks
   end
-
 end

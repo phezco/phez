@@ -1,15 +1,15 @@
 class Comment < ActiveRecord::Base
   include PgSearch
-  multisearchable :against => :body,
-                  :if => :not_premium
+  multisearchable against: :body,
+                  if: :not_premium
 
-  acts_as_nested_set :scope => [:commentable_id, :commentable_type]
+  acts_as_nested_set scope: [:commentable_id, :commentable_type]
 
-  validates :body, :presence => true
-  validates :user, :presence => true
+  validates :body, presence: true
+  validates :user, presence: true
 
   belongs_to :user
-  belongs_to :commentable, :polymorphic => true
+  belongs_to :commentable, polymorphic: true
   has_many :comment_votes, dependent: :destroy
 
   scope :latest, -> { order('created_at DESC') }
@@ -17,7 +17,9 @@ class Comment < ActiveRecord::Base
     t = DateTime.now
     beginning_of_month = t.beginning_of_month
     end_of_month = t.end_of_month
-    where('created_at >= :beginning_of_month AND created_at <= :end_of_month', beginning_of_month: beginning_of_month, end_of_month: end_of_month)
+    where('created_at >= :beginning_of_month AND created_at <= :end_of_month',
+          beginning_of_month: beginning_of_month,
+          end_of_month: end_of_month)
   end
 
   after_create :add_comment_upvote
@@ -42,15 +44,18 @@ class Comment < ActiveRecord::Base
   end
 
   def vote_total
-    CommentVote.where(comment_id: self.id).sum(:vote_value)
+    CommentVote.where(comment_id: id).sum(:vote_value)
   end
 
   def upvote_total
-    CommentVote.where(comment_id: self.id).where('vote_value > 0').sum(:vote_value)
+    CommentVote.where(comment_id: id).where('vote_value > 0').sum(:vote_value)
   end
 
   def downvote_total
-    CommentVote.where(comment_id: self.id).where('vote_value < 0').sum(:vote_value) * -1
+    CommentVote
+      .where(comment_id: id)
+      .where('vote_value < 0')
+      .sum(:vote_value) * -1
   end
 
   def delete!
@@ -74,7 +79,10 @@ class Comment < ActiveRecord::Base
   end
 
   def add_message_to_inbox_of_post_creator
-    Message.add_message_comment!(commentable.user, self, 'new_post_comment') unless commentable.user == user
+    Message
+      .add_message_comment!(commentable.user,
+                            self,
+                            'new_post_comment') unless commentable.user == user
   end
 
   def add_reply_message
@@ -87,7 +95,7 @@ class Comment < ActiveRecord::Base
   end
 
   def delete_messages!
-    Message.delete_all(:messageable_type => 'Comment', :messageable_id => self.id)
+    Message.delete_all(messageable_type: 'Comment', messageable_id: id)
   end
 
   def message_cleanup
@@ -96,22 +104,25 @@ class Comment < ActiveRecord::Base
     m.map(&:destroy)
   end
 
-  #helper method to check if a comment has children
+  # Helper method to check if a comment has children
   def has_children?
-    self.children.any?
+    children.any?
   end
 
   # Helper class method to lookup all comments assigned
   # to all commentable types for a given user.
   scope :find_comments_by_user, lambda { |user|
-    where(:user_id => user.id).order('created_at DESC')
+    where(user_id: user.id).order('created_at DESC')
   }
 
   # Helper class method to look up all comments for
   # commentable class name and commentable id.
-  scope :find_comments_for_commentable, lambda { |commentable_str, commentable_id|
-    where(:commentable_type => commentable_str.to_s, :commentable_id => commentable_id).order('created_at DESC')
-  }
+  scope :find_comments_for_commentable,
+    lambda { |commentable_str, commentable_id|
+      where(commentable_type: commentable_str.to_s,
+            commentable_id: commentable_id)
+        .order('created_at DESC')
+    }
 
   # Helper class method to look up a commentable object
   # given the commentable class name and id
@@ -124,9 +135,8 @@ class Comment < ActiveRecord::Base
   # example in readme
   def self.build_from(obj, user_id, comment)
     new \
-      :commentable => obj,
-      :body        => comment,
-      :user_id     => user_id
+      commentable: obj,
+      body: comment,
+      user_id: user_id
   end
-
 end

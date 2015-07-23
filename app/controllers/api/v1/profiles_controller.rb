@@ -5,21 +5,20 @@ class Api::V1::ProfilesController < Api::V1::BaseController
   end
 
   def posts
-    @posts = @user.posts.latest.paginate(:page => params[:page])
+    @posts = @user.posts.latest.paginate(page: params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
   def comments
-    @comments = @user.comments.latest.paginate(:page => params[:page])
+    @comments = @user.comments.latest.paginate(page: params[:page])
   end
 
-private
+  private
 
   def set_by_username
     @user = User.where(username: params[:username]).first
     if @user.nil?
-      render json: errors_json("Could not find user: #{params[:username]}"), status: :not_found and return
+      render json: errors_json("Could not find user: #{params[:username]}"), status: :not_found && return
     end
   end
-
 end

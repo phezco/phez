@@ -8,7 +8,11 @@ class VotesController < ApplicationController
         json = { 'success' => true, 'post_id' => @post.id }
         format.json { render json: json, status: :created }
       else
-        json = { 'success' => false, 'post_id' => @post.id, 'error' => 'There was a problem saving your vote.' }
+        json = {
+          'success' => false,
+          'post_id' => @post.id,
+          'error' => 'There was a problem saving your vote.'
+        }
         format.json { render json: json, status: :bad_request }
       end
     end
@@ -20,7 +24,11 @@ class VotesController < ApplicationController
         json = { 'success' => true, 'post_id' => @post.id }
         format.json { render json: json, status: :created }
       else
-        json = { 'success' => false, 'post_id' => @post.id, 'error' => 'There was a problem saving your vote.' }
+        json = {
+          'success' => false,
+          'post_id' => @post.id,
+          'error' => 'There was a problem saving your vote.'
+        }
         format.json { render json: json, status: :bad_request }
       end
     end
@@ -32,7 +40,11 @@ class VotesController < ApplicationController
         json = { 'success' => true, 'post_id' => @post.id }
         format.json { render json: json, status: :created }
       else
-        json = { 'success' => false, 'post_id' => @post.id, 'error' => 'There was a problem deleting your vote.' }
+        json = {
+          'success' => false,
+          'post_id' => @post.id,
+          'error' => 'There was a problem deleting your vote.'
+        }
         format.json { render json: json, status: :bad_request }
       end
     end
@@ -40,8 +52,7 @@ class VotesController < ApplicationController
 
   private
 
-    def set_post
-      @post = Post.find(params[:post_id])
-    end
-
+  def set_post
+    @post = Post.find(params[:post_id])
+  end
 end
