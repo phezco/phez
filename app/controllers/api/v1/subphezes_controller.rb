@@ -10,13 +10,13 @@ class Api::V1::SubphezesController < Api::V1::BaseController
 
   def all
     api_disallow_non_premium(@subphez)
-    @posts = @subphez.posts.by_hot_score.paginate(:page => params[:page])
+    @posts = @subphez.posts.by_hot_score.paginate(page: params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
   def latest
     api_disallow_non_premium(@subphez)
-    @posts = @subphez.posts.latest.paginate(:page => params[:page])
+    @posts = @subphez.posts.latest.paginate(page: params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
@@ -45,11 +45,10 @@ class Api::V1::SubphezesController < Api::V1::BaseController
 
   private
 
-    def set_subphez_by_path
-      @subphez = Subphez.by_path(params[:path])
-      if @subphez.nil?
-        render json: errors_json("Could not find subphez: #{params[:path]}"), status: :not_found and return
-      end
+  def set_subphez_by_path
+    @subphez = Subphez.by_path(params[:path])
+    if @subphez.nil?
+      render json: errors_json("Could not find subphez: #{params[:path]}"), status: :not_found and return
     end
-
+  end
 end

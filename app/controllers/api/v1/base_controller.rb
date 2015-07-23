@@ -9,7 +9,7 @@ class Api::V1::BaseController < ApplicationController
     render json: errors_json(e.message), status: :not_found
   end
 
-private
+  private
 
   def api_disallow_non_premium(subphez)
     return true if !subphez.is_premium_only

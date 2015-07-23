@@ -5,7 +5,7 @@ class Api::V1::PostsController < Api::V1::BaseController
 
   def all
     to_show_premium = current_resource_owner ? current_resource_owner.is_premium : false
-    @posts = Post.by_hot_score.show_premium(to_show_premium).paginate(:page => params[:page])
+    @posts = Post.by_hot_score.show_premium(to_show_premium).paginate(page: params[:page])
     render json: @posts, each_serializer: PostSerializer
   end
 
@@ -72,7 +72,7 @@ class Api::V1::PostsController < Api::V1::BaseController
 
   private
 
-    def set_post
-      @post = Post.find(params[:id])
-    end
+  def set_post
+    @post = Post.find(params[:id])
+  end
 end

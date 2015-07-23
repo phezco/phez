@@ -8,7 +8,11 @@ class CommentVotesController < ApplicationController
         json = { 'success' => true, 'comment_id' => @comment.id }
         format.json { render json: json, status: :created }
       else
-        json = { 'success' => false, 'comment_id' => @comment.id, 'error' => 'There was a problem saving your vote.' }
+        json = {
+          'success' => false,
+          'comment_id' => @comment.id,
+          'error' => 'There was a problem saving your vote.'
+        }
         format.json { render json: json, status: :bad_request }
       end
     end
@@ -20,7 +24,11 @@ class CommentVotesController < ApplicationController
         json = { 'success' => true, 'comment_id' => @comment.id }
         format.json { render json: json, status: :created }
       else
-        json = { 'success' => false, 'comment_id' => @comment.id, 'error' => 'There was a problem saving your vote.' }
+        json = {
+          'success' => false,
+          'comment_id' => @comment.id,
+          'error' => 'There was a problem saving your vote.'
+        }
         format.json { render json: json, status: :bad_request }
       end
     end
@@ -28,15 +36,14 @@ class CommentVotesController < ApplicationController
 
   private
 
-    def set_comment
-      @comment = Comment.where(id: params[:comment_id]).first
-      if @comment.nil?
-        respond_to do |format|
-          json = { 'success' => false }
-          format.json { render json: json, status: :bad_request }
-        end
-        return
+  def set_comment
+    @comment = Comment.where(id: params[:comment_id]).first
+    if @comment.nil?
+      respond_to do |format|
+        json = { 'success' => false }
+        format.json { render json: json, status: :bad_request }
       end
+      return
     end
-
+  end
 end
