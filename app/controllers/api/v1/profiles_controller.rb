@@ -1,8 +1,6 @@
 class Api::V1::ProfilesController < Api::V1::BaseController
-  before_filter :set_by_username
 
-  def show
-  end
+  before_filter :set_by_username
 
   def posts
     @posts = @user.posts.latest.paginate(:page => params[:page])
@@ -11,6 +9,9 @@ class Api::V1::ProfilesController < Api::V1::BaseController
 
   def comments
     @comments = @user.comments.latest.paginate(:page => params[:page])
+  end
+
+  def show
   end
 
 private

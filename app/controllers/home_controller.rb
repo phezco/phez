@@ -25,4 +25,7 @@ class HomeController < ApplicationController
   def thanks
   end
 
+  def apidocs
+  end
+
 end

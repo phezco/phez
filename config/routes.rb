@@ -1,10 +1,27 @@
 Rails.application.routes.draw do
 
+  use_doorkeeper do
+    controllers :applications => 'oauth/applications'
+  end
+
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
+      resources :comments, only: [:create, :destroy]
+      resources :users, only: [] do
+        collection do
+          get 'details'
+          get 'inbox'
+        end
+      end
       resources :posts, only: [:show] do
         collection do
           get 'all'
+          get 'my'
+          post 'create'
+        end
+        member do
+          post 'upvote'
+          post 'downvote'
         end
       end
       resources :subphezes, only: [] do
@@ -12,9 +29,11 @@ Rails.application.routes.draw do
           get 'top'
           get ':path/all' => 'subphezes#all'
           get ':path/latest' => 'subphezes#latest'
+          post ':path/subscribe' => 'subphezes#subscribe'
+          post ':path/unsubscribe' => 'subphezes#unsubscribe'
         end
       end
-      resources :profiles, only: [:show] do
+      resources :profiles, only: [] do
         collection do
           get ':username/details' => 'profiles#show'
           get ':username/posts' => 'profiles#posts'
@@ -67,6 +86,7 @@ Rails.application.routes.draw do
     collection do
       get 'privacy'
       get 'thanks'
+      get 'apidocs'
     end
   end
 
