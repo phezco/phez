@@ -27,6 +27,11 @@ class Post < ActiveRecord::Base
     where(is_premium_only: false) unless to_show_premium
   }
 
+  scope :last_five_minutes, lambda {
+    where('created_at >= :five_minutes_ago',
+          five_minutes_ago: 5.minutes.ago)
+  }
+
   before_create :set_guid
   before_save :format_website_url
   after_create :add_vote

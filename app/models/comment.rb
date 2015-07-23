@@ -22,6 +22,11 @@ class Comment < ActiveRecord::Base
           end_of_month: end_of_month)
   end
 
+  scope :last_five_minutes, lambda {
+    where('created_at >= :five_minutes_ago',
+          five_minutes_ago: 5.minutes.ago)
+  }
+
   after_create :add_comment_upvote
   after_create :add_message_to_inbox_of_post_creator
   before_destroy :delete_messages!

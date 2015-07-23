@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_post, only: [:edit, :update, :destroy]
+  before_action :throttle, only: [:create]
 
   def suggest_title
     suggested_title = Post.suggest_title(params[:url])

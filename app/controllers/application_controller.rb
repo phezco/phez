@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include ActionView::Helpers::DateHelper
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -36,6 +38,26 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     session[:previous_url] || root_path
+  end
+
+  def throttle
+    return true unless user_signed_in?
+    if current_user.throttled_until
+      if current_user.throttled_until > DateTime.now
+        throttle_message = "Woah there cowboy! You seem to be doing that awfully fast. Are you some kind of super-human ninja wizard?!?! Please wait #{time_ago_in_words(current_user.throttled_until)} from now before trying that again."
+        redirect_to root_path, alert: throttle_message and return false
+      else
+        current_user.update_attribute(:throttled_until, nil) and return true
+      end
+    else
+      @last_five_minutes_post_count = current_user.posts.last_five_minutes.count
+      @last_five_minutes_comment_count = current_user.comments.last_five_minutes.count
+      if (@last_five_minutes_post_count >= 5) || (@last_five_minutes_comment_count >= 5)
+        current_user.update_attribute(:throttled_until, 30.minutes.from_now)
+        throttle_message = "Woah there cowboy! You seem to be doing that awfully fast. Are you some kind of super-human ninja wizard?!?! Please wait #{time_ago_in_words(current_user.throttled_until)} from now before trying that again."
+        redirect_to root_path, alert: throttle_message and return false
+      end
+    end
   end
 
   protected

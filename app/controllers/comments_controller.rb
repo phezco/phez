@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
+  before_action :throttle, only: [:create]
 
   def show
     @comment = Comment.find(params[:id])
