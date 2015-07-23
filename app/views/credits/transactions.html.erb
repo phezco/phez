@@ -1,0 +1,26 @@
+<h2>Transactions (to be created)</h2>
+
+<table style="width: 90%" class="padded-table">
+  <tr>
+    <th>User</th>
+    <th>Earnings</th>
+    <th>Bitcoin Address</th>
+  </tr>
+  <% @earnings_hash.each_pair do |user_id, mbtc| %>
+    <% next if mbtc == 0 %>
+    <% user = User.find(user_id) %>
+    <tr>
+      <td><%= link_to user.username, build_profile_path(user) %></td>
+      <td><%= mbtc %> mbtc</td>
+      <td><%= user.bitcoin_address %></td>
+    </tr>
+  <% end %>
+</table>
+
+<br/>
+
+<p>Note: click this button only once per month (the last day of the month). </p>
+
+<%= link_to 'Create Transactions', create_transactions_credits_path, method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
+
+<br/><br/>

@@ -57,7 +57,8 @@ Rails.application.routes.draw do
   resources :credits, :only => [] do
     collection do
       get 'leaderboard'
-      get 'posters_csv'
+      get 'transactions'
+      post 'create_transactions'
     end
   end
   resources :subscriptions, :only => [:create, :destroy]

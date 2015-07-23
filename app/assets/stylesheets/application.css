@@ -185,6 +185,13 @@ div.premium-plan {
   font-size: 3em !important;
   color: green;
 }
+.padded-table td, .padded-table th {
+  padding: 10px;
+}
+table.padded-table, table.padded-table th, table.padded-table td {
+   border: 1px solid #ccc;
+}
+
 .transactions-table {
   width: 800px;
 }

@@ -40,7 +40,7 @@
         <table class="transactions-table">
           <tr>
             <th>Transaction Type</th>
-            <th>Amount mBTC</th>
+            <th>Amount (mBTC)</th>
             <th>Deposit Address</th>
             <th>Credit/Withdrawal</th>
             <th>When</th>
@@ -51,11 +51,19 @@
                 <%= case txn.txn_type
                     when 'reward'
                       'phez premium reward'
+                    when 'content'
+                      'content contributor'
                     end
                 %>
               </td>
-              <td><%= txn.amount_mbtc.round(0) %></td>
-              <td>N/A - internal</td>
+              <td><%= txn.amount_mbtc.round(0) %> mBTC</td>
+              <td>
+                <% if txn.credit? %>
+                  N/A - internal
+                <% else %>
+                  <%= txn.bitcoin_address %>
+                <% end %>
+              </td>
               <td><%= txn.credit? ? 'Credit' : 'Withdrawal' %></td>
               <td><%= txn.created_at %></td>
             </tr>
