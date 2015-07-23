@@ -43,6 +43,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :admin, :only => [:index] do
+    collection do
+      get 'payments_csv'
+      get 'microtip_csv'
+    end
+  end
+
   resources :search, :only => [:index]
 
   resources :rewards, :only => [:new, :create] do

@@ -1,0 +1,3 @@
+<%- @payable.each do |user| %>
+<%= user.bitcoin_address %>,<%= user.balance_in_bitcoin %><br/>
+<% end %>

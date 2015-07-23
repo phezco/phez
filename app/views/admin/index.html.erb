@@ -1,0 +1,54 @@
+<% title('Admin Dashboard') %>
+
+<%= render :partial => 'menu' %>
+
+<div class="row">
+
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <div class="dashboard-panel blue">
+      <i class="fa fa-user"></i> <%= @user_count %> Users
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <div class="dashboard-panel orangey">
+      <i class="fa fa-bookmark"></i> <%= @post_count %> Posts
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <div class="dashboard-panel green">
+      <i class="fa fa-comments"></i> <%= @comment_count %> Comments
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <div class="dashboard-panel red">
+      <i class="fa fa-database"></i> <%= @subphez_count %> Subphezes
+    </div>
+  </div>
+
+</div>
+
+<br/>
+
+<div class="row">
+
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <h4>Recent Users</h4>
+    <% @users.each do |user| %>
+      <div class="spaced-div">
+        <%= link_to user.username, build_profile_path(user) %> <%= time_ago_in_words(user.created_at) %> ago
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <h4>Recent Comments</h4>
+    <% @comments.each do |comment| %>
+      <% @comment = comment %>
+      <%= render :partial => 'posts/comment_stripped' %>
+    <% end %>
+  </div>
+
+</div>

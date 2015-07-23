@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   validates :username, uniqueness: true, length: { minimum: 1, maximum: 30 }, presence: true, :allow_blank => false
   validates :password, if: :password_present?, :presence => true, length: { minimum: 6, maximum: 100 }, :allow_blank => false, confirmation: true
+  validates :bitcoin_address, format: { with: /\A(1|3)[a-zA-Z1-9]{26,33}\z/, message: "is invalid" }, :allow_blank => true
 
   has_many :votes, dependent: :destroy
   has_many :moderations
@@ -20,7 +21,17 @@ class User < ActiveRecord::Base
   has_many :transactions
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
+  scope :latest, -> { order('created_at DESC') }
+
   validate :ensure_email_unique
+
+  def balance
+    transactions.sum(:amount_mbtc)
+  end
+
+  def balance_in_bitcoin
+    balance / 1000.0
+  end
 
   def has_rewardable_months?
     rewardable_months > 0

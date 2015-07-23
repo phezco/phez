@@ -15,6 +15,37 @@
  *= require font-awesome
  *= require jquery-ui
  */
+
+/* Admin Styles */
+div.dashboard-panel {
+  border-radius: 10px;
+  width: 100%;
+  color: #fff;
+  height: 76px;
+  padding: 20px 0;
+  padding-left: 14px;
+  font-size: 1.5em;
+}
+.blue {
+  background-color: #0000cc;
+}
+.orangey {
+  background-color: #E68A00;
+}
+.green {
+  background-color: #009900;
+}
+.red {
+  background-color: #B82500;
+}
+div.spaced-div {
+  padding: 6px 0;
+}
+div.admin-heading-well {
+  padding: 8px 10px;
+}
+/* /Admin Styles */
+
 h2 a.post-link:visited {
   color: #4c1a80 !important;
 }
