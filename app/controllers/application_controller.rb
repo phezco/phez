@@ -42,6 +42,7 @@ class ApplicationController < ActionController::Base
 
   def throttle
     return true unless user_signed_in?
+    return true if current_user.is_admin || current_user.throttle_exempt
     if current_user.throttled_until
       if current_user.throttled_until > DateTime.now
         throttle_message = "Woah there cowboy! You seem to be doing that awfully fast. Are you some kind of super-human ninja wizard?!?! Please wait #{time_ago_in_words(current_user.throttled_until)} from now before trying that again."
