@@ -16,7 +16,11 @@
 !/log/.keep
 /tmp
 
+# Ignore database configuration
 /config/database.yml
 
 # Ignore application configuration
 /config/application.yml
+
+.ruby-version
+.ruby-gemset

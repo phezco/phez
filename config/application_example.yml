@@ -1,6 +1,6 @@
 
-recaptcha_public_key: 
-recaptcha_private_key: 
+recaptcha_public_key:
+recaptcha_private_key:
 exception_notification_email:
 donate_code: ''
 enable_screenshots: 'false'
@@ -16,7 +16,7 @@ coinkite_api_key: ''
 coinkite_api_secret: ''
 
 production:
-  recaptcha_public_key: 
-  recaptcha_private_key: 
+  recaptcha_public_key:
+  recaptcha_private_key:
   exception_notification_email:
   app_domain: ''

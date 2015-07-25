@@ -1,0 +1,9 @@
+cats:
+  user: one
+  title: cats
+  path: cats
+
+sloths:
+  user: one
+  title: sloths
+  path: sloths
