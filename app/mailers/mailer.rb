@@ -1,6 +1,5 @@
 class Mailer < ActionMailer::Base
   default from: "\"Phez\" <no-reply@#{Figaro.env.app_domain}>"
-  add_template_helper(ApplicationHelper)
 
   layout 'mailer'
 

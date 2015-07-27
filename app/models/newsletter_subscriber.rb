@@ -20,7 +20,8 @@ class NewsletterSubscriber < ActiveRecord::Base
     NewsletterSubscriber.where(is_confirmed: true).each do |newsletter_subscriber|
       begin
         m = Mailer.newsletter(newsletter_subscriber, @posts).deliver_now!
-      rescue Exception
+      rescue Exception => e
+        puts "Rescued Exception: #{e.inspect}"
       end
     end
   end

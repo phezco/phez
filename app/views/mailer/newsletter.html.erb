@@ -13,6 +13,6 @@
 <% i = 1 %>
 <% @posts.each do |post| %>
   <h3><%= i %>. <%= link_to post.title, post.url_linkable %></h3>
-  <p><%= link_to 'view comments on phez', build_post_path(post) %></p>
+  <p><%= link_to 'view comments on phez', view_post_url(path: post.subphez.path, post_id: post.id, guid: post.guid) %></p>
   <% i += 1 %>
 <% end %>
