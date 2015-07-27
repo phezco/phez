@@ -1,0 +1,19 @@
+<div class="newsletter-subscribe">
+  <div class="row">
+    <div class="col-md-12">
+      Phez is a crowdsourced collection of the day's hottest stories, images and videos. Subscribe today to get the top ten posts delivered directly to your inbox every Monday, Wednesday and Friday.
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-12">
+      <center>
+      <%= form_for(@newsletter_subscriber, url: newsletters_path) do |f| %>
+        <%= f.email_field :email, required: true, placeholder: 'your email' %>
+        <%= f.submit 'Subscribe', class: 'btn btn-primary' %>
+      <% end %>
+      </center>
+    </div>
+  </div>
+
+</div>
+<br/>

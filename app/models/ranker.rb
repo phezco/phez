@@ -5,6 +5,25 @@ class Ranker
     hot_score_all!
   end
 
+  def self.pointify_daily!
+    Post.update_all(daily_points: 0)
+    post_hash = {}
+    Vote.last_twentyfour_hours.each do |vote|
+      if post_hash[vote.post_id]
+        post_hash[vote.post_id] += vote.vote_value
+      else
+        post_hash[vote.post_id] = vote.vote_value
+      end
+    end
+    post_hash.each_pair do |post_id, value|
+      post = Post.where(id: post_id).first
+      if post
+        puts "#{post.id} :: #{post.title} :: #{value} daily points"
+        post.update(daily_points: value)
+      end
+    end
+  end
+
   def self.pointify!
     post_hash = {}
     Vote.last_thirtysix_hours.each do |vote|

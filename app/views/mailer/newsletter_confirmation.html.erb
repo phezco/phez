@@ -1,0 +1,17 @@
+<% content_for :teaser do %>
+  Please confirm your email address.
+<% end %>
+
+<% content_for :header do %>
+  <h1>Phez Email Confirmation</h1>
+<% end %>
+
+<% content_for :unsubscribe do %>
+  <%= link_to 'Unsubscribe', unsubscribe_newsletter_url(:id => @subscriber.secret) %>
+<% end %>
+
+<p>Please confirm your email address to begin receiving Phez updates to your inbox:</p>
+
+<%= link_to 'Click Here to Confirm Your Email Address', confirm_newsletter_url(:id => @subscriber.secret) %>
+
+<p>You will not begin receiving emails from Phez until you click the above link.</p>

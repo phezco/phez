@@ -1,5 +1,9 @@
 <% title('Home') %>
 
+<% if !user_signed_in? %>
+  <%= render partial: 'shared/subscribe' %>
+<% end %>
+
 <%= render partial: 'subphezes/recently_created' %>
 
 <br/>

@@ -5,6 +5,13 @@ namespace :phez do
     Ranker.rank!
   end
 
+  desc "Set user secrets"
+  task :set_secrets => :environment do
+    User.all.each do |u|
+      u.set_secret!
+    end
+  end
+
   desc "Premium check - revoke or extend expired premium users"
   task :premium_check => :environment do
     User.where("premium_until < ?", DateTime.now).each do |u|

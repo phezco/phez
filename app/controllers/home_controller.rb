@@ -7,6 +7,7 @@ class HomeController < ApplicationController
              .show_premium(to_show_premium)
              .paginate(page: params[:page])
     @vote_hash = Vote.vote_hash(current_user, @posts)
+    @newsletter_subscriber = NewsletterSubscriber.new
   end
 
   def my

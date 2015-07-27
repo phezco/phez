@@ -43,6 +43,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :newsletters, :only => [:new, :create] do
+    member do
+      get 'confirm'
+      get 'unsubscribe'
+    end
+  end
+
   resources :admin, :only => [:index] do
     collection do
       get 'payments_csv'

@@ -1,0 +1,18 @@
+<% content_for :teaser do %>
+  Today's top posts on Phez.co
+<% end %>
+
+<% content_for :header do %>
+  <h1>Phez Top Posts</h1>
+<% end %>
+
+<% content_for :unsubscribe do %>
+  <%= link_to 'Unsubscribe', unsubscribe_newsletter_url(:id => @subscriber.secret) %>
+<% end %>
+
+<% i = 1 %>
+<% @posts.each do |post| %>
+  <h3><%= i %>. <%= link_to post.title, post.url_linkable %></h3>
+  <p><%= link_to 'view comments on phez', build_post_path(post) %></p>
+  <% i += 1 %>
+<% end %>

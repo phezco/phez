@@ -25,6 +25,17 @@ class User < ActiveRecord::Base
 
   validate :ensure_email_unique
 
+  before_create :set_secret
+
+  def set_secret
+    self.secret = SecureRandom.hex.slice(0, 10)
+  end
+
+  def set_secret!
+    set_secret
+    update_attribute(:secret, self.secret)
+  end
+
   def balance
     transactions.sum(:amount_mbtc)
   end

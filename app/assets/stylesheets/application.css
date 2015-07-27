@@ -46,6 +46,13 @@ div.admin-heading-well {
 }
 /* /Admin Styles */
 
+div.newsletter-subscribe {
+  background-color: #ffffcc;
+  border: #ffff99 solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+
 h2 a.post-link:visited {
   color: #4c1a80 !important;
 }
