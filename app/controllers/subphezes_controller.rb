@@ -1,6 +1,6 @@
 class SubphezesController < ApplicationController
-  before_action :authenticate_user!, 
-                except: [:index, :show, :latest, :autocomplete]
+  before_action :authenticate_user!,
+                except: [:index, :show, :latest, :autocomplete, :random]
   before_action :set_subphez, only: [:edit, :update, :destroy]
   before_action :set_subphez_by_path,
                 only: [:show, :latest, :manage, :add_moderator,
@@ -9,7 +9,7 @@ class SubphezesController < ApplicationController
 
   def autocomplete
     @subphezes = Subphez.where('path ILIKE ?', "#{params[:term]}%")
-                 .order('path ASC')
+                        .order('path ASC')
     @paths = @subphezes.collect { |s| s.path }
     respond_to do |format|
       format.json { render json: @paths.to_json }
@@ -160,6 +160,11 @@ class SubphezesController < ApplicationController
   #     format.json { head :no_content }
   #   end
   # end
+
+  def random
+    random_path = Subphez.pluck(:path).sample
+    redirect_to view_subphez_path(path: random_path)
+  end
 
   private
 

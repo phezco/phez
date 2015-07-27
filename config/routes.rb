@@ -112,6 +112,8 @@ Rails.application.routes.draw do
 
   get 'submit' => 'posts#new', as: :new_post
 
+  get 'random' => 'subphezes#random', as: :random_subphez
+
   post 'votes/upvote' => 'votes#upvote'
   post 'votes/downvote' => 'votes#downvote'
   post 'votes/delete_vote' => 'votes#delete_vote'

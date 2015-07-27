@@ -1,13 +1,16 @@
 class Subphez < ActiveRecord::Base
-  validates :path, format: { with: /\A[a-zA-Z0-9]+\Z/ }, length: {minimum: 1, maximum: 30}, uniqueness: true
+  validates :path,
+            format: { with: /\A[a-zA-Z0-9]+\Z/ },
+            length: { minimum: 1, maximum: 30 },
+            uniqueness: true
   validates :title, presence: true
 
   belongs_to :user
   has_many :posts
   has_many :moderations
-  has_many :moderators, :through => :moderations
+  has_many :moderators, through: :moderations
   has_many :subscriptions
-  has_many :subscribers, :through => :subscriptions
+  has_many :subscribers, through: :subscriptions
 
   scope :latest, -> { order('created_at DESC') }
 
@@ -39,11 +42,11 @@ class Subphez < ActiveRecord::Base
   end
 
   def add_owner_as_moderator
-    Moderation.create!(:user_id => user_id, :subphez_id => id)
+    Moderation.create!(user_id: user_id, subphez_id: id)
   end
 
   def add_moderator!(new_moderator)
-    Moderation.create!(:user_id => new_moderator.id, :subphez_id => id)
+    Moderation.create!(user_id: new_moderator.id, subphez_id: id)
   end
 
   def subscribe_creator
