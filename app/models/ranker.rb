@@ -36,6 +36,7 @@ class Ranker
     post_hash.each_pair do |post_id, value|
       post = Post.where(id: post_id).first
       if post
+        value = (value * 100.0).to_i
         puts "#{post.id} :: #{post.title} :: #{value} points"
         post.update(points: value)
       end
@@ -44,24 +45,24 @@ class Ranker
 
   def self.points(vote)
     if vote.upvote?
-      if vote.created_at > 2.hours.ago
-        return 8
-      elsif vote.created_at > 4.hours.ago
-        return 4
-      elsif vote.created_at > 8.hours.ago
-        return 2
-      else
+      if vote.created_at > 6.hours.ago
+        return 1.25
+      elsif vote.created_at > 12.hours.ago
+        return 1.1
+      elsif vote.created_at > 24.hours.ago
         return 1
+      else
+        return 0.75
       end
     else
-      if vote.created_at > 2.hours.ago
-        return -8
-      elsif vote.created_at > 4.hours.ago
-        return -4
-      elsif vote.created_at > 8.hours.ago
-        return -2
-      else
+      if vote.created_at > 6.hours.ago
+        return -1.25
+      elsif vote.created_at > 12.hours.ago
+        return -1.1
+      elsif vote.created_at > 24.hours.ago
         return -1
+      else
+        return -0.75
       end
     end
   end
@@ -114,8 +115,10 @@ class Ranker
             weight = 1.06
           elsif post.created_at > 48.hours.ago
             weight = 0.95
+          elsif post.created_at > 96.hours.ago
+            weight = 0.8
           else
-            weight = 0.9
+            weight = 0.7
           end
         end
         adjusted_hot_score = (adjusted_hot_score.to_f * weight).to_i
