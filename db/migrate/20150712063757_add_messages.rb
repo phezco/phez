@@ -8,6 +8,6 @@ class AddMessages < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_column :users, :orange, :boolean, :default => false
+    add_column :users, :orange, :boolean, default: false
   end
 end

@@ -1,23 +1,23 @@
 class User < ActiveRecord::Base
   include PgSearch
-  multisearchable :against => :username
+  multisearchable against: :username
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :authentication_keys => [:username]
+         :recoverable, :rememberable, :trackable, authentication_keys: [:username]
 
-  validates :username, uniqueness: true, length: { minimum: 1, maximum: 30 }, presence: true, :allow_blank => false
-  validates :password, if: :password_present?, :presence => true, length: { minimum: 6, maximum: 100 }, :allow_blank => false, confirmation: true
-  validates :bitcoin_address, format: { with: /\A(1|3)[a-zA-Z1-9]{26,33}\z/, message: "is invalid" }, :allow_blank => true
+  validates :username, uniqueness: true, length: { minimum: 1, maximum: 30 }, presence: true, allow_blank: false
+  validates :password, if: :password_present?, presence: true, length: { minimum: 6, maximum: 100 }, allow_blank: false, confirmation: true
+  validates :bitcoin_address, format: { with: /\A(1|3)[a-zA-Z1-9]{26,33}\z/, message: "is invalid" }, allow_blank: true
 
   has_many :votes, dependent: :destroy
   has_many :moderations, dependent: :destroy
-  has_many :moderated_subphezes, :through => :moderations
+  has_many :moderated_subphezes, through: :moderations
   has_many :messages, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :subphezes, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :subscribed_subphezes, :through => :subscriptions
+  has_many :subscribed_subphezes, through: :subscriptions
   has_many :transactions, dependent: :destroy
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
 

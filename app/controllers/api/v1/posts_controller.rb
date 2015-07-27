@@ -1,6 +1,6 @@
 class Api::V1::PostsController < Api::V1::BaseController
-  before_action :doorkeeper_authorize!, :only => [:create, :my, :upvote, :downvote]
-  before_action :authenticate_user!, :only => [:create, :my, :upvote, :downvote]
+  before_action :doorkeeper_authorize!, only: [:create, :my, :upvote, :downvote]
+  before_action :authenticate_user!, only: [:create, :my, :upvote, :downvote]
   before_action :set_post, only: [:show, :upvote, :downvote]
 
   def all

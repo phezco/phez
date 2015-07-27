@@ -1,7 +1,7 @@
 class Api::V1::SubphezesController < Api::V1::BaseController
-  before_action :set_subphez_by_path, :except => [:top]
-  before_action :doorkeeper_authorize!, :only => [:subscribe, :unsubscribe]
-  before_action :authenticate_user!, :only => [:subscribe, :unsubscribe]
+  before_action :set_subphez_by_path, except: [:top]
+  before_action :doorkeeper_authorize!, only: [:subscribe, :unsubscribe]
+  before_action :authenticate_user!, only: [:subscribe, :unsubscribe]
 
   def top
     @subphezes = Subphez.top_by_subscriber_count(100)
