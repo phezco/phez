@@ -38,10 +38,14 @@ class CreditsController < ApplicationController
     @top_users_rewarded = ((@reward_top_percentage) * User.count.to_f).to_i
     @top_users_limit = (@top_users_rewarded.to_f * 1.5).to_i
 
+    @sub_pool_percentage = 0.166
+    @total_mbtc_per_subpool = (@sub_pool_percentage * @pool_available).round(0)
+
     # Setup Earnings Calculator
     @ec = EarningsCalculator.new(@pool_available,
                                  @reward_top_percentage,
-                                 User.count)
+                                 User.count,
+                                 @total_mbtc_per_subpool)
 
   end
 
@@ -55,13 +59,13 @@ class CreditsController < ApplicationController
     @earnings_hash = {}
     i = 1
     @top_posters.each do |u|
-      mbtc = @ec.calculate_mbtc_earnings(0.166, i)
+      mbtc = @ec.calculate_mbtc_earnings(@sub_pool_percentage, i)
       @earnings_hash[u.id] = mbtc
       i += 1
     end
     i = 1
     @top_moderators.each do |u|
-      mbtc = @ec.calculate_mbtc_earnings(0.166, i)
+      mbtc = @ec.calculate_mbtc_earnings(@sub_pool_percentage, i)
       if @earnings_hash[u.id]
         @earnings_hash[u.id] += mbtc
       else
@@ -71,7 +75,7 @@ class CreditsController < ApplicationController
     end
     i = 1
     @top_commenters.each do |u|
-      mbtc = @ec.calculate_mbtc_earnings(0.166, i)
+      mbtc = @ec.calculate_mbtc_earnings(@sub_pool_percentage, i)
       if @earnings_hash[u.id]
         @earnings_hash[u.id] += mbtc
       else
