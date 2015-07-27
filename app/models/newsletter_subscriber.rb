@@ -4,6 +4,11 @@ class NewsletterSubscriber < ActiveRecord::Base
   validates :email, uniqueness: true
 
   before_create :set_secret
+  after_create :send_confirmation
+
+  def send_confirmation
+    Mailer.newsletter_confirmation(self).deliver_now!
+  end
 
   def set_secret
     self.secret = SecureRandom.hex.slice(0, 10)
