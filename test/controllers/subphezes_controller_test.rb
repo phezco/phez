@@ -6,6 +6,8 @@ class SubphezesControllerTest < ActionController::TestCase
   end
 
   test "should redirect to show a subphez" do
+    FactoryGirl.create(:subphez)
+    FactoryGirl.create(:subphez, :dogs, user: FactoryGirl.create(:user, :bar))
     valid_pathname = /[a-zA-Z0-9]+/
     get :random
     assert_response :redirect

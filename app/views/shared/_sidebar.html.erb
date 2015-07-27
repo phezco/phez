@@ -6,9 +6,8 @@
     </p>
     <ul class="nav nav-list">
         <li><%= link_to 'Top Subphezes', subphezes_path %></li>
-        <li><%= link_to 'Random Subphez', random_subphez_path %></li>
         <li><%= link_to 'Leaderboard', leaderboard_credits_path %></li>
-        <hr>
+        <li><%= link_to 'Random Subphez', random_subphez_path %></li>
       <% if user_signed_in? %>
         <li><%= link_to 'My Subscriptions', subscriptions_users_path %></li>
         <li><%= link_to 'My Account', edit_user_registration_path %></li>
