@@ -7,6 +7,10 @@ class SubphezesController < ApplicationController
                        :remove_moderator, :approve_modrequest,
                        :update_modrequest]
 
+  before_action :frozen_check!,
+                only: [:new, :create, :update, :manage, :approve_moderator,
+                       :remove_moderator, :approve_modrequest, :update_modrequest]
+
   def autocomplete
     @subphezes = Subphez.where('path ILIKE ?', "#{params[:term]}%")
                         .order('path ASC')

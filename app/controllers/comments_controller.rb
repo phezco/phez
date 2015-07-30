@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :throttle, only: [:create]
+  before_action :frozen_check!
 
   def show
     @comment = Comment.find(params[:id])

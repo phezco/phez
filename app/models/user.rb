@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
   end
 
   def self.top_by_monthly_link_karma(limit = 100)
-    users = User.all.map {|u| u }
+    users = User.where(is_reward_ineligible: false).all.map {|u| u }
     users.sort! { |a, b| b.monthly_link_karma <=> a.monthly_link_karma }.reject {|u| u.is_admin}[0 .. (limit-1)]
   end
 
@@ -156,14 +156,14 @@ class User < ActiveRecord::Base
     subphezes.each do |subphez|
       next if mods.size >= limit
       subphez.moderators.each do |mod|
-        mods << mod unless mod.is_admin
+        mods << mod unless mod.is_admin || mod.is_reward_ineligible
       end
     end
     mods.uniq
   end
 
   def self.top_by_monthly_comment_karma(limit = 100)
-    users = User.all.map {|u| u }
+    users = User.where(is_reward_ineligible: false).all.map {|u| u }
     users.sort! { |a, b| b.monthly_comment_karma <=> a.monthly_comment_karma }.reject {|u| u.is_admin}[0 .. (limit-1)]
   end
 

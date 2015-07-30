@@ -52,10 +52,17 @@ Rails.application.routes.draw do
 
   resources :admin, only: [:index] do
     collection do
+      get 'users'
       get 'payments_csv'
       get 'microtip_csv'
       get 'transactions'
       post 'create_transaction'
+    end
+    member do
+      patch 'freeze'
+      patch 'unfreeze'
+      patch 'make_ineligible'
+      patch 'make_eligible'
     end
   end
 

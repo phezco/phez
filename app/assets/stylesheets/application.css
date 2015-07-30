@@ -44,6 +44,14 @@ div.spaced-div {
 div.admin-heading-well {
   padding: 8px 10px;
 }
+
+.generic-table td, .generic-table th {
+  padding: 10px;
+}
+table.generic-table, table.generic-table th, table.generic-table td {
+   border: 1px solid #ccc;
+}
+
 /* /Admin Styles */
 
 div.newsletter-subscribe {

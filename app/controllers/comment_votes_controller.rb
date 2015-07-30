@@ -1,6 +1,7 @@
 class CommentVotesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_comment
+  before_action :frozen_check!
 
   def upvote
     respond_to do |format|

@@ -1,5 +1,7 @@
 class MessagesController < ApplicationController
   before_action :authenticate_user!
+  before_action :frozen_check!,
+                only: [:new, :create]
 
   def index
     @messages = current_user.messages.paginate(page: params[:page])

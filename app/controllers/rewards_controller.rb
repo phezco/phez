@@ -1,5 +1,6 @@
 class RewardsController < ApplicationController
   before_action :authenticate_user!
+  before_action :frozen_check!
 
   def new
     @reward = Reward.new

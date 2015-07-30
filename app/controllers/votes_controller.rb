@@ -1,5 +1,6 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
+  before_action :frozen_check!
   before_action :set_post
 
   def upvote

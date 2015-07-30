@@ -44,6 +44,34 @@ class AdminController < ApplicationController
     end
   end
 
+  def users
+    @users = User.latest.all.paginate(page: params[:page])
+  end
+
+  def freeze
+    user = User.find(params[:id])
+    user.update_attribute(:is_frozen, true)
+    redirect_to users_admin_index_path, notice: 'User frozen.'
+  end
+
+  def unfreeze
+    user = User.find(params[:id])
+    user.update_attribute(:is_frozen, false)
+    redirect_to users_admin_index_path, notice: 'User thawed (unfrozen).'
+  end
+
+  def make_ineligible
+    user = User.find(params[:id])
+    user.update_attribute(:is_reward_ineligible, true)
+    redirect_to users_admin_index_path, notice: 'User is no longer eligible for rewards.'
+  end
+
+  def make_eligible
+    user = User.find(params[:id])
+    user.update_attribute(:is_reward_ineligible, false)
+    redirect_to users_admin_index_path, notice: 'User is now eligible for rewards.'
+  end
+
   private
 
   def setup_payable_users

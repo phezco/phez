@@ -1,0 +1,36 @@
+<% title('Admin :: Users') %>
+
+<%= render :partial => 'menu' %>
+
+
+<table class="generic-table" style="width: 98%">
+  <tr>
+    <th>User</th>
+    <th>IP</th>
+    <th>Frozen?</th>
+    <th>Reward Ineligible?</th>
+    <th></th>
+  </tr>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= link_to user.username, build_profile_path(user) %></td>
+      <td><%= user.current_sign_in_ip.to_s %></td>
+      <td><%= user.is_frozen ? 'Yes' : 'No' %></td>
+      <td><%= user.is_reward_ineligible ? 'Yes' : 'No' %></td>
+      <td>
+        <% if user.is_frozen %>
+          <%= link_to 'Unfreeze', unfreeze_admin_path(user), method: :patch, class: 'btn btn-success btn-xs' %>
+        <% else %>
+          <%= link_to 'Freeze', freeze_admin_path(user), method: :patch, class: 'btn btn-danger btn-xs' %>
+        <% end %>
+        <% if user.is_reward_ineligible %>
+          <%= link_to 'Qualify', make_eligible_admin_path(user), method: :patch, class: 'btn btn-success btn-xs' %>
+        <% else %>
+          <%= link_to 'Disqualify', make_ineligible_admin_path(user), method: :patch, class: 'btn btn-danger btn-xs' %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= will_paginate @users %>

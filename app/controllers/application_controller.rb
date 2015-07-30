@@ -61,6 +61,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def frozen_check!
+    return true unless user_signed_in?
+    if current_user.is_frozen
+      redirect_to root_path, alert: 'Your account has been frozen due to suspicious activity or attempting to game the system.'
+      return false
+    end
+    return true
+  end
+
   protected
 
   def configure_permitted_parameters
