@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   use_doorkeeper do
-    controllers :applications => 'oauth/applications'
+    controllers applications: 'oauth/applications'
   end
 
   namespace :api, defaults: {format: :json} do
@@ -43,14 +43,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :newsletters, :only => [:new, :create] do
+  resources :newsletters, only: [:new, :create] do
     member do
       get 'confirm'
       get 'unsubscribe'
     end
   end
 
-  resources :admin, :only => [:index] do
+  resources :admin, only: [:index] do
     collection do
       get 'payments_csv'
       get 'microtip_csv'
@@ -59,9 +59,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :search, :only => [:index]
+  resources :search, only: [:index]
 
-  resources :rewards, :only => [:new, :create] do
+  resources :rewards, only: [:new, :create] do
     collection do
       get 'premium'
       post 'create_rewardable'
@@ -70,28 +70,28 @@ Rails.application.routes.draw do
       get 'thanks'
     end
   end
-  resources :credits, :only => [] do
+  resources :credits, only: [] do
     collection do
       get 'leaderboard'
       get 'transactions'
       post 'create_transactions'
     end
   end
-  resources :subscriptions, :only => [:create, :destroy]
-  resources :comments, :only => [:show, :create, :edit, :update, :destroy]
-  resources :posts, :except => [:index, :new] do
+  resources :subscriptions, only: [:create, :destroy]
+  resources :comments, only: [:show, :create, :edit, :update, :destroy]
+  resources :posts, except: [:index, :new] do
     collection do
       get 'suggest_title'
     end
   end
-  resources :messages, :only => [:index, :new, :create]
-  resources :profiles, :only => [:show] do
+  resources :messages, only: [:index, :new, :create]
+  resources :profiles, only: [:show] do
     member do
       get 'comments'
     end
   end
 
-  resources :users, :only => [] do
+  resources :users, only: [] do
     collection do
       get 'subscriptions'
       get 'change_password'
@@ -99,7 +99,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :home, :only => [:index] do
+  resources :home, only: [:index] do
     collection do
       get 'privacy'
       get 'thanks'
@@ -128,12 +128,12 @@ Rails.application.routes.draw do
   post 'comment_votes/upvote' => 'comment_votes#upvote'
   post 'comment_votes/downvote' => 'comment_votes#downvote'
 
-  resources :subphezes, :except => [:destroy] do
+  resources :subphezes, except: [:destroy] do
     collection do
       get 'autocomplete'
     end
   end
-  devise_for :users, :controllers => {:registrations => "registrations"}
+  devise_for :users, controllers: {registrations: "registrations"}
 
   get 'my' => 'home#my', as: :my
   get 'latest' => 'home#latest', as: :latest

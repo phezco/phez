@@ -1,6 +1,6 @@
 class ModRequest < ActiveRecord::Base
   belongs_to :user
-  belongs_to :inviting_user, :class_name => 'User', :foreign_key => 'inviting_user_id'
+  belongs_to :inviting_user, class_name: 'User', foreign_key: 'inviting_user_id'
   belongs_to :subphez
   after_create :deliver_message
 

@@ -11,7 +11,7 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def inbox
-    @messages = current_resource_owner.messages.paginate(:page => params[:page])
+    @messages = current_resource_owner.messages.paginate(page: params[:page])
     current_resource_owner.inbox_read!
   end
 

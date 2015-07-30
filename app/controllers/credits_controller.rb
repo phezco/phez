@@ -1,9 +1,9 @@
 class CreditsController < ApplicationController
-  before_action :authenticate_user!, :except => [:leaderboard]
-  before_action :require_admin!, :except => [:leaderboard]
+  before_action :authenticate_user!, except: [:leaderboard]
+  before_action :require_admin!, except: [:leaderboard]
   before_action :setup_vars
   before_action :setup_users
-  before_filter :setup_earnings_hash, :except => [:leaderboard]
+  before_filter :setup_earnings_hash, except: [:leaderboard]
 
   def transactions
   end
@@ -12,9 +12,9 @@ class CreditsController < ApplicationController
     @earnings_hash.each do |user_id, mbtc|
       next if mbtc == 0
       user = User.find(user_id)
-      txn = Transaction.create!(:user_id => user.id,
-                                :amount_mbtc => mbtc,
-                                :txn_type => 'content')
+      txn = Transaction.create!(user_id: user.id,
+                                amount_mbtc: mbtc,
+                                txn_type: 'content')
     end
     redirect_to root_path, notice: 'Transactions created.'
   end

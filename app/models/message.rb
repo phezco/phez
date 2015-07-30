@@ -3,11 +3,11 @@ class Message < ActiveRecord::Base
   default_scope { order('created_at DESC') } 
 
   belongs_to :user
-  belongs_to :from_user, :class_name => 'User', :foreign_key => 'from_user_id'
-  belongs_to :messageable, :polymorphic => true
+  belongs_to :from_user, class_name: 'User', foreign_key: 'from_user_id'
+  belongs_to :messageable, polymorphic: true
 
-  validates :user, :presence => true
-  validates :body, :presence => true
+  validates :user, presence: true
+  validates :body, presence: true
   after_create :set_orange
   before_save :sanitize_attributes
 
@@ -23,7 +23,7 @@ class Message < ActiveRecord::Base
 
   def self.add_message_comment!(user, comment, reason)
     message = Message.new(user: user, messageable: comment, reason: reason)
-    message.save(:validate => false)
+    message.save(validate: false)
     message.set_orange
   end
 
