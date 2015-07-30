@@ -1,12 +1,12 @@
 class Reward < ActiveRecord::Base
 
   validates :user, presence: true
-  validates :months, presence: true, :numericality => { :only_integer => true, :greater_than => 0 }
-  validates :amount_usd, presence: true, :numericality => { :greater_than_or_equal_to => Figaro.env.premium_cost_per_month.to_f }
+  validates :months, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :amount_usd, presence: true, numericality: { greater_than_or_equal_to: Figaro.env.premium_cost_per_month.to_f }
 
   belongs_to :user
-  belongs_to :rewarded_user, :class_name => 'User', :foreign_key => 'rewarded_user_id'
-  belongs_to :rewardable, :polymorphic => true
+  belongs_to :rewarded_user, class_name: 'User', foreign_key: 'rewarded_user_id'
+  belongs_to :rewardable, polymorphic: true
 
   def activate!
     user.reward!(self)

@@ -13,13 +13,13 @@ class AdminController < ApplicationController
 
   def payments_csv
     setup_payable_users
-    render :layout => false
+    render layout: false
   end
 
   def microtip_csv
     @users = User.all.select { |u| !u.bitcoin_address.blank? }
     @microtip = 1
-    render :layout => false
+    render layout: false
   end
 
   def transactions
