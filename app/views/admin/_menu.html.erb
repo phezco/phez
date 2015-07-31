@@ -4,5 +4,6 @@
   <%= link_to 'Generate Monthly Transactions', transactions_credits_path %> &nbsp;|&nbsp;
   <%= link_to 'Transactions', transactions_admin_index_path %> &nbsp;|&nbsp;
   <%= link_to 'Payments CSV', payments_csv_admin_index_path %> &nbsp;|&nbsp;
+  <%= link_to 'Generate Payment Transactions', generate_payment_transactions_admin_index_path, method: :post, data: { confirm: 'Are you sure?' } %> &nbsp;|&nbsp;
   <%= link_to 'Microtip CSV', microtip_csv_admin_index_path %>
 </div>

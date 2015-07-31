@@ -2,7 +2,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :user
   validates :user, presence: true
 
-  TxnTypes = ['reward', 'content', 'development', 'misc']
+  TxnTypes = ['reward', 'content', 'development', 'misc', 'payment']
 
   def credit?
     amount_mbtc > 0

@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       get 'microtip_csv'
       get 'transactions'
       post 'create_transaction'
+      post 'generate_payment_transactions'
     end
     member do
       patch 'freeze'
