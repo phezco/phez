@@ -19,10 +19,10 @@ class AdminController < ApplicationController
   def generate_payment_transactions
     setup_payable_users
     @payable.each do |user|
-      txn = Transaction.create!(user_id: user.id,
-                                amount_mbtc: (user.balance * -1),
-                                txn_type: 'payment',
-                                bitcoin_address: user.bitcoin_address)
+      Transaction.create!(user_id: user.id,
+                          amount_mbtc: (user.balance * -1),
+                          txn_type: 'payment',
+                          bitcoin_address: user.bitcoin_address)
     end
     redirect_to admin_index_path, notice: 'Payment transactions generated.'
   end
