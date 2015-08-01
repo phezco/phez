@@ -21,5 +21,5 @@ every :wednesday, at: '6pm' do
 end
 
 every :friday, at: '6pm' do
-  runner "NewsletterSubscirber.send_newsletter!"
+  runner "NewsletterSubscriber.send_newsletter!"
 end
