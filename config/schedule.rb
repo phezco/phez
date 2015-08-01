@@ -13,7 +13,7 @@ every 1.day, at: '1:05 am' do
 end
 
 every 10.minutes do
-  runner "NewsletterSubscirber.send_newsletter"
+  runner "NewsletterSubscriber.send_newsletter!"
 end
 
 # every :sunday, at: '7pm' do

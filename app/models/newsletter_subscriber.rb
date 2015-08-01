@@ -14,8 +14,8 @@ class NewsletterSubscriber < ActiveRecord::Base
     self.secret = SecureRandom.hex.slice(0, 10)
   end
 
-  def self.send_newsletter
-    puts "BEGIN: NewsletterSubscriber.send_newsletter"
+  def self.send_newsletter!
+    puts "BEGIN: NewsletterSubscriber.send_newsletter!"
     Ranker.pointify_daily!
     @posts = Post.order('daily_points DESC').limit(10)
     NewsletterSubscriber.where(is_confirmed: true).each do |newsletter_subscriber|
