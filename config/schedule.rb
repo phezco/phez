@@ -12,14 +12,22 @@ every 1.day, at: '1:05 am' do
   command "backup perform --trigger phez_backup"
 end
 
-every :sunday, at: '7pm' do
-  runner "NewsletterSubscirber.send_newsletter!"
+every 10.minutes do
+  runner "NewsletterSubscirber.send_newsletter"
 end
 
-every :tuesday, at: '7pm' do
-  runner "NewsletterSubscirber.send_newsletter!"
-end
+# every :sunday, at: '7pm' do
+#   runner "NewsletterSubscirber.send_newsletter!"
+# end
 
-every :thursday, at: '7pm' do
-  runner "NewsletterSubscirber.send_newsletter!"
-end
+# every :sunday, at: '7pm' do
+#   runner "NewsletterSubscirber.send_newsletter!"
+# end
+
+# every :tuesday, at: '7pm' do
+#   runner "NewsletterSubscirber.send_newsletter!"
+# end
+
+# every :thursday, at: '7pm' do
+#   runner "NewsletterSubscirber.send_newsletter!"
+# end

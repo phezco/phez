@@ -14,15 +14,17 @@ class NewsletterSubscriber < ActiveRecord::Base
     self.secret = SecureRandom.hex.slice(0, 10)
   end
 
-  def self.send_newsletter!
+  def self.send_newsletter
+    puts "BEGIN: NewsletterSubscriber.send_newsletter"
     Ranker.pointify_daily!
     @posts = Post.order('daily_points DESC').limit(10)
     NewsletterSubscriber.where(is_confirmed: true).each do |newsletter_subscriber|
-      begin
+      #begin
         m = Mailer.newsletter(newsletter_subscriber, @posts).deliver_now!
-      rescue Exception => e
-        puts "Rescued Exception: #{e.inspect}"
-      end
+        puts "Mailer.newsletter: #{m.inspect}"
+      #rescue Exception => e
+      #  puts "Rescued Exception: #{e.inspect}"
+      #end
     end
   end
 
