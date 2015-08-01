@@ -19,12 +19,12 @@ class NewsletterSubscriber < ActiveRecord::Base
     Ranker.pointify_daily!
     @posts = Post.order('daily_points DESC').limit(10)
     NewsletterSubscriber.where(is_confirmed: true).each do |newsletter_subscriber|
-      #begin
+      begin
         m = Mailer.newsletter(newsletter_subscriber, @posts).deliver_now!
         puts "Mailer.newsletter: #{m.inspect}"
-      #rescue Exception => e
-      #  puts "Rescued Exception: #{e.inspect}"
-      #end
+      rescue Exception => e
+        puts "Rescued Exception: #{e.inspect}"
+      end
     end
   end
 
