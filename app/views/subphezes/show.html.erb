@@ -1,4 +1,5 @@
 <% title("#{@subphez.title} :: hot") %>
+<%= content_for :head, auto_discovery_link_tag(:atom, "#{@subphez.url}.atom") %>
 
 <div class="well subphez-heading-well">
   <ul class="list-inline">
