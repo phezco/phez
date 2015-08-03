@@ -6,7 +6,7 @@ atom_feed root_url: @subphez.url do |feed|
       entry.title(post.title)
       entry.content(post.body)
       entry.author do |author|
-        author.name(post.user.username)
+        author.name(post.username)
       end
     end
   end

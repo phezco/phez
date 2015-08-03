@@ -5,17 +5,21 @@
   <ul class="list-inline">
     <li><h2>Hot</h2></li>
     <li>&nbsp;&nbsp;</li>
-    <li><h2><%= link_to 'New', subphez_latest_path(:path => @subphez.path) %></h2></li>
+    <li>
+      <h2>
+        <%= link_to 'New', subphez_latest_path(:path => @subphez.path) %>
+      </h2>
+    </li>
   </ul>
 </div>
 
 <% @posts.each do |post| %>
   <% @post = post %>
-  <%= render :partial => 'posts/heading' %>
+  <%= render partial: 'posts/heading' %>
 <% end %>
 
 <%= will_paginate @posts %>
 
 <% content_for :sidebar do %>
-  <%= render :partial => 'sidebar' %>
+  <%= render partial: 'sidebar' %>
 <% end %>
