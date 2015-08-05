@@ -1,4 +1,4 @@
-set :output, "/home/ubuntu/cron.log"
+set :output, "/dev/null"
 
 every 5.minutes do
   runner "Ranker.rank!"
