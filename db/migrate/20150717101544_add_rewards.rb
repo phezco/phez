@@ -24,6 +24,5 @@ class AddRewards < ActiveRecord::Migration
 
     add_column :subphezes, :is_premium_only, :boolean, default: false
     Subphez.update_all(is_premium_only: false)
-
   end
 end

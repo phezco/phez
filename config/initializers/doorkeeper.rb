@@ -13,10 +13,10 @@ Doorkeeper.configure do
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
-#  admin_authenticator do
-#    (current_user && current_user.is_admin) || redirect_to(new_user_session_url)
-#    Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
-#  end
+  #  admin_authenticator do
+  #    (current_user && current_user.is_admin) || redirect_to(new_user_session_url)
+  #    Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
+  #  end
 
   # Authorization Code expiration time (default 10 minutes).
   # authorization_code_expires_in 10.minutes
@@ -50,7 +50,7 @@ Doorkeeper.configure do
   # Define access token scopes for your provider
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
-  default_scopes  :public
+  default_scopes :public
   # optional_scopes :write, :update
 
   # Change the way client credentials are retrieved from the request object.
@@ -94,7 +94,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  #grant_flows %w(authorization_code client_credentials)
+  # grant_flows %w(authorization_code client_credentials)
   grant_flows %w(authorization_code password client_credentials)
 
   # Under some circumstances you might want to have applications auto-approved,

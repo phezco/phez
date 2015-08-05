@@ -31,16 +31,16 @@ class AdminController < ApplicationController
     @transaction = Transaction.new(transaction_params)
     @user = User.by_username_insensitive(params[:username])
     if @user.nil?
-      render action: :transactions,
-        alert: "Could not find user with username: #{params[:username]}" and return
+      render(action: :transactions,
+             alert: "Could not find user with username: #{params[:username]}") && return
     end
     @transaction.user = @user
     if @transaction.save
       redirect_to transactions_admin_index_path,
-        notice: 'Transaction successfully created.'
+                  notice: 'Transaction successfully created.'
     else
       render action: :transactions,
-        alert: "There was a problem creating the transaction."
+             alert: 'There was a problem creating the transaction.'
     end
   end
 
@@ -84,5 +84,4 @@ class AdminController < ApplicationController
   def transaction_params
     params.require(:transaction).permit(:amount_mbtc, :txn_type)
   end
-
 end

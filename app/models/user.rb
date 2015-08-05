@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   validates :username, uniqueness: true, length: { minimum: 1, maximum: 30 }, presence: true, allow_blank: false
   validates :password, if: :password_present?, presence: true, length: { minimum: 6, maximum: 100 }, allow_blank: false, confirmation: true
-  validates :bitcoin_address, format: { with: /\A(1|3)[a-zA-Z1-9]{26,33}\z/, message: "is invalid" }, allow_blank: true
+  validates :bitcoin_address, format: { with: /\A(1|3)[a-zA-Z1-9]{26,33}\z/, message: 'is invalid' }, allow_blank: true
 
   has_many :votes, dependent: :destroy
   has_many :moderations, dependent: :destroy
@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
 
   def set_secret!
     set_secret
-    update_attribute(:secret, self.secret)
+    update_attribute(:secret, secret)
   end
 
   def balance
@@ -89,31 +89,31 @@ class User < ActiveRecord::Base
   end
 
   def password_present?
-    !self.password.blank? && !self.password_confirmation.blank?
+    !password.blank? && !password_confirmation.blank?
   end
 
   def monthly_comment_karma
-    karma = comments.this_month.map {|p| p.vote_total }.inject(:+)
+    karma = comments.this_month.map(&:vote_total).inject(:+)
     karma.nil? ? 0 : karma
   end
 
   def monthly_link_karma
-    karma = posts.this_month.map {|p| p.vote_total }.inject(:+)
+    karma = posts.this_month.map(&:vote_total).inject(:+)
     karma.nil? ? 0 : karma
   end
 
   def link_karma
-    karma = posts.map {|p| p.vote_total }.inject(:+)
+    karma = posts.map(&:vote_total).inject(:+)
     karma.nil? ? 0 : karma
   end
 
   def comment_karma
-    karma = comments.map {|c| c.vote_total }.inject(:+)
+    karma = comments.map(&:vote_total).inject(:+)
     karma.nil? ? 0 : karma
   end
 
   def max_subphezes_reached?
-    return false if self.is_admin
+    return false if is_admin
     subphezes.count >= Subphez::MaxPerUser
   end
 
@@ -122,7 +122,7 @@ class User < ActiveRecord::Base
   end
 
   def is_owner?(subphez)
-    subphez.user_id == self.id
+    subphez.user_id == id
   end
 
   def email_required?
@@ -146,8 +146,8 @@ class User < ActiveRecord::Base
   end
 
   def self.top_by_monthly_link_karma(limit = 100)
-    users = User.where(is_reward_ineligible: false).all.map {|u| u }
-    users.sort! { |a, b| b.monthly_link_karma <=> a.monthly_link_karma }.reject {|u| u.is_admin}[0 .. (limit-1)]
+    users = User.where(is_reward_ineligible: false).all.map { |u| u }
+    users.sort! { |a, b| b.monthly_link_karma <=> a.monthly_link_karma }.reject(&:is_admin)[0..(limit - 1)]
   end
 
   def self.top_by_monthly_moderation(limit = 100)
@@ -163,34 +163,29 @@ class User < ActiveRecord::Base
   end
 
   def self.top_by_monthly_comment_karma(limit = 100)
-    users = User.where(is_reward_ineligible: false).all.map {|u| u }
-    users.sort! { |a, b| b.monthly_comment_karma <=> a.monthly_comment_karma }.reject {|u| u.is_admin}[0 .. (limit-1)]
+    users = User.where(is_reward_ineligible: false).all.map { |u| u }
+    users.sort! { |a, b| b.monthly_comment_karma <=> a.monthly_comment_karma }.reject(&:is_admin)[0..(limit - 1)]
   end
 
   protected
 
-    def ensure_email_unique
-      return if email.blank?
-      # Simple email validation for now
-      if !email.include?('@')
-        errors.add(:email, "does not appear to be valid. Missing the @ symbol?")
-        return
-      end
-      if new_record?
-        existing = User.where(email: email).first
-        if existing
-          errors.add(:email, "is already taken")
-        end
-      else
-        existing = User.where(email: email).where.not(id: id).first
-        if existing
-          errors.add(:email, "is already taken")
-        end
-      end
+  def ensure_email_unique
+    return if email.blank?
+    # Simple email validation for now
+    unless email.include?('@')
+      errors.add(:email, 'does not appear to be valid. Missing the @ symbol?')
+      return
     end
-
-    def confirmation_required?
-      false
+    if new_record?
+      existing = User.where(email: email).first
+      errors.add(:email, 'is already taken') if existing
+    else
+      existing = User.where(email: email).where.not(id: id).first
+      errors.add(:email, 'is already taken') if existing
     end
+  end
 
+  def confirmation_required?
+    false
+  end
 end

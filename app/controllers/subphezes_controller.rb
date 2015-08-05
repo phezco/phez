@@ -13,8 +13,8 @@ class SubphezesController < ApplicationController
 
   def autocomplete
     @subphezes = Subphez.where('path ILIKE ?', "#{params[:term]}%")
-                        .order('path ASC')
-    @paths = @subphezes.collect { |s| s.path }
+                 .order('path ASC')
+    @paths = @subphezes.collect(&:path)
     respond_to do |format|
       format.json { render json: @paths.to_json }
     end
@@ -41,22 +41,22 @@ class SubphezesController < ApplicationController
   end
 
   def manage
-    if !current_user.can_moderate?(@subphez)
-      redirect_to build_subphez_path(@subphez),
-                  alert: 'You are not a moderator of this subphez.' and return
+    unless current_user.can_moderate?(@subphez)
+      redirect_to(build_subphez_path(@subphez),
+                  alert: 'You are not a moderator of this subphez.') && return
     end
     @mod_request = ModRequest.new
   end
 
   def add_moderator
-    if !current_user.can_moderate?(@subphez)
-      redirect_to :back,
-                  alert: 'You are not a moderator of this subphez.' and return
+    unless current_user.can_moderate?(@subphez)
+      redirect_to(:back,
+                  alert: 'You are not a moderator of this subphez.') && return
     end
     @user = User.by_username_insensitive(params[:username])
     if @user.nil?
-      redirect_to :back,
-                  alert: 'Could not find user with that username.' and return
+      redirect_to(:back,
+                  alert: 'Could not find user with that username.') && return
     end
     @mod_request = ModRequest.new(
       user_id: @user.id,
@@ -73,14 +73,14 @@ class SubphezesController < ApplicationController
   end
 
   def remove_moderator
-    if !current_user.is_owner?(@subphez)
-      redirect_to :back,
-                  alert: 'You are not the owner of this subphez.' and return
+    unless current_user.is_owner?(@subphez)
+      redirect_to(:back,
+                  alert: 'You are not the owner of this subphez.') && return
     end
     @user = User.find(params[:user_id])
-    if !@subphez.moderators.include?(@user)
-      redirect_to :back,
-                  alert: 'This user is not a moderator of this subphez.' and return
+    unless @subphez.moderators.include?(@user)
+      redirect_to(:back,
+                  alert: 'This user is not a moderator of this subphez.') && return
     end
     @moderation = Moderation.where(user_id: @user.id)
                   .where(subphez_id: @subphez.id).first
@@ -104,8 +104,8 @@ class SubphezesController < ApplicationController
                    .where(user_id: current_user.id, subphez_id: @subphez.id)
                    .first
     if @mod_request.nil?
-      redirect_to :back,
-                  alert: 'Could not find add moderator request.' and return
+      redirect_to(:back,
+                  alert: 'Could not find add moderator request.') && return
     end
     @subphez.add_moderator!(current_user)
     redirect_to manage_subphez_path(path: @subphez.path),
@@ -116,8 +116,8 @@ class SubphezesController < ApplicationController
   def new
     @subphez = Subphez.new
     if current_user.max_subphezes_reached?
-      redirect_to root_path,
-                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon." and return
+      redirect_to(root_path,
+                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon.") && return
     end
   end
 
@@ -129,14 +129,14 @@ class SubphezesController < ApplicationController
   # POST /subphezs.json
   def create
     if current_user.max_subphezes_reached?
-      redirect_to root_path,
-                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon." and return
+      redirect_to(root_path,
+                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon.") && return
     end
     @subphez = Subphez.new(subphez_params)
     @subphez.user_id = current_user.id
     if @subphez.save
-        redirect_to view_subphez_path(path: @subphez.path),
-                    notice: 'Subphez was successfully created.'
+      redirect_to view_subphez_path(path: @subphez.path),
+                  notice: 'Subphez was successfully created.'
     else
       render :new
     end
@@ -180,8 +180,8 @@ class SubphezesController < ApplicationController
   def set_subphez_by_path
     @subphez = Subphez.by_path(params[:path])
 
-    redirect_to root_path,
-                alert: 'Could not find subphez.' and return if @subphez.nil?
+    redirect_to(root_path,
+                alert: 'Could not find subphez.') && return if @subphez.nil?
   end
 
   # Never trust parameters from the scary internet,

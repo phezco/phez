@@ -12,7 +12,7 @@ class Api::V1::BaseController < ApplicationController
   private
 
   def api_disallow_non_premium(subphez)
-    return true if !subphez.is_premium_only
+    return true unless subphez.is_premium_only
     unless current_resource_owner && current_resource_owner.is_premium
       render json: errors_json('You must be a premium user to access that content. Please consider buying some Phez Premium.'), status: :unauthorized
       return false
@@ -43,5 +43,4 @@ class Api::V1::BaseController < ApplicationController
 
     render json: { errors: ['User is not authenticated!'] }, status: :unauthorized
   end
-
 end

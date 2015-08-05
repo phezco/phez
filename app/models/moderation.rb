@@ -4,5 +4,4 @@ class Moderation < ActiveRecord::Base
 
   belongs_to :subphez
   belongs_to :moderated_subphez, class_name: 'Subphez', foreign_key: 'subphez_id'
-
 end

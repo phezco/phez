@@ -87,13 +87,12 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = {host: 'phez.co'}
-
+  config.action_mailer.default_url_options = { host: 'phez.co' }
 end
 
 Phez::Application.config.middleware.use ExceptionNotification::Rack,
-  email: {
-    email_prefix: "[Phez] ",
-    sender_address: %{"notifier" <notifier@phez.co>},
-    exception_recipients: "#{Figaro.env.exception_notification_email}"
-  }
+                                        email: {
+                                          email_prefix: '[Phez] ',
+                                          sender_address: %("notifier" <notifier@phez.co>),
+                                          exception_recipients: "#{Figaro.env.exception_notification_email}"
+                                        }

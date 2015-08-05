@@ -33,5 +33,4 @@ class Oauth::ApplicationsController < Doorkeeper::ApplicationsController
       render :new
     end
   end
-
 end

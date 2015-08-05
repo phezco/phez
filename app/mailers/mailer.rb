@@ -7,7 +7,7 @@ class Mailer < ActionMailer::Base
     @posts = posts
     @subscriber = newsletter_subscriber
     # Assume server time is UTC so use 1 day from now to get accurate date
-    t = 1.day.from_now.strftime("%B %e, %Y")
+    t = 1.day.from_now.strftime('%B %e, %Y')
     mail to: @subscriber.email,
          subject: "Phez Top Posts for #{t}"
   end
@@ -15,7 +15,6 @@ class Mailer < ActionMailer::Base
   def newsletter_confirmation(newsletter_subscriber)
     @subscriber = newsletter_subscriber
     mail to: @subscriber.email,
-         subject: "[Phez] Please confirm your email address"
+         subject: '[Phez] Please confirm your email address'
   end
-
 end

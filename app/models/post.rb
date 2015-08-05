@@ -97,7 +97,7 @@ class Post < ActiveRecord::Base
   end
 
   def format_website_url
-    if !url.blank?
+    unless url.blank?
       return if url.include?('http://') || url.include?('https://')
       self.url = "http://#{url}"
     end
@@ -110,7 +110,7 @@ class Post < ActiveRecord::Base
   def editable?
     return false unless is_self
     return true if created_at > 1.day.ago
-    return false
+    false
   end
 
   def set_guid

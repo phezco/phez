@@ -6,19 +6,19 @@ class PostsControllerTest < ActionController::TestCase
   setup do
   end
 
-  test "should redirect on get new (not authenticated)" do
+  test 'should redirect on get new (not authenticated)' do
     get :new
     assert_response :redirect
   end
 
-  test "should get new (authenticated)" do
+  test 'should get new (authenticated)' do
     @user = FactoryGirl.create(:user)
     sign_in(@user)
     get :new
     assert_response :success
   end
 
-  test "should create post (authenticated)" do
+  test 'should create post (authenticated)' do
     @subphez = FactoryGirl.create(:subphez)
     sign_in(@subphez.user)
     assert_difference('Post.count') do
@@ -28,26 +28,26 @@ class PostsControllerTest < ActionController::TestCase
     assert_redirected_to view_post_path(path: @subphez.path, post_id: assigns(:post).id, guid: assigns(:post).guid)
   end
 
-  test "should show post" do
+  test 'should show post' do
     @post = FactoryGirl.create(:post)
     get :show, post_id: @post.id, path: @post.subphez.path, guid: @post.guid
     assert_response :success
   end
 
-  test "should be redirect on get edit (not authenticated)" do
+  test 'should be redirect on get edit (not authenticated)' do
     @post = FactoryGirl.create(:post)
     get :edit, id: @post
     assert_response :redirect
   end
 
-  test "should get edit (authenticated post owner)" do
+  test 'should get edit (authenticated post owner)' do
     @post = FactoryGirl.create(:post)
     sign_in(@post.user)
     get :edit, id: @post
     assert_response :success
   end
 
-  test "should be redirected on get edit (authenticated non-post owner)" do
+  test 'should be redirected on get edit (authenticated non-post owner)' do
     @request.env['HTTP_REFERER'] = 'http://test.host/p/cats/submit'
 
     @post = FactoryGirl.create(:post)
@@ -57,7 +57,7 @@ class PostsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test "should update post (authenticated post owner)" do
+  test 'should update post (authenticated post owner)' do
     @post = FactoryGirl.create(:post, :selfpost)
     sign_in(@post.user)
     patch :update, id: @post, post: { body: 'Updated body', title: 'Updated Title' }
@@ -67,7 +67,7 @@ class PostsControllerTest < ActionController::TestCase
     assert_redirected_to view_post_path(path: @post.subphez.path, post_id: @post.id, guid: assigns(:post).guid)
   end
 
-  test "should not update post (authenticated non-post owner)" do
+  test 'should not update post (authenticated non-post owner)' do
     @request.env['HTTP_REFERER'] = 'http://test.host/'
 
     @post = FactoryGirl.create(:post, :selfpost)
@@ -79,7 +79,7 @@ class PostsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test "should destroy post (authenticated post owner)" do
+  test 'should destroy post (authenticated post owner)' do
     @request.env['HTTP_REFERER'] = 'http://test.host/cats/1/post-guid'
     @post = FactoryGirl.create(:post, :selfpost)
     sign_in(@post.user)
@@ -90,7 +90,7 @@ class PostsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test "should not destroy post (authenticated non-post owner)" do
+  test 'should not destroy post (authenticated non-post owner)' do
     @request.env['HTTP_REFERER'] = 'http://test.host/'
 
     @post = FactoryGirl.create(:post)
@@ -101,5 +101,4 @@ class PostsControllerTest < ActionController::TestCase
     end
     assert_response :redirect
   end
-
 end

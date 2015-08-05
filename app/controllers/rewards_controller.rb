@@ -31,11 +31,11 @@ class RewardsController < ApplicationController
     @reward.user = current_user
     if @reward.rewardable.nil? || @reward.rewardable.user.nil?
       flash[:alert] = 'There was a problem rewarding Phez Premium: post/comment or user not found'
-      redirect_to root_path and return
+      redirect_to(root_path) && return
     end
     if params[:plan] && params[:funding_source]
       flash[:alert] = 'Please select either your account as a funding source or a new premium purchase plan, but not both.'
-      render action: :premium and return
+      render(action: :premium) && return
     end
 
     if params[:plan]
@@ -47,18 +47,18 @@ class RewardsController < ApplicationController
         redirect_to coinkite_pay_url
       else
         flash[:alert] = 'There was a problem creating your Phez Premium transaction.'
-        render action: :premium and return
+        render(action: :premium) && return
       end
     else
       # Rewarding Premium from existing account months
       if params[:months].blank?
         flash[:alert] = "Please select the number of premium months you'd like to give."
-        render action: :premium and return
+        render(action: :premium) && return
       end
       months = params[:months].to_i
       if months > current_user.rewardable_months
         flash[:alert] = "You cannot give more premium months than the number present in your account at this time: #{current_user.premium_months} months"
-        render action: :premium and return
+        render(action: :premium) && return
       end
       @reward.months = months
       @reward.amount_usd = Reward.cost(months)
@@ -73,14 +73,13 @@ class RewardsController < ApplicationController
         render action: :premium
       end
     end
-
   end
 
   def thanks
     @reward = Reward.where(id: params[:id]).first
     if @reward.nil?
-      redirect_to new_reward_path,
-                  alert: 'Premium Reward purchase not found.' and return
+      redirect_to(new_reward_path,
+                  alert: 'Premium Reward purchase not found.') && return
     end
     @reward.activate!
   end

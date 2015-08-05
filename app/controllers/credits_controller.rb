@@ -46,7 +46,6 @@ class CreditsController < ApplicationController
                                  @reward_top_percentage,
                                  User.count,
                                  @total_mbtc_per_subpool)
-
   end
 
   def setup_users
@@ -84,5 +83,4 @@ class CreditsController < ApplicationController
       i += 1
     end
   end
-
 end

@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-
   use_doorkeeper do
     controllers applications: 'oauth/applications'
   end
 
-  namespace :api, defaults: {format: :json} do
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :comments, only: [:create, :destroy]
       resources :users, only: [] do
@@ -140,7 +139,7 @@ Rails.application.routes.draw do
       get 'autocomplete'
     end
   end
-  devise_for :users, controllers: {registrations: "registrations"}
+  devise_for :users, controllers: { registrations: 'registrations' }
 
   get 'my' => 'home#my', as: :my
   get 'latest' => 'home#latest', as: :latest

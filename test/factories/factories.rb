@@ -1,11 +1,11 @@
 require 'factory_girl'
 
 FactoryGirl.define do
-  sequence(:random) do |n|
-    (1..10000).to_a.sample
-    #rand(1000)
-    #@random ||= (1..1000).to_a.shuffle
-    #@random[n]
+  sequence(:random) do |_n|
+    (1..10_000).to_a.sample
+    # rand(1000)
+    # @random ||= (1..1000).to_a.shuffle
+    # @random[n]
   end
 
   factory :user do
@@ -15,7 +15,7 @@ FactoryGirl.define do
     trait :bar do
       username 'bar'
     end
-    
+
     trait :poster do
       username 'poster'
     end
@@ -49,6 +49,4 @@ FactoryGirl.define do
       body "This is a self post. It's body can **contain** markdown."
     end
   end
-
 end
-
