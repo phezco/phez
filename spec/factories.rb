@@ -1,13 +1,6 @@
-=begin
 require 'factory_girl'
 
 FactoryGirl.define do
-  sequence(:random) do |n|
-    (1..10000).to_a.sample
-    #rand(1000)
-    #@random ||= (1..1000).to_a.shuffle
-    #@random[n]
-  end
 
   factory :user do
     username 'foo'
@@ -25,15 +18,25 @@ FactoryGirl.define do
       is_admin true
       username 'admin'
     end
+
+    trait :subphez_creator do
+      username 'subphezCreator'
+    end
+
+    trait :subphez_creator_two do
+      username 'subphezCreator2'
+    end
+
   end
 
   factory :subphez do
-    association :user, factory: :user
+    association :user, factory: [:user, :subphez_creator]
     path 'cats'
     title 'Cats Subphez!'
     trait :dogs do
       path 'dogs'
       title 'Dogs Subphez!'
+      association :user, factory: [:user, :subphez_creator_two]
     end
   end
 
@@ -53,4 +56,3 @@ FactoryGirl.define do
 
 end
 
-=end

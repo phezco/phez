@@ -1,8 +1,14 @@
 <div class="col-lg-3">
   <div class="well sidebar-nav">
-    <h3><%= link_to @subphez.title, build_subphez_path(@subphez) %></h3>
+    <h3>
+      <%= link_to @subphez.title, build_subphez_path(@subphez) %>
+    </h3>
 
-    <div class="karma"><span class="link-karma"><%= @subphez.subscriber_count %></span> &nbsp;subscribers</div>
+    <div class="karma">
+      <span class="link-karma">
+        <%= @subphez.subscriber_count %>
+      </span> &nbsp;subscribers
+    </div>
     <br/>
     <% if user_signed_in? && current_user.subscribed_subphezes.include?(@subphez) %>
       <%= link_to 'unsubscribe', subscription_path(0, :subphez_id => @subphez.id), method: :delete, class: 'btn btn-danger' %>
@@ -33,6 +39,10 @@
       <% @subphez.moderators.each do |mod| %>
         <%= link_to mod.username, build_profile_path(mod) %> <br/>
       <% end %>
+    </div>
+    <br/>
+    <div>
+      <%= link_to 'atom feed', @subphez.atom_feed %>
     </div>
   </div>
 </div>
