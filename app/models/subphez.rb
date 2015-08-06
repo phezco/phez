@@ -24,6 +24,10 @@ class Subphez < ActiveRecord::Base
     "http://#{Figaro.env.app_domain}/p/#{path}"
   end
 
+  def atom_feed
+    "#{url}.atom"
+  end
+
   def subscriber_count
     Subscription.where(subphez_id: self.id).count
   end

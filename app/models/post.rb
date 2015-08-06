@@ -39,6 +39,8 @@ class Post < ActiveRecord::Base
 
   self.per_page = 20
 
+  delegate :username, to: :user, allow_nil: true
+
   def not_premium
     !is_premium_only
   end
