@@ -32,7 +32,7 @@ class AdminController < ApplicationController
     @user = User.by_username_insensitive(params[:username])
     if @user.nil?
       render(action: :transactions,
-             alert: "Could not find user with username: #{params[:username]}") && return
+             alert: "Could not find user with username: #{params[:username]}") and return
     end
     @transaction.user = @user
     if @transaction.save
@@ -77,7 +77,7 @@ class AdminController < ApplicationController
   def setup_payable_users
     @payable = []
     User.all.each do |user|
-      @payable << user if (user.balance > 0) && !user.bitcoin_address.blank?
+      @payable << user if (user.balance > 0) and !user.bitcoin_address.blank?
     end
   end
 

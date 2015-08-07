@@ -23,11 +23,11 @@ class Api::V1::PostsController < Api::V1::BaseController
     @subphez = Subphez.by_path(params[:subphez_path])
     if @subphez.nil?
       json = { 'success' => false, 'errors' => "could not find subphez with path: #{params[:subphez_path]}" }
-      render(json: json) && return
+      render(json: json) and return
     end
-    if @subphez.is_admin_only && !current_resource_owner.is_admin
+    if @subphez.is_admin_only and !current_resource_owner.is_admin
       json = { 'success' => false, 'errors' => 'admin-only subphez - authenticated user is not allowed to post here' }
-      render(json: json) && return
+      render(json: json) and return
     end
     @post.subphez = @subphez
     @post.url = params[:url]

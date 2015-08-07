@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
 
   def disallow_non_premium(subphez)
     return true unless subphez.is_premium_only
-    unless user_signed_in? && current_user.is_premium
+    unless user_signed_in? and current_user.is_premium
       redirect_to root_path, alert: 'You must be a premium user to access that content. Please consider buying some Phez Premium.'
       return false
     end

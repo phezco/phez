@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
   end
 
   def password_present?
-    !password.blank? && !password_confirmation.blank?
+    !password.blank? and !password_confirmation.blank?
   end
 
   def monthly_comment_karma

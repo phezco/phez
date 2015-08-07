@@ -43,7 +43,7 @@ class SubphezesController < ApplicationController
   def manage
     unless current_user.can_moderate?(@subphez)
       redirect_to(build_subphez_path(@subphez),
-                  alert: 'You are not a moderator of this subphez.') && return
+                  alert: 'You are not a moderator of this subphez.') and return
     end
     @mod_request = ModRequest.new
   end
@@ -51,12 +51,12 @@ class SubphezesController < ApplicationController
   def add_moderator
     unless current_user.can_moderate?(@subphez)
       redirect_to(:back,
-                  alert: 'You are not a moderator of this subphez.') && return
+                  alert: 'You are not a moderator of this subphez.') and return
     end
     @user = User.by_username_insensitive(params[:username])
     if @user.nil?
       redirect_to(:back,
-                  alert: 'Could not find user with that username.') && return
+                  alert: 'Could not find user with that username.') and return
     end
     @mod_request = ModRequest.new(
       user_id: @user.id,
@@ -75,12 +75,12 @@ class SubphezesController < ApplicationController
   def remove_moderator
     unless current_user.is_owner?(@subphez)
       redirect_to(:back,
-                  alert: 'You are not the owner of this subphez.') && return
+                  alert: 'You are not the owner of this subphez.') and return
     end
     @user = User.find(params[:user_id])
     unless @subphez.moderators.include?(@user)
       redirect_to(:back,
-                  alert: 'This user is not a moderator of this subphez.') && return
+                  alert: 'This user is not a moderator of this subphez.') and return
     end
     @moderation = Moderation.where(user_id: @user.id)
                   .where(subphez_id: @subphez.id).first
@@ -95,7 +95,7 @@ class SubphezesController < ApplicationController
                    .first
     if @mod_request.nil?
       redirect_to :back,
-                  alert: 'Could not find add moderator request.' && return
+                  alert: 'Could not find add moderator request.' and return
     end
   end
 
@@ -105,7 +105,7 @@ class SubphezesController < ApplicationController
                    .first
     if @mod_request.nil?
       redirect_to(:back,
-                  alert: 'Could not find add moderator request.') && return
+                  alert: 'Could not find add moderator request.') and return
     end
     @subphez.add_moderator!(current_user)
     redirect_to manage_subphez_path(path: @subphez.path),
@@ -117,7 +117,7 @@ class SubphezesController < ApplicationController
     @subphez = Subphez.new
     if current_user.max_subphezes_reached?
       redirect_to(root_path,
-                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon.") && return
+                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon.") and return
     end
   end
 
@@ -130,7 +130,7 @@ class SubphezesController < ApplicationController
   def create
     if current_user.max_subphezes_reached?
       redirect_to(root_path,
-                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon.") && return
+                  alert: "We're sorry, you have reached the maximum number of Subphezes allowable at this time. Please post content to and moderate your existing Subphezes, and we will consider lifting this limit soon.") and return
     end
     @subphez = Subphez.new(subphez_params)
     @subphez.user_id = current_user.id
@@ -181,7 +181,7 @@ class SubphezesController < ApplicationController
     @subphez = Subphez.by_path(params[:path])
 
     redirect_to(root_path,
-                alert: 'Could not find subphez.') && return if @subphez.nil?
+                alert: 'Could not find subphez.') and return if @subphez.nil?
   end
 
   # Never trust parameters from the scary internet,

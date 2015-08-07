@@ -92,7 +92,7 @@ class Comment < ActiveRecord::Base
 
   def add_reply_message
     parent_comment = parent
-    if parent_comment && !(parent_comment.user == user)
+    if parent_comment and !(parent_comment.user == user)
       unless Message.messageable_inboxed?(parent_comment.user, self)
         Message.add_message_comment!(parent_comment.user, self, 'comment_reply')
       end
@@ -105,7 +105,7 @@ class Comment < ActiveRecord::Base
 
   def message_cleanup
     # Not ideal but other ways of deleting comment messages weren't working properly:
-    m = Message.all.select { |m| m.messageable_id && m.messageable_type && m.messageable.nil? }
+    m = Message.all.select { |m| m.messageable_id and m.messageable_type and m.messageable.nil? }
     m.map(&:destroy)
   end
 

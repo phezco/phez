@@ -18,7 +18,7 @@ class Api::V1::ProfilesController < Api::V1::BaseController
   def set_by_username
     @user = User.where(username: params[:username]).first
     if @user.nil?
-      render(json: errors_json("Could not find user: #{params[:username]}"), status: :not_found) && return
+      render(json: errors_json("Could not find user: #{params[:username]}"), status: :not_found) and return
     end
   end
 end

@@ -48,7 +48,7 @@ class Api::V1::SubphezesController < Api::V1::BaseController
   def set_subphez_by_path
     @subphez = Subphez.by_path(params[:path])
     if @subphez.nil?
-      render(json: errors_json("Could not find subphez: #{params[:path]}"), status: :not_found) && return
+      render(json: errors_json("Could not find subphez: #{params[:path]}"), status: :not_found) and return
     end
   end
 end

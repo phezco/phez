@@ -4,18 +4,18 @@
 
     <div class="karma"><span class="link-karma"><%= @subphez.subscriber_count %></span> &nbsp;subscribers</div>
     <br/>
-    <% if user_signed_in? && current_user.subscribed_subphezes.include?(@subphez) %>
+    <% if user_signed_in? and current_user.subscribed_subphezes.include?(@subphez) %>
       <%= link_to 'unsubscribe', subscription_path(0, :subphez_id => @subphez.id), method: :delete, class: 'btn btn-danger' %>
     <% else %>
       <%= link_to 'subscribe', subscriptions_path(subphez_id: @subphez.id), method: :post, class: 'btn btn-success' %>
     <% end %>
     <br/>
     <br/>
-    <% if !@subphez.is_admin_only || (user_signed_in? && current_user.is_admin) %>
+    <% if !@subphez.is_admin_only || (user_signed_in? and current_user.is_admin) %>
       <%= link_to 'Submit a new link', new_subphez_post_path(:path => @subphez.path), class: 'btn btn-primary' %>
     <% end %>
     <br/>
-    <% if user_signed_in? && current_user.can_moderate?(@subphez) %>
+    <% if user_signed_in? and current_user.can_moderate?(@subphez) %>
       <br/>
       <%= link_to 'Edit this Subphez', edit_subphez_path(@subphez), class: 'btn btn-primary' %>
       <br/><br/>

@@ -4,7 +4,7 @@
         <%
         @upvoted, @downvoted = false, false
 
-        if user_signed_in? && @vote_hash
+        if user_signed_in? and @vote_hash
           @vote = @vote_hash[@post.id]
           if @vote
             @upvoted = @vote.upvote?
@@ -28,7 +28,7 @@
     <% end %>
   </div>
   <div class="col-md-11 col-sm-11 col-xs-10">
-    <% if Figaro.env.enable_screenshots && !@post.is_self %>
+    <% if Figaro.env.enable_screenshots and !@post.is_self %>
       <div class="thumbnail">
         <a href="<%= @post.url_linkable %>"><img src='http://api.pagepeeker.com/v2/thumbs.php?size=s&url=<%= @post.url_encoded %>' width="90"></a>
       </div>
