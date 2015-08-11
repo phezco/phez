@@ -2,7 +2,7 @@ class Subphez < ActiveRecord::Base
   validates :path,
             format: { with: /\A[a-zA-Z0-9]+\Z/ },
             length: { minimum: 1, maximum: 30 },
-            uniqueness: true
+            uniqueness: { case_sensitive: false }
   validates :title, presence: true
 
   belongs_to :user
