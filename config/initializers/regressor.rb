@@ -1,7 +1,7 @@
 # If the regressor gem is inside a group wrap your initializer in
 # if defined?(Regressor) do .. end
 if defined?(Regressor)
-  Regressor.configure do |config|
+  Regressor.configure do |_config|
     # Defines the path where the generated files for your models will be placed
     # config.regression_path = 'spec/models/regression'
 

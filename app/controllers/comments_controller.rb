@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
   def update
     @comment = Comment.find(params[:id])
     if @comment.nil?
-      redirect_to root_path, notice: 'Comment not found.' and return
+      redirect_to(root_path, notice: 'Comment not found.') and return
     end
     disallow_non_owner
     if @comment.update(comment_params)
@@ -50,11 +50,11 @@ class CommentsController < ApplicationController
   def destroy
     @comment = Comment.find(params[:id])
     if @comment.nil?
-      redirect_to root_path,
-                  alert: 'Could not find comment to delete.' and return
+      redirect_to(root_path,
+                  alert: 'Could not find comment to delete.') and return
     end
     unless @comment.owner?(current_user) || @comment.moderatable?(current_user)
-      redirect_to root_path, alert: 'You are not allowed to do that.' and return
+      redirect_to(root_path, alert: 'You are not allowed to do that.') and return
     end
     @comment.delete!
     redirect_to build_post_path(@comment.commentable),
@@ -65,7 +65,7 @@ class CommentsController < ApplicationController
 
   def disallow_non_owner
     unless @comment.owner?(current_user)
-      redirect_to root_path, alert: 'You are not allowed to do that.' and return
+      redirect_to(root_path, alert: 'You are not allowed to do that.') and return
     end
   end
 

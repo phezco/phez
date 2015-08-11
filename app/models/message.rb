@@ -1,6 +1,5 @@
 class Message < ActiveRecord::Base
-
-  default_scope { order('created_at DESC') } 
+  default_scope { order('created_at DESC') }
 
   belongs_to :user
   belongs_to :from_user, class_name: 'User', foreign_key: 'from_user_id'
@@ -18,7 +17,7 @@ class Message < ActiveRecord::Base
   end
 
   def sanitize_attributes
-    self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
+    self.title = Sanitizer.sanitize(title) unless title.blank?
   end
 
   def self.add_message_comment!(user, comment, reason)
@@ -34,5 +33,4 @@ class Message < ActiveRecord::Base
   def set_orange
     user.update_attribute(:orange, true)
   end
-
 end

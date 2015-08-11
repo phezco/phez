@@ -1,5 +1,4 @@
 class EarningsCalculator
-
   def initialize(pool_available, reward_top_percentage, global_user_count, total_mbtc_per_subpool)
     @pool_available = pool_available
     @reward_top_percentage = reward_top_percentage

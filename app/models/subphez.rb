@@ -29,7 +29,7 @@ class Subphez < ActiveRecord::Base
   end
 
   def subscriber_count
-    Subscription.where(subphez_id: self.id).count
+    Subscription.where(subphez_id: id).count
   end
 
   def sidebar_rendered
@@ -58,17 +58,17 @@ class Subphez < ActiveRecord::Base
   end
 
   def sanitize_attributes
-    self.title = Sanitizer.sanitize(self.title) unless self.title.blank?
-    self.sidebar = Sanitizer.sanitize(self.sidebar) unless self.sidebar.blank?
+    self.title = Sanitizer.sanitize(title) unless title.blank?
+    self.sidebar = Sanitizer.sanitize(sidebar) unless sidebar.blank?
   end
 
   def self.by_path(path)
-    Subphez.where("LOWER(path) = ?", path.downcase).first
+    Subphez.where('LOWER(path) = ?', path.downcase).first
   end
 
   def self.top_by_subscriber_count(limit = 100)
     subphezes = Subphez.all
     subphezes = subphezes.map { |s| s }.sort! { |a, b| b.subscriber_count <=> a.subscriber_count }
-    subphezes[0 .. (limit-1)]
+    subphezes[0..(limit - 1)]
   end
 end

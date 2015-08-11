@@ -21,7 +21,7 @@ class PostsController < ApplicationController
   def show
     @post = Post.where(id: params[:post_id]).first
     if @post.nil?
-      redirect_to root_path, alert: 'Could not find post.' and return
+      redirect_to(root_path, alert: 'Could not find post.') and return
     end
     disallow_non_premium(@post.subphez)
     @comments = @post.root_comments
@@ -33,9 +33,9 @@ class PostsController < ApplicationController
   def new
     @subphez = nil
     @subphez = Subphez.by_path(params[:path]) if params[:path]
-    if @subphez && @subphez.is_admin_only && !current_user.is_admin
-      redirect_to root_path,
-                  alert: 'Only Admins are allowed to post here.' and return
+    if @subphez and @subphez.is_admin_only and !current_user.is_admin
+      redirect_to(root_path,
+                  alert: 'Only Admins are allowed to post here.') and return
     end
     @post = Post.new
     @post.url = params[:url] if params[:url]
@@ -53,13 +53,13 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @subphez = Subphez.by_path(params[:subphez_path]) if params[:subphez_path]
     if @subphez.nil?
-      render action: :new,
-      alert: "Could not find Subphez with path: #{params[:subphez_path]}" and return
+      render(action: :new,
+             alert: "Could not find Subphez with path: #{params[:subphez_path]}") and return
     end
     @post.subphez = @subphez
-    if @subphez.is_admin_only && !current_user.is_admin
-      redirect_to root_path,
-                  alert: 'Only Admins are allowed to post here.' and return
+    if @subphez.is_admin_only and !current_user.is_admin
+      redirect_to(root_path,
+                  alert: 'Only Admins are allowed to post here.') and return
     end
     @post.user_id = current_user.id
     @post.vote_total = 1
@@ -79,9 +79,7 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
-    unless @post.owner?(current_user)
-      redirect_to :back and return
-    end
+    redirect_to(:back) and return unless @post.owner?(current_user)
     if @post.update(post_params)
       redirect_to build_post_path(@post),
                   notice: 'Post was successfully updated.'

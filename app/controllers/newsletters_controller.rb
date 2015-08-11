@@ -1,5 +1,4 @@
 class NewslettersController < ApplicationController
-
   def new
     @newsletter_subscriber = NewsletterSubscriber.new
   end
@@ -40,5 +39,4 @@ class NewslettersController < ApplicationController
   def newsletter_params
     params.require(:newsletter_subscriber).permit(:email)
   end
-
 end

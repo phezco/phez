@@ -29,14 +29,14 @@ class ApplicationController < ActionController::Base
   end
 
   def disallow_non_premium(subphez)
-    return true if !subphez.is_premium_only
-    unless user_signed_in? && current_user.is_premium
+    return true unless subphez.is_premium_only
+    unless user_signed_in? and current_user.is_premium
       redirect_to root_path, alert: 'You must be a premium user to access that content. Please consider buying some Phez Premium.'
       return false
     end
   end
 
-  def after_sign_in_path_for(resource)
+  def after_sign_in_path_for(_resource)
     session[:previous_url] || root_path
   end
 
@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, alert: 'Your account has been frozen due to suspicious activity or attempting to game the system.'
       return false
     end
-    return true
+    true
   end
 
   protected
