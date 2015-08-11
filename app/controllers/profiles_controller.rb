@@ -13,6 +13,6 @@ class ProfilesController < ApplicationController
 
   def set_by_username
     @user = User.by_username_insensitive(params[:id])
-    redirect_to root_path, alert: 'Could not find user.' and return if @user.nil?
+    redirect_to(root_path, alert: 'Could not find user.') and return if @user.nil?
   end
 end

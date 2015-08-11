@@ -5,7 +5,7 @@
     Submitted by: <%= link_to @post.user.username, build_profile_path(@post.user) %> <br/>
     Submitted: <%= time_ago_in_words(@post.created_at) %> ago
     <br/>
-    <% if user_signed_in? && @post.owner?(current_user) && @post.editable? %>
+    <% if user_signed_in? and @post.owner?(current_user) and @post.editable? %>
       <br/>
       <%= link_to 'Edit this Post', edit_post_path(@post), class: 'btn btn-primary' %>
       <br/>

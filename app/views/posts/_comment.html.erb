@@ -39,10 +39,10 @@ end
     <%= link_to 'permalink', "#{build_post_path(@comment.commentable)}##{@comment.id}" %> &nbsp;
     <% if user_signed_in? %>
 
-      <% if !@comment.is_deleted && @comment.owner?(current_user) %>
+      <% if !@comment.is_deleted and @comment.owner?(current_user) %>
         <%= link_to 'edit', "javascript:Phez.edit(#{@comment.id})" %> &nbsp;
       <% end %>
-      <% if !@comment.is_deleted && (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
+      <% if !@comment.is_deleted and (@comment.owner?(current_user) || @comment.moderatable?(current_user)) %>
         <%= link_to 'delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' } %> &nbsp;
       <% end %>
 
@@ -63,7 +63,7 @@ end
   <% @comment.children.each do |comment| %>
     <% @comment = comment %>
     <div class="indented-comment">
-      <%= render :partial => 'comment' %> 
+      <%= render :partial => 'comment' %>
     </div>
   <% end %>
 <% end %>

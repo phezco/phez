@@ -17,7 +17,7 @@
 
 <% @subphez.moderators.each do |user| %>
   <%= user.username %>
-  <% if current_user.is_owner?(@subphez) && user != current_user %>
+  <% if current_user.is_owner?(@subphez) and user != current_user %>
     <%= link_to 'Remove Moderator', remove_moderator_subphez_path(:id => @subphez.id, :user_id => user.id), method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
   <% end %>
   <br/>

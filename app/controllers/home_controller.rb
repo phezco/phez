@@ -32,5 +32,4 @@ class HomeController < ApplicationController
 
   def apidocs
   end
-
 end

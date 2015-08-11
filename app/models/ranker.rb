@@ -1,5 +1,4 @@
 class Ranker
-
   def self.rank!
     pointify!
     hot_score_all!
@@ -129,5 +128,4 @@ class Ranker
       i += 1
     end
   end
-
 end

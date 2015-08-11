@@ -17,8 +17,7 @@ class RegistrationsController < Devise::RegistrationsController
     resource.update_without_password(params)
   end
 
-  def after_sign_up_path_for(resource)
+  def after_sign_up_path_for(_resource)
     session[:previous_url] || root_path
   end
-
 end

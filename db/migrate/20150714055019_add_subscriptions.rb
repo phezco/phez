@@ -6,6 +6,5 @@ class AddSubscriptions < ActiveRecord::Migration
 
       t.datetime :created_at, null: false
     end
-
   end
 end

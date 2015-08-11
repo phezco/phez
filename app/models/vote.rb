@@ -2,8 +2,8 @@ class Vote < ActiveRecord::Base
   belongs_to :user
   belongs_to :post
 
-  scope :last_thirtysix_hours, lambda { where('created_at > ?', 36.hours.ago) }
-  scope :last_twentyfour_hours, lambda { where('created_at > ?', 24.hours.ago) }
+  scope :last_thirtysix_hours, -> { where('created_at > ?', 36.hours.ago) }
+  scope :last_twentyfour_hours, -> { where('created_at > ?', 24.hours.ago) }
 
   def upvote?
     vote_value == 1
@@ -48,5 +48,4 @@ class Vote < ActiveRecord::Base
     end
     vote_hash
   end
-
 end

@@ -16,5 +16,4 @@ class Subscription < ActiveRecord::Base
     return false unless subscription
     subscription.destroy
   end
-
 end

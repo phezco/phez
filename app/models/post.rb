@@ -99,7 +99,7 @@ class Post < ActiveRecord::Base
   end
 
   def format_website_url
-    if !url.blank?
+    unless url.blank?
       return if url.include?('http://') || url.include?('https://')
       self.url = "http://#{url}"
     end
@@ -112,7 +112,7 @@ class Post < ActiveRecord::Base
   def editable?
     return false unless is_self
     return true if created_at > 1.day.ago
-    return false
+    false
   end
 
   def set_guid
@@ -138,7 +138,7 @@ class Post < ActiveRecord::Base
   end
 
   def url_and_body_cant_both_be_blank
-    if url.blank? && body.blank?
+    if url.blank? and body.blank?
       errors.add(:url, "can't be blank if body is blank")
       errors.add(:body, "can't be blank if url is blank")
     end
@@ -155,7 +155,7 @@ class Post < ActiveRecord::Base
     suggested_title = ''
     begin
       rc = RestClient.get(url)
-      if rc.headers && rc.headers[:content_type] &&
+      if rc.headers and rc.headers[:content_type] and
          !rc.headers[:content_type].blank?
 
         content_type = rc.headers[:content_type].split(';')[0].strip
