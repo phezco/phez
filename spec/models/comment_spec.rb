@@ -4,6 +4,14 @@ RSpec.describe Comment, type: :model do
 
   describe "check validations" do
     context "validates presence" do
+      it 'is valid with both body and user' do
+        u = user.create(:user)
+        comment = Comment.new(body: "hello", user: u)
+        comment.valid?
+        expect(comment).to be_valid
+
+      end
+
       it 'is not valid without a body' do
         comment = Comment.new(body: nil)
         comment.valid?
@@ -17,16 +25,16 @@ RSpec.describe Comment, type: :model do
       end
     end
 
-    context "rewards and upvotes" do
+    # context "rewards and upvotes" do
 
-      it 'rewards a comment' do
-        comment = Comment.create
-        comment.reward!
-        expect(comment.is_rewarded).to be_truthy
+    #   it 'rewards a comment' do
+    #     comment = FactoryGirl.build(:comment)
+    #     comment.reward!
+    #     expect(comment.is_rewarded).to be_truthy
 
-      end
+    #   end
 
-    end
+    # end
 
   end
 end
