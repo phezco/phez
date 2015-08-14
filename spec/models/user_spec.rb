@@ -17,5 +17,5 @@ RSpec.describe User, type: :model do
   it { should have_many(:subscriptions) }
   it { should have_many(:subscribed_subphezes) }
   it { should have_many(:transactions) }
-  it { should have_many(:oauth_applications) }
+  it { should have_many(:oauth_applications)
 end
