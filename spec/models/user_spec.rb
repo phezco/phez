@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
   subject { user }
 
   it { should validate_presence_of :username }
+  it { should be_valid }
 
   it { should have_many(:votes) }
   it { should have_many(:moderations) }
@@ -17,10 +18,15 @@ RSpec.describe User, type: :model do
   it { should have_many(:subscriptions) }
   it { should have_many(:subscribed_subphezes) }
   it { should have_many(:transactions) }
-  it { should have_many(:oauth_applications)
-
-  context "method calls" do
-
-
-  end
+  it { should have_many(:oauth_applications) }
 end
+  # context "method calls" do
+  #   it "should set_secret successfully" do
+  #     @user = FactoryGirl.build(:user)
+  #
+  #
+  #   end
+  #
+  #
+  # end
+# end
