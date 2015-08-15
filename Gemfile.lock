@@ -312,6 +312,3 @@ DEPENDENCIES
   web-console (~> 2.0)
   whenever
   will_paginate (~> 3.0.6)
-
-BUNDLED WITH
-   1.10.5
