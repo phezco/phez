@@ -1,15 +1,11 @@
 Phez, the App
 =============
 
-*Phez* is a Ruby on Rails application powering the website Phez.co:
+*Phez* is a Ruby on Rails application similar to reddit, but with Bitcoin.
 
-[Phez.co](http://phez.co/)
+It formerly powered the site phez.co, which has since been shuttered.
 
-Please consider donating some Bitcoin to Phez:
-
-1NhonFuVMiCaM9RJj1DJBoYTiN6Qaf51KQ
-
-![Donate Bitcoin to Phez - QR Code](https://raw.githubusercontent.com/phezco/phez/master/public/img/bitcoin-qr.png)
+If you would like to take over maintenance of this project, fork the repo and announce that you are the new maintainer via the usual channels. Thanks! - p4x
 
 
 Contributing
