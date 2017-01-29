@@ -116,7 +116,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
-    json (1.8.3)
+    json (1.8.6)
     jwt (1.5.1)
     less (2.6.0)
       commonjs (~> 0.2.7)
@@ -312,3 +312,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   whenever
   will_paginate (~> 3.0.6)
+
+BUNDLED WITH
+   1.14.2
